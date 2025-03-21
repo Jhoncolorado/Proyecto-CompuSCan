@@ -366,15 +366,13 @@ footer::before {
 .notificacion {
   position: fixed;
   top: 20px;
-  right: 20px;
+  right: -100%;
   padding: 15px 25px;
   border-radius: 8px;
   color: white;
   z-index: 1000;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16);
-  opacity: 0;
-  transform: translateX(150%);
-  transition: all 0.4s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  transition: right 0.5s ease-in-out;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -385,10 +383,8 @@ footer::before {
 .notificacion.info { background: #17a2b8; }
 
 .notificacion.show {
-  opacity: 1;
-  transform: translateX(0);
+  right: 20px;
 }
-
 
 
 /* IA Upload */
@@ -516,3 +512,17 @@ input[name="rh"] {
   margin: 5px;
 }
 
+/* style.css - Línea 232 */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+@media (max-width: 480px) {
+  .form-group input, 
+  .form-group select {
+    font-size: 14px;
+    padding: 0.7rem;
+  }
+}
