@@ -9,6 +9,7 @@ const alertaRoutes = require('./routes/alertaRoutes');
 const historialDispositivoRoutes = require('./routes/historialDispositivoRoutes');
 const rfidRoutes = require('./routes/rfidRoutes');
 const observacionRoutes = require('./routes/observacionRoutes');
+const programaRoutes = require('./routes/programaRoutes');
 
 // Middleware para parsear JSON
 app.use(express.json());
@@ -20,6 +21,8 @@ app.use('/api/alertas', alertaRoutes);
 app.use('/api/historial-dispositivos', historialDispositivoRoutes);
 app.use('/api/rfid', rfidRoutes);
 app.use('/api/observaciones', observacionRoutes);
+app.use('/api/programas', programaRoutes);
+
 
 // Servir archivos estáticos (frontend)
 app.use(express.static(path.join(__dirname, '../')));

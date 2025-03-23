@@ -3,7 +3,7 @@ const pool = require('../config/db');
 const dispositivoModel = {
     getAllDispositivos: async () => {
         try {
-            const query = 'SELECT * FROM dispositivos';
+            const query = 'SELECT * FROM dispositivo';
             const result = await pool.query(query);
             return result.rows;
         } catch (error) {
@@ -13,7 +13,7 @@ const dispositivoModel = {
     },
     getDispositivoById: async (id) => {
         try {
-            const query = 'SELECT * FROM dispositivos WHERE id = $1';
+            const query = 'SELECT * FROM dispositivo WHERE id = $1';
             const result = await pool.query(query, [id]);
             if (result.rows.length === 0) {
                 throw new Error('Dispositivo no encontrado');
@@ -28,7 +28,7 @@ const dispositivoModel = {
         try {
             const { marca, modelo, usuario_id } = dispositivo;
             const query = `
-                INSERT INTO dispositivos (marca, modelo, usuario_id)
+                INSERT INTO dispositivo (marca, modelo, usuario_id)
                 VALUES ($1, $2, $3)
                 RETURNING *`;
             const result = await pool.query(query, [marca, modelo, usuario_id]);
@@ -42,7 +42,7 @@ const dispositivoModel = {
         try {
             const { marca, modelo, usuario_id } = dispositivo;
             const query = `
-                UPDATE dispositivos
+                UPDATE dispositivo
                 SET marca = $1, modelo = $2, usuario_id = $3
                 WHERE id = $4
                 RETURNING *`;
@@ -58,7 +58,7 @@ const dispositivoModel = {
     },
     deleteDispositivo: async (id) => {
         try {
-            const query = 'DELETE FROM dispositivos WHERE id = $1 RETURNING *';
+            const query = 'DELETE FROM dispositivo WHERE id = $1 RETURNING *';
             const result = await pool.query(query, [id]);
             if (result.rows.length === 0) {
                 throw new Error('Dispositivo no encontrado');

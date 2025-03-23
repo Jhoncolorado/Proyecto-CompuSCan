@@ -13,7 +13,7 @@ const alertaModel = {
     },
     getAlertaById: async (id) => {
         try {
-            const query = 'SELECT * FROM alertas WHERE id = $1';
+            const query = 'SELECT * FROM alertas WHERE idalertas = $1'; // Corregido: usar "idalertas" en lugar de "id"
             const result = await pool.query(query, [id]);
             if (result.rows.length === 0) {
                 throw new Error('Alerta no encontrada');
@@ -26,7 +26,9 @@ const alertaModel = {
     },
     createAlerta: async (alerta) => {
         try {
-            const { fecha, hora, tipo_alerta } = alerta;
+            const { tipo_alerta } = alerta;
+            const fecha = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
+            const hora = new Date().toTimeString().split(' ')[0]; // Hora actual en formato HH:MM:SS
             const query = `
                 INSERT INTO alertas (fecha, hora, tipo_alerta)
                 VALUES ($1, $2, $3)
@@ -44,7 +46,7 @@ const alertaModel = {
             const query = `
                 UPDATE alertas
                 SET fecha = $1, hora = $2, tipo_alerta = $3
-                WHERE id = $4
+                WHERE idalertas = $4
                 RETURNING *`;
             const result = await pool.query(query, [fecha, hora, tipo_alerta, id]);
             if (result.rows.length === 0) {
@@ -58,7 +60,7 @@ const alertaModel = {
     },
     deleteAlerta: async (id) => {
         try {
-            const query = 'DELETE FROM alertas WHERE id = $1 RETURNING *';
+            const query = 'DELETE FROM alertas WHERE idalertas = $1 RETURNING *'; // Corregido: usar "idalertas" en lugar de "id"
             const result = await pool.query(query, [id]);
             if (result.rows.length === 0) {
                 throw new Error('Alerta no encontrada');
