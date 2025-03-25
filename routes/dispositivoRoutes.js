@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const dispositivoController = require('../controllers/dispositivoController');
+const historialDispositivoController = require('../controllers/historialDispositivoController');
 
-// Rutas para dispositivos
-router.get('/', dispositivoController.getAllDispositivos);
-router.get('/:id', dispositivoController.getDispositivoById);
-router.post('/', dispositivoController.createDispositivo);
-router.put('/:id', dispositivoController.updateDispositivo);
-router.delete('/:id', dispositivoController.deleteDispositivo);
+// Rutas esenciales
+router.get('/', historialDispositivoController.getAllHistorialDispositivos); // Para reportes
+router.get('/:id', historialDispositivoController.getHistorialDispositivoById); // Para consultas específicas
+router.post('/', historialDispositivoController.createHistorialDispositivo); // Para registrar eventos RFID
 
 module.exports = router;

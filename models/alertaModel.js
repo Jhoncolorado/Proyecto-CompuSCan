@@ -3,7 +3,7 @@ const pool = require('../config/db');
 const alertaModel = {
     getAllAlertas: async () => {
         try {
-            const query = 'SELECT * FROM alertas';
+            const query = 'SELECT * FROM alerta';  // Cambiado de "alertas" a "alerta" (singular)
             const result = await pool.query(query);
             return result.rows;
         } catch (error) {
@@ -11,9 +11,10 @@ const alertaModel = {
             throw error;
         }
     },
+
     getAlertaById: async (id) => {
         try {
-            const query = 'SELECT * FROM alertas WHERE idalertas = $1'; // Corregido: usar "idalertas" en lugar de "id"
+            const query = 'SELECT * FROM alerta WHERE id = $1';  // Cambiado a "id" (no "idalertas")
             const result = await pool.query(query, [id]);
             if (result.rows.length === 0) {
                 throw new Error('Alerta no encontrada');
@@ -24,31 +25,31 @@ const alertaModel = {
             throw error;
         }
     },
-    createAlerta: async (alerta) => {
+
+    createAlerta: async (alertaData) => {
         try {
-            const { tipo_alerta } = alerta;
-            const fecha = new Date().toISOString().split('T')[0]; // Fecha actual en formato YYYY-MM-DD
-            const hora = new Date().toTimeString().split(' ')[0]; // Hora actual en formato HH:MM:SS
+            const { descripcion } = alertaData;
             const query = `
-                INSERT INTO alertas (fecha, hora, tipo_alerta)
-                VALUES ($1, $2, $3)
+                INSERT INTO alerta (descripcion)  // Solo insertamos descripción (fecha es automática)
+                VALUES ($1)
                 RETURNING *`;
-            const result = await pool.query(query, [fecha, hora, tipo_alerta]);
+            const result = await pool.query(query, [descripcion]);
             return result.rows[0];
         } catch (error) {
             console.error('Error al crear la alerta:', error);
             throw error;
         }
     },
-    updateAlerta: async (id, alerta) => {
+
+    updateAlerta: async (id, alertaData) => {
         try {
-            const { fecha, hora, tipo_alerta } = alerta;
+            const { descripcion } = alertaData;
             const query = `
-                UPDATE alertas
-                SET fecha = $1, hora = $2, tipo_alerta = $3
-                WHERE idalertas = $4
+                UPDATE alerta
+                SET descripcion = $1  // Solo actualizamos descripción
+                WHERE id = $2
                 RETURNING *`;
-            const result = await pool.query(query, [fecha, hora, tipo_alerta, id]);
+            const result = await pool.query(query, [descripcion, id]);
             if (result.rows.length === 0) {
                 throw new Error('Alerta no encontrada');
             }
@@ -58,9 +59,10 @@ const alertaModel = {
             throw error;
         }
     },
+
     deleteAlerta: async (id) => {
         try {
-            const query = 'DELETE FROM alertas WHERE idalertas = $1 RETURNING *'; // Corregido: usar "idalertas" en lugar de "id"
+            const query = 'DELETE FROM alerta WHERE id = $1 RETURNING *';  // Cambiado a "id"
             const result = await pool.query(query, [id]);
             if (result.rows.length === 0) {
                 throw new Error('Alerta no encontrada');
