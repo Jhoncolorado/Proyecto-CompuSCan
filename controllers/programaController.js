@@ -1,24 +1,6 @@
 const programaModel = require('../models/programaModel');
 
 const programaController = {
-    createPrograma: async (req, res) => {
-        try {
-            const { nombre_programa } = req.body;
-            if (!nombre_programa) {
-                return res.status(400).json({ error: 'El nombre del programa es requerido' });
-            }
-            const newPrograma = await programaModel.createPrograma({ 
-                nombre_programa 
-            });
-            res.status(201).json(newPrograma);
-        } catch (error) {
-            res.status(500).json({ 
-                error: 'Error al crear programa',
-                details: error.message 
-            });
-        }
-    },
-
     getAllProgramas: async (req, res) => {
         try {
             const programas = await programaModel.getAllProgramas();
@@ -46,17 +28,53 @@ const programaController = {
         }
     },
 
+    createPrograma: async (req, res) => {
+        try {
+            const { nombre_programa } = req.body;
+
+            // Validar campos requeridos
+            if (!nombre_programa) {
+                return res.status(400).json({ 
+                    error: 'El nombre del programa es requerido',
+                    required: ['nombre_programa']
+                });
+            }
+
+            const newPrograma = await programaModel.createPrograma({
+                nombre_programa
+            });
+
+            res.status(201).json({
+                message: 'Programa creado exitosamente',
+                programa: newPrograma
+            });
+        } catch (error) {
+            res.status(500).json({ 
+                error: 'Error al crear programa',
+                details: error.message 
+            });
+        }
+    },
+
     updatePrograma: async (req, res) => {
         try {
             const { nombre_programa } = req.body;
-            const updatedPrograma = await programaModel.updatePrograma(
-                req.params.id, 
-                { nombre_programa }
-            );
-            if (!updatedPrograma) {
+
+            // Verificar si el programa existe
+            const programaExistente = await programaModel.getProgramaById(req.params.id);
+            if (!programaExistente) {
                 return res.status(404).json({ error: 'Programa no encontrado' });
             }
-            res.json(updatedPrograma);
+
+            const updatedPrograma = await programaModel.updatePrograma(
+                req.params.id,
+                { nombre_programa }
+            );
+
+            res.json({
+                message: 'Programa actualizado exitosamente',
+                programa: updatedPrograma
+            });
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al actualizar programa',
@@ -71,7 +89,10 @@ const programaController = {
             if (!deletedPrograma) {
                 return res.status(404).json({ error: 'Programa no encontrado' });
             }
-            res.json({ message: 'Programa eliminado correctamente' });
+            res.json({ 
+                message: 'Programa eliminado correctamente',
+                id: deletedPrograma.id
+            });
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al eliminar programa',

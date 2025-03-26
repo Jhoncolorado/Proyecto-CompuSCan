@@ -30,19 +30,33 @@ const dispositivoController = {
 
     createDispositivo: async (req, res) => {
         try {
-            // Validar campos obligatorios según nuevo SQL
-            const { nombre, tipo, serial } = req.body;
+            console.log('Recibiendo petición POST en /api/dispositivos');
+            console.log('Body recibido:', req.body);
+            
+            const { nombre, tipo, serial, foto } = req.body;
+
+            // Validar campos obligatorios
             if (!nombre || !tipo || !serial) {
-                return res.status(400).json({ error: 'Nombre, tipo y serial son requeridos' });
+                return res.status(400).json({ error: 'Faltan campos obligatorios' });
+            }
+
+            // Verificar si el serial ya existe
+            const dispositivoExistente = await dispositivoModel.getDispositivoBySerial(serial);
+            if (dispositivoExistente) {
+                return res.status(400).json({ error: 'El número de serie ya está registrado' });
             }
 
             const newDispositivo = await dispositivoModel.createDispositivo({
                 nombre,
                 tipo,
                 serial,
-                foto: req.body.foto || null // Campo opcional (BYTEA)
+                foto
             });
-            res.status(201).json(newDispositivo);
+
+            res.status(201).json({
+                message: 'Dispositivo creado exitosamente',
+                dispositivo: newDispositivo
+            });
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al crear dispositivo',
@@ -54,17 +68,35 @@ const dispositivoController = {
     updateDispositivo: async (req, res) => {
         try {
             const { nombre, tipo, serial, foto } = req.body;
-            const updatedDispositivo = await dispositivoModel.updateDispositivo(req.params.id, {
-                nombre,
-                tipo,
-                serial,
-                foto
-            });
 
-            if (!updatedDispositivo) {
+            // Verificar si el dispositivo existe
+            const dispositivoExistente = await dispositivoModel.getDispositivoById(req.params.id);
+            if (!dispositivoExistente) {
                 return res.status(404).json({ error: 'Dispositivo no encontrado' });
             }
-            res.json(updatedDispositivo);
+
+            // Si se está actualizando el serial, verificar que no exista
+            if (serial && serial !== dispositivoExistente.serial) {
+                const serialExistente = await dispositivoModel.getDispositivoBySerial(serial);
+                if (serialExistente) {
+                    return res.status(400).json({ error: 'El número de serie ya está registrado' });
+                }
+            }
+
+            const updatedDispositivo = await dispositivoModel.updateDispositivo(
+                req.params.id,
+                {
+                    nombre,
+                    tipo,
+                    serial,
+                    foto
+                }
+            );
+
+            res.json({
+                message: 'Dispositivo actualizado exitosamente',
+                dispositivo: updatedDispositivo
+            });
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al actualizar dispositivo',

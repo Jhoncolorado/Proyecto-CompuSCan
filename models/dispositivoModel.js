@@ -2,7 +2,7 @@ const pool = require('../config/db');
 
 const dispositivoModel = {
     getAllDispositivos: async () => {
-        const query = 'SELECT * FROM dispositivo';
+        const query = 'SELECT id, nombre, tipo, serial, foto, fecha_registro FROM dispositivo';
         const result = await pool.query(query);
         return result.rows;
     },
@@ -10,21 +10,31 @@ const dispositivoModel = {
     getDispositivoById: async (id) => {
         const query = 'SELECT * FROM dispositivo WHERE id = $1';
         const result = await pool.query(query, [id]);
-        return result.rows[0]; // Retorna undefined si no existe
+        return result.rows[0];
     },
 
-    createDispositivo: async ({ nombre, tipo, serial, foto }) => {
+    getDispositivoBySerial: async (serial) => {
+        const query = 'SELECT * FROM dispositivo WHERE serial = $1';
+        const result = await pool.query(query, [serial]);
+        return result.rows[0];
+    },
+
+    createDispositivo: async ({ 
+        nombre, tipo, serial, foto 
+    }) => {
         const query = `
-            INSERT INTO dispositivo 
-            (nombre, tipo, serial, foto)
+            INSERT INTO dispositivo (nombre, tipo, serial, foto)
             VALUES ($1, $2, $3, $4)
             RETURNING *`;
+        
         const values = [nombre, tipo, serial, foto];
         const result = await pool.query(query, values);
         return result.rows[0];
     },
 
-    updateDispositivo: async (id, { nombre, tipo, serial, foto }) => {
+    updateDispositivo: async (id, { 
+        nombre, tipo, serial, foto 
+    }) => {
         const query = `
             UPDATE dispositivo
             SET 
@@ -34,13 +44,14 @@ const dispositivoModel = {
                 foto = COALESCE($4, foto)
             WHERE id = $5
             RETURNING *`;
+        
         const values = [nombre, tipo, serial, foto, id];
         const result = await pool.query(query, values);
         return result.rows[0];
     },
 
     deleteDispositivo: async (id) => {
-        const query = 'DELETE FROM dispositivo WHERE id = $1 RETURNING *';
+        const query = 'DELETE FROM dispositivo WHERE id = $1 RETURNING id';
         const result = await pool.query(query, [id]);
         return result.rows[0];
     }

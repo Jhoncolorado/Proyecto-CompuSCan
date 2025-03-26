@@ -6,7 +6,10 @@ const alertaController = {
             const alertas = await alertaModel.getAllAlertas();
             res.json(alertas);
         } catch (error) {
-            res.status(500).json({ error: 'Error al obtener las alertas', details: error.message });
+            res.status(500).json({ 
+                error: 'Error al obtener alertas',
+                details: error.message 
+            });
         }
     },
 
@@ -18,39 +21,69 @@ const alertaController = {
             }
             res.json(alerta);
         } catch (error) {
-            res.status(500).json({ error: 'Error al obtener la alerta', details: error.message });
+            res.status(500).json({ 
+                error: 'Error al obtener alerta',
+                details: error.message 
+            });
         }
     },
 
     createAlerta: async (req, res) => {
         try {
-            // Validación básica según el nuevo esquema SQL
-            if (!req.body.descripcion) {
-                return res.status(400).json({ error: 'La descripción es requerida' });
+            const { descripcion, dispositivo_id } = req.body;
+
+            // Validar campos obligatorios
+            if (!descripcion || !dispositivo_id) {
+                return res.status(400).json({ 
+                    error: 'Faltan campos obligatorios',
+                    required: ['descripcion', 'dispositivo_id']
+                });
             }
-            
+
             const newAlerta = await alertaModel.createAlerta({
-                descripcion: req.body.descripcion,
-                // fecha se asigna automáticamente (CURRENT_TIMESTAMP en SQL)
+                descripcion,
+                dispositivo_id
             });
-            res.status(201).json(newAlerta);
+
+            res.status(201).json({
+                message: 'Alerta creada exitosamente',
+                alerta: newAlerta
+            });
         } catch (error) {
-            res.status(500).json({ error: 'Error al crear la alerta', details: error.message });
+            res.status(500).json({ 
+                error: 'Error al crear alerta',
+                details: error.message 
+            });
         }
     },
 
     updateAlerta: async (req, res) => {
         try {
-            const updatedAlerta = await alertaModel.updateAlerta(req.params.id, {
-                descripcion: req.body.descripcion // Solo actualizamos la descripción
-            });
-            
-            if (!updatedAlerta) {
+            const { descripcion, dispositivo_id } = req.body;
+
+            // Verificar si la alerta existe
+            const alertaExistente = await alertaModel.getAlertaById(req.params.id);
+            if (!alertaExistente) {
                 return res.status(404).json({ error: 'Alerta no encontrada' });
             }
-            res.json(updatedAlerta);
+
+            const updatedAlerta = await alertaModel.updateAlerta(
+                req.params.id,
+                {
+                    descripcion,
+                    dispositivo_id
+                }
+            );
+
+            res.json({
+                message: 'Alerta actualizada exitosamente',
+                alerta: updatedAlerta
+            });
         } catch (error) {
-            res.status(500).json({ error: 'Error al actualizar la alerta', details: error.message });
+            res.status(500).json({ 
+                error: 'Error al actualizar alerta',
+                details: error.message 
+            });
         }
     },
 
@@ -62,9 +95,36 @@ const alertaController = {
             }
             res.json({ message: 'Alerta eliminada correctamente' });
         } catch (error) {
-            res.status(500).json({ error: 'Error al eliminar la alerta', details: error.message });
+            res.status(500).json({ 
+                error: 'Error al eliminar alerta',
+                details: error.message 
+            });
         }
     },
+
+    getAlertasByDispositivo: async (req, res) => {
+        try {
+            const alertas = await alertaModel.getAlertasByDispositivo(req.params.dispositivo_id);
+            res.json(alertas);
+        } catch (error) {
+            res.status(500).json({ 
+                error: 'Error al obtener alertas del dispositivo',
+                details: error.message 
+            });
+        }
+    },
+
+    getAlertasByUsuario: async (req, res) => {
+        try {
+            const alertas = await alertaModel.getAlertasByUsuario(req.params.usuario_id);
+            res.json(alertas);
+        } catch (error) {
+            res.status(500).json({ 
+                error: 'Error al obtener alertas del usuario',
+                details: error.message 
+            });
+        }
+    }
 };
 
 module.exports = alertaController;

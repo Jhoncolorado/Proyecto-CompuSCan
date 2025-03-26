@@ -1,4 +1,5 @@
 const usuarioModel = require('../models/usuarioModel');
+const bcrypt = require('bcrypt');
 
 const usuarioController = {
     getAllUsuarios: async (req, res) => {
@@ -30,26 +31,57 @@ const usuarioController = {
 
     createUsuario: async (req, res) => {
         try {
-            // Validar campos obligatorios según nuevo SQL
-            const { nombre, correo, documento, tipo_documento, contrasena, rol } = req.body;
+            const { 
+                nombre, correo, documento, tipo_documento, 
+                contrasena, rol, telefono1, telefono2, 
+                rh, ficha, observacion, foto 
+            } = req.body;
+
+            // Validar campos obligatorios
             if (!nombre || !correo || !documento || !tipo_documento || !contrasena || !rol) {
                 return res.status(400).json({ error: 'Faltan campos obligatorios' });
             }
+
+            // Verificar si el correo ya existe
+            const usuarioExistente = await usuarioModel.getUsuarioByEmail(correo);
+            if (usuarioExistente) {
+                return res.status(400).json({ error: 'El correo electrónico ya está registrado' });
+            }
+
+            // Verificar si el documento ya existe
+            const documentoExistente = await usuarioModel.getUsuarioByDocument(documento);
+            if (documentoExistente) {
+                return res.status(400).json({ error: 'El documento ya está registrado' });
+            }
+
+            // Encriptar contraseña
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(contrasena, salt);
 
             const newUsuario = await usuarioModel.createUsuario({
                 nombre,
                 correo,
                 documento,
                 tipo_documento,
-                contrasena,
+                contrasena: hashedPassword,
                 rol,
-                telefono1: req.body.telefono1 || null,
-                telefono2: req.body.telefono2 || null,
-                rh: req.body.rh || null,
-                ficha: req.body.ficha || null,
-                foto: req.body.foto || null
+                telefono1,
+                telefono2,
+                rh,
+                ficha,
+                observacion,
+                foto
             });
-            res.status(201).json(newUsuario);
+
+            res.status(201).json({
+                message: 'Usuario creado exitosamente',
+                usuario: {
+                    id: newUsuario.id,
+                    nombre: newUsuario.nombre,
+                    correo: newUsuario.correo,
+                    rol: newUsuario.rol
+                }
+            });
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al crear usuario',
@@ -60,22 +92,48 @@ const usuarioController = {
 
     updateUsuario: async (req, res) => {
         try {
-            const updatedUsuario = await usuarioModel.updateUsuario(
-                req.params.id, 
-                {
-                    nombre: req.body.nombre,
-                    correo: req.body.correo,
-                    telefono1: req.body.telefono1,
-                    telefono2: req.body.telefono2,
-                    rh: req.body.rh,
-                    ficha: req.body.ficha,
-                    foto: req.body.foto
-                }
-            );
-            if (!updatedUsuario) {
+            const { 
+                nombre, correo, telefono1, telefono2, 
+                rh, ficha, observacion, foto 
+            } = req.body;
+
+            // Verificar si el usuario existe
+            const usuarioExistente = await usuarioModel.getUsuarioById(req.params.id);
+            if (!usuarioExistente) {
                 return res.status(404).json({ error: 'Usuario no encontrado' });
             }
-            res.json(updatedUsuario);
+
+            // Si se está actualizando el correo, verificar que no exista
+            if (correo && correo !== usuarioExistente.correo) {
+                const correoExistente = await usuarioModel.getUsuarioByEmail(correo);
+                if (correoExistente) {
+                    return res.status(400).json({ error: 'El correo electrónico ya está registrado' });
+                }
+            }
+
+            const updatedUsuario = await usuarioModel.updateUsuario(
+                req.params.id,
+                {
+                    nombre,
+                    correo,
+                    telefono1,
+                    telefono2,
+                    rh,
+                    ficha,
+                    observacion,
+                    foto
+                }
+            );
+
+            res.json({
+                message: 'Usuario actualizado exitosamente',
+                usuario: {
+                    id: updatedUsuario.id,
+                    nombre: updatedUsuario.nombre,
+                    correo: updatedUsuario.correo,
+                    rol: updatedUsuario.rol
+                }
+            });
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al actualizar usuario',
@@ -94,6 +152,43 @@ const usuarioController = {
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al eliminar usuario',
+                details: error.message 
+            });
+        }
+    },
+
+    login: async (req, res) => {
+        try {
+            const { correo, contrasena } = req.body;
+
+            if (!correo || !contrasena) {
+                return res.status(400).json({ error: 'Correo y contraseña son requeridos' });
+            }
+
+            const usuario = await usuarioModel.getUsuarioByEmail(correo);
+            if (!usuario) {
+                return res.status(401).json({ error: 'Credenciales inválidas' });
+            }
+
+            const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
+            if (!contrasenaValida) {
+                return res.status(401).json({ error: 'Credenciales inválidas' });
+            }
+
+            // Generar token JWT aquí si es necesario
+
+            res.json({
+                message: 'Login exitoso',
+                usuario: {
+                    id: usuario.id,
+                    nombre: usuario.nombre,
+                    correo: usuario.correo,
+                    rol: usuario.rol
+                }
+            });
+        } catch (error) {
+            res.status(500).json({ 
+                error: 'Error en el login',
                 details: error.message 
             });
         }
