@@ -1,0 +1,12 @@
+{
+  "name": "proyecto-compuscan",
+  "version": "1.0.0",
+  "description": "- `GET /api/usuarios`: Obtener todos los usuarios.\r - `POST /api/usuarios`: Crear un nuevo usuario.\r - `GET /api/usuarios/:id`: Obtener un usuario por ID.\r - `PUT /api/usuarios/:id`: Actualizar un usuario.\r - `DELETE /api/usuarios/:id`: Eliminar un usuario.",
+  "main": "javascript.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

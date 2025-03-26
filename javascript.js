@@ -3,7 +3,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     const bcrypt = window.dcodeIO.bcrypt;
     const saltRounds = 10;
 
-    // ========== [2. LISTA COMPLETA DE PROGRAMAS SENA ==========
+    // Verificar si hay una sesión activa
+    const checkSession = () => {
+        const user = localStorage.getItem('user');
+        if (user) {
+            document.body.classList.add('logged-in');
+            return true;
+        }
+        document.body.classList.remove('logged-in');
+        return false;
+    };
+
+    // Proteger secciones
+    const protectSections = () => {
+        document.querySelectorAll('#registros, #equipos').forEach(section => {
+            section.classList.add('protected-section');
+        });
+    };
+
+    // Inicializar protección
+    protectSections();
+    checkSession();
+
+    // ========== [2. LISTA COMPLETA DE PROGRAMAS SENA] ==========
     const programasSENA = [
         "ADSO",
         "ENFERMERIA",
@@ -55,14 +77,67 @@ document.addEventListener("DOMContentLoaded", async () => {
     const navLinks = document.querySelectorAll('.nav-link');
     
     function showSection(sectionId) {
-        sections.forEach(section => section.classList.toggle('active', section.id === sectionId));
-        navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${sectionId}`));
+        const isLoggedIn = checkSession();
+        
+        // Si la sección es protegida y el usuario no está logueado, redirigir al inicio
+        if ((sectionId === 'registros' || sectionId === 'equipos') && !isLoggedIn) {
+            mostrarNotificacion('❌ Debes iniciar sesión para acceder a esta sección', 'error');
+            sectionId = 'inicio';
+        }
+
+        // Ocultar todas las secciones primero
+        sections.forEach(section => {
+            section.classList.remove('active');
+            section.style.display = 'none';
+        });
+
+        // Mostrar la sección seleccionada
+        const targetSection = document.getElementById(sectionId);
+        if (targetSection) {
+            targetSection.classList.add('active');
+            targetSection.style.display = 'block';
+        }
+
+        // Actualizar enlaces de navegación
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${sectionId}`) {
+                link.classList.add('active');
+            }
+        });
+
+        // Manejar la visibilidad del contenido según el estado de login
+        const loginSection = document.getElementById('login-section');
+        const mainContent = document.getElementById('main-content');
+        
+        if (loginSection && mainContent) {
+            if (sectionId === 'inicio') {
+                if (isLoggedIn) {
+                    loginSection.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    setTimeout(() => mainContent.classList.add('visible'), 50);
+                } else {
+                    mainContent.classList.remove('visible');
+                    setTimeout(() => {
+                        mainContent.style.display = 'none';
+                        loginSection.style.display = 'block';
+                    }, 300);
+                }
+            } else {
+                loginSection.style.display = 'none';
+                mainContent.style.display = 'none';
+            }
+        } else {
+            console.error('Elementos no encontrados: loginSection o mainContent');
+        }
     }
 
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            showSection(link.getAttribute('href').substring(1));
+            const sectionId = link.getAttribute('href').substring(1);
+            showSection(sectionId);
+            window.location.hash = sectionId;
         });
     });
 
@@ -103,81 +178,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    async function validarImagen(imagen) {
-        try {
-            const tensor = tf.browser.fromPixels(imagen)
-                .resizeNearestNeighbor([224, 224])
-                .toFloat()
-                .expandDims();
-            
-            const predicciones = await net.classify(tensor, 5);
-            tensor.dispose();
-    
-            const keywordsEquipo = [
-                'desktop', 'laptop', 'notebook', 'computer', 'pc', 
-                'macbook', 'electronic', 'device', 'tablet', 'camera',
-                'charger', 'electronics', 'battery', 'adapter', 'monitor',
-                'keyboard', 'mouse', 'printer', 'scanner', 'projector',
-                'hardware', 'electronic equipment', 'personal computer',
-                'workstation', 'motherboard', 'processor', 'display',
-                'speaker', 'loudspeaker', 'plectrum',
-                'desktop computer', 'notebook computer', 'laptop computer'
-            ];
-    
-            const exclusiones = [
-                'logo', 'paper', 'card', 'book', 'label', 'person',
-                'food', 'animal', 'clothing', 'vehicle', 'furniture',
-                'building', 'landscape', 'toy', 'artwork', 'plant',
-                'flower', 'tree', 'sky', 'water', 'road'
-            ];
-    
-            const umbralConfianza = 0.10;
-    
-            const esDispositivo = predicciones.some(p => {
-                const clase = p.className.toLowerCase();
-                const confianza = p.probability;
-                
-                const tieneKeyword = keywordsEquipo.some(kw => clase.includes(kw));
-                const tieneExclusion = exclusiones.some(ex => clase.includes(ex));
-                
-                if (tieneKeyword) {
-                    console.log(`Detectado posible dispositivo: ${clase} (${confianza.toFixed(2)})`);
-                    return true;
-                }
-                
-                return tieneKeyword && (confianza > umbralConfianza) && !tieneExclusion;
-            });
-    
-            if (!esDispositivo) {
-                console.log("No es identificado como dispositivo en primera revisión, haciendo análisis secundario...");
-                
-                const otrasPredicciones = predicciones.map(p => p.className.toLowerCase());
-                
-                const terminosIndirectos = [
-                    'electronic', 'screen', 'display', 'technology', 
-                    'digital', 'equipment', 'device', 'hardware',
-                    'metal', 'plastic', 'screen', 'speaker', 'unit',
-                    'system', 'pick', 'plectrum', 'appliance', 'gadget'
-                ];
-                
-                const posibleDispositivo = otrasPredicciones.some(p => 
-                    terminosIndirectos.some(term => p.includes(term))
-                );
-                
-                if (posibleDispositivo) return true;
-                
-                const altaConfianzaGeneral = predicciones.some(p => p.probability > 0.4);
-                if (altaConfianzaGeneral) return true;
-            }
-    
-            return esDispositivo;
-        } catch (error) {
-            console.error("Error en validación IA:", error);
-            mostrarNotificacion('⚠️ Advertencia: Error en análisis de imagen. Verificando manualmente.', 'warning');
-            return true;
-        }
-    }
-
     // ========== [8. GESTIÓN DE CONTRASEÑAS] ==========
     async function hashPassword(password) {
         return await bcrypt.hash(password, saltRounds);
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const rol = this.value;
         const camposEspecificos = document.getElementById('campos-especificos');
         camposEspecificos.innerHTML = '';
-    
+        
         const campos = {
             aprendiz: `
                 <div class="form-group">
@@ -280,7 +280,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     });
 
-    // ========== [10. VALIDACIÓN GLOBAL RH ==========
+    // ========== [10. VALIDACIÓN GLOBAL RH] ==========
     document.addEventListener('input', function(e) {
         if (e.target.name === 'rh') {
             const rhValue = e.target.value;
@@ -340,117 +340,238 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // ========== [12. GESTIÓN DE FORMULARIOS] ==========
-    async function handleFormSubmit(formId, storageKey) {
-        const form = document.getElementById(formId);
-        if (!form) return;
-
-        form.addEventListener('submit', async (e) => {
+    // Formulario de Usuario
+    const formUsuario = document.getElementById('form-usuario');
+    if (formUsuario) {
+        formUsuario.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            if (formId === 'form-usuario' && !await validarContraseña(form)) return;
             
-            if (formId === 'form-equipo') {
-                const files = document.getElementById('ia-upload').files;
-                if (files.length !== 3) {
-                    mostrarNotificacion('❌ Debes subir 3 imágenes', 'error');
-                    return;
-                }
+            if (!await validarContraseña(formUsuario)) return;
+
+            try {
+                const formData = new FormData(formUsuario);
                 
-                if (!iaCargada) {
-                    mostrarNotificacion('⚠️ IA no está lista', 'error');
+                // Construir el nombre completo
+                const nombreCompleto = `${formData.get('nombre')} ${formData.get('apellidos')}`.trim();
+                
+                const userData = {
+                    nombre: nombreCompleto,
+                    correo: formData.get('email'),
+                    documento: formData.get('documento'),
+                    tipo_documento: 'CC',
+                    contrasena: formData.get('password'),
+                    rol: formData.get('rol'),
+                    rh: formData.get('rh') || null,
+                    ficha: formData.get('ficha') || null,
+                    observacion: formData.get('observaciones') || null,
+                    telefono1: null,
+                    telefono2: null,
+                    foto: null
+                };
+
+                console.log('Datos a enviar:', userData); // Para debug
+
+                // Enviar al backend
+                const response = await window.api.registrarUsuario(userData);
+                
+                if (response.error) {
+                    mostrarNotificacion(response.error, 'error');
                     return;
                 }
 
-                try {
-                    const resultados = await Promise.all(Array.from(files).map(async file => {
-                        const img = await new Promise((resolve, reject) => {
-                            const reader = new FileReader();
-                            reader.onload = e => {
-                                const imagen = new Image();
-                                imagen.onload = () => resolve(imagen);
-                                imagen.onerror = reject;
-                                imagen.src = e.target.result;
-                            };
-                            reader.readAsDataURL(file);
-                        });
-                        return await validarImagen(img);
-                    }));
-
-                    if (!resultados.every(r => r)) {
-                        mostrarNotificacion('❌ Imágenes no válidas', 'error');
-                        return;
-                    }
-                } catch (error) {
-                    mostrarNotificacion('⚠️ Error procesando imágenes', 'error');
-                    return;
-                }
+                mostrarNotificacion('✅ Usuario registrado exitosamente', 'success');
+                formUsuario.reset();
+                showSection('inicio');
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion('❌ Error al registrar usuario: ' + (error.message || 'Error desconocido'), 'error');
             }
-
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-            
-            if (formId === 'form-usuario') {
-                // Verificar duplicados para aprendices
-                if (data.rol === 'aprendiz') {
-                    const aprendices = JSON.parse(localStorage.getItem('aprendices') || '[]');
-                    const fichaDuplicada = aprendices.some(a => 
-                        a.ficha === data.ficha && a.programa === data.programa
-                    );
-                    
-                    if (fichaDuplicada) {
-                        mostrarNotificacion('❌ Esta ficha ya está registrada para este programa', 'error');
-                        return;
-                    }
-                }
-
-                data.password_hash = await hashPassword(data.password);
-                delete data.password;
-                delete data.confirm_password;
-            }
-
-            const coleccion = formId === 'form-usuario' ? `${data.rol}s` : storageKey;
-            const registros = JSON.parse(localStorage.getItem(coleccion) || '[]');
-            registros.push(data);
-            localStorage.setItem(coleccion, JSON.stringify(registros));
-            
-            mostrarNotificacion('✅ Registro exitoso!', 'success');
-            form.reset();
-            showSection('inicio');
         });
     }
 
-    // ========== [13. AUTENTICACIÓN] ==========
-    window.loginWeb = async (documento, password) => {
-        const usuarios = [
-            ...JSON.parse(localStorage.getItem('aprendices') || '[]'),
-            ...JSON.parse(localStorage.getItem('instructores') || '[]'),
-            ...JSON.parse(localStorage.getItem('administrativos') || '[]')
-        ];
+    // Formulario de Equipo
+    const formEquipo = document.getElementById('form-equipo');
+    if (formEquipo) {
+        formEquipo.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        const usuario = usuarios.find(u => u.documento === documento);
-        if (!usuario) return mostrarNotificacion('❌ Credenciales inválidas', 'error');
-
-        try {
-            if (await bcrypt.compare(password, usuario.password_hash)) {
-                mostrarNotificacion('✅ Bienvenido!', 'success');
-                // Redirección lógica aquí
-            } else {
-                mostrarNotificacion('❌ Credenciales inválidas', 'error');
+            // Validación de imágenes con IA
+            const files = document.getElementById('ia-upload').files;
+            if (files.length !== 3) {
+                mostrarNotificacion('❌ Debes subir 3 imágenes', 'error');
+                return;
             }
+
+            if (!iaCargada) {
+                mostrarNotificacion('⚠️ IA no está lista', 'error');
+                return;
+            }
+
+            try {
+                // Validar imágenes con IA
+                const resultados = await Promise.all(Array.from(files).map(async file => {
+                    const img = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = e => {
+                            const imagen = new Image();
+                            imagen.onload = () => resolve(imagen);
+                            imagen.onerror = reject;
+                            imagen.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    });
+                    return await validarImagen(img);
+                }));
+
+                if (!resultados.every(r => r)) {
+                    mostrarNotificacion('❌ Imágenes no válidas', 'error');
+                    return;
+                }
+
+                // Preparar datos del dispositivo
+                const formData = new FormData(formEquipo);
+                const dispositivoData = Object.fromEntries(formData.entries());
+                
+                // Convertir imágenes a base64
+                dispositivoData.fotos = await Promise.all(
+                    Array.from(files).map(file => 
+                        new Promise((resolve, reject) => {
+                            const reader = new FileReader();
+                            reader.onload = e => resolve(e.target.result);
+                            reader.onerror = reject;
+                            reader.readAsDataURL(file);
+                        })
+                    )
+                );
+
+                // Enviar al backend
+                const response = await window.api.registrarDispositivo(dispositivoData);
+                
+                if (response.error) {
+                    mostrarNotificacion(response.error, 'error');
+                    return;
+                }
+
+                mostrarNotificacion('✅ Dispositivo registrado exitosamente', 'success');
+                formEquipo.reset();
+                showSection('inicio');
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion('❌ Error al registrar dispositivo', 'error');
+            }
+        });
+    }
+
+    // Formulario de Contacto
+    const formContacto = document.getElementById('form-contacto');
+    if (formContacto) {
+        formContacto.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const formData = new FormData(formContacto);
+                const contactoData = Object.fromEntries(formData.entries());
+
+                // Aquí podrías agregar una llamada a la API para manejar mensajes de contacto
+                // Por ahora solo mostraremos una notificación
+                mostrarNotificacion('✅ Mensaje enviado exitosamente', 'success');
+                formContacto.reset();
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion('❌ Error al enviar mensaje', 'error');
+            }
+        });
+    }
+
+    // ========== [13. VALIDACIÓN DE IMÁGENES] ==========
+    async function validarImagen(imagen) {
+        try {
+            const predicciones = await net.classify(imagen);
+            
+            const keywordsEquipo = [
+                'desktop', 'laptop', 'notebook', 'computer', 'pc', 
+                'macbook', 'electronic', 'device', 'tablet', 'camera',
+                'charger', 'electronics', 'battery', 'adapter', 'monitor',
+                'keyboard', 'mouse', 'printer', 'scanner', 'projector',
+                'hardware', 'electronic equipment', 'personal computer',
+                'workstation', 'motherboard', 'processor', 'display',
+                'speaker', 'loudspeaker', 'plectrum',
+                'desktop computer', 'notebook computer', 'laptop computer'
+            ];
+
+            const exclusiones = [
+                'logo', 'paper', 'card', 'book', 'label', 'person',
+                'food', 'animal', 'clothing', 'vehicle', 'furniture',
+                'building', 'landscape', 'toy', 'artwork', 'plant',
+                'flower', 'tree', 'sky', 'water', 'road'
+            ];
+
+            return predicciones.some(p => {
+                const clase = p.className.toLowerCase();
+                return keywordsEquipo.some(kw => clase.includes(kw)) && 
+                       !exclusiones.some(ex => clase.includes(ex));
+            });
         } catch (error) {
-            mostrarNotificacion('⚠️ Error en autenticación', 'error');
-            console.error("Error login:", error);
+            console.error("Error en validación IA:", error);
+            mostrarNotificacion('⚠️ Error en análisis de imagen', 'warning');
+            return false;
         }
-    };
+    }
 
     // ========== [14. INICIALIZACIÓN] ==========
+    cargarModeloIA();
     showSection(window.location.hash.substring(1) || 'inicio');
-    if (window.location.hash === '#equipos') await cargarModeloIA();
-    window.addEventListener('hashchange', async () => {
-        if (window.location.hash === '#equipos' && !iaCargada) await cargarModeloIA();
-    });
 
-    await cargarModeloIA();
-    handleFormSubmit('form-usuario');
-    handleFormSubmit('form-equipo', 'equipos');
+    // ========== [15. MANEJO DE LOGIN] ==========
+    const formLogin = document.getElementById('form-login');
+    if (formLogin) {
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                const formData = new FormData(formLogin);
+                const loginData = {
+                    correo: formData.get('correo'),
+                    contrasena: formData.get('contrasena')
+                };
+
+                console.log('Intentando iniciar sesión con:', loginData);
+
+                const response = await fetch('/api/usuarios/login', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const data = await response.json();
+                console.log('Respuesta del servidor:', data);
+
+                if (response.ok) {
+                    localStorage.setItem('user', JSON.stringify(data.usuario));
+                    document.body.classList.add('logged-in');
+                    mostrarNotificacion('✅ Inicio de sesión exitoso', 'success');
+                    formLogin.reset();
+                    
+                    // Actualizar el contenido principal con animación
+                    const mainContent = document.getElementById('main-content');
+                    if (mainContent) {
+                        mainContent.querySelector('h2').textContent = `Bienvenido ${data.usuario.nombre}`;
+                        mainContent.style.display = 'block';
+                        setTimeout(() => mainContent.classList.add('visible'), 50);
+                    }
+                    
+                    // Mantener en la sección de inicio
+                    showSection('inicio');
+                } else {
+                    throw new Error(data.error || 'Error al iniciar sesión');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion('❌ ' + error.message, 'error');
+            }
+        });
+    }
 });
