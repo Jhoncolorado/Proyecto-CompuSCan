@@ -160,33 +160,35 @@ const usuarioController = {
     login: async (req, res) => {
         try {
             const { correo, contrasena } = req.body;
+            console.log('Intento de login para:', correo); // Debug
 
             if (!correo || !contrasena) {
                 return res.status(400).json({ error: 'Correo y contraseña son requeridos' });
             }
 
             const usuario = await usuarioModel.getUsuarioByEmail(correo);
+            console.log('Usuario encontrado:', usuario ? 'Sí' : 'No'); // Debug
+
             if (!usuario) {
                 return res.status(401).json({ error: 'Credenciales inválidas' });
             }
 
             const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
+            console.log('Contraseña válida:', contrasenaValida); // Debug
+
             if (!contrasenaValida) {
                 return res.status(401).json({ error: 'Credenciales inválidas' });
             }
 
-            // Generar token JWT aquí si es necesario
+            // No enviar la contraseña en la respuesta
+            const { contrasena: _, ...usuarioSinContrasena } = usuario;
 
             res.json({
                 message: 'Login exitoso',
-                usuario: {
-                    id: usuario.id,
-                    nombre: usuario.nombre,
-                    correo: usuario.correo,
-                    rol: usuario.rol
-                }
+                usuario: usuarioSinContrasena
             });
         } catch (error) {
+            console.error('Error en login:', error); // Debug
             res.status(500).json({ 
                 error: 'Error en el login',
                 details: error.message 
