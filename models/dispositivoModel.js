@@ -1,8 +1,11 @@
-const pool = require('../config/db');
+const pool = require('../config/database');
 
 const dispositivoModel = {
     getAllDispositivos: async () => {
-        const query = 'SELECT id, nombre, tipo, serial, foto, fecha_registro FROM dispositivo';
+        const query = `
+            SELECT id, tipo, marca, modelo, serial, procesador, cargador, mouse, foto, fecha_registro 
+            FROM dispositivo 
+            ORDER BY fecha_registro DESC`;
         const result = await pool.query(query);
         return result.rows;
     },
@@ -20,32 +23,40 @@ const dispositivoModel = {
     },
 
     createDispositivo: async ({ 
-        nombre, tipo, serial, foto 
+        tipo, marca, modelo, serial, procesador, cargador, mouse, foto 
     }) => {
         const query = `
-            INSERT INTO dispositivo (nombre, tipo, serial, foto)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO dispositivo (
+                tipo, marca, modelo, serial, procesador, cargador, mouse, foto
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING *`;
         
-        const values = [nombre, tipo, serial, foto];
+        const values = [tipo, marca, modelo, serial, procesador, cargador, mouse, foto];
+        console.log('Insertando dispositivo con valores:', values);
+        
         const result = await pool.query(query, values);
+        console.log('Dispositivo insertado:', result.rows[0]);
         return result.rows[0];
     },
 
     updateDispositivo: async (id, { 
-        nombre, tipo, serial, foto 
+        tipo, marca, modelo, serial, procesador, cargador, mouse, foto 
     }) => {
         const query = `
             UPDATE dispositivo
             SET 
-                nombre = COALESCE($1, nombre),
-                tipo = COALESCE($2, tipo),
-                serial = COALESCE($3, serial),
-                foto = COALESCE($4, foto)
-            WHERE id = $5
+                tipo = COALESCE($1, tipo),
+                marca = COALESCE($2, marca),
+                modelo = COALESCE($3, modelo),
+                serial = COALESCE($4, serial),
+                procesador = COALESCE($5, procesador),
+                cargador = COALESCE($6, cargador),
+                mouse = COALESCE($7, mouse),
+                foto = COALESCE($8, foto)
+            WHERE id = $9
             RETURNING *`;
         
-        const values = [nombre, tipo, serial, foto, id];
+        const values = [tipo, marca, modelo, serial, procesador, cargador, mouse, foto, id];
         const result = await pool.query(query, values);
         return result.rows[0];
     },
