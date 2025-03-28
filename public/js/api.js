@@ -6,16 +6,21 @@ window.api = {
     // Usuarios
     async registrarUsuario(userData) {
         try {
+            console.log('Iniciando registro de usuario...');
             const response = await fetch(`${API_URL}/usuarios`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify(userData)
             });
             
             const data = await response.json();
+            console.log('Respuesta del servidor:', data);
             
             if (!response.ok) {
-                throw new Error(data.error || 'Error desconocido');
+                throw new Error(data.error || data.message || 'Error desconocido en el registro');
             }
             
             return data;
@@ -28,12 +33,30 @@ window.api = {
     // Dispositivos
     async registrarDispositivo(dispositivoData) {
         try {
+            console.log('Iniciando registro de dispositivo...');
+            
+            // Verificar que las fotos existen y son un array
+            if (!dispositivoData.fotos || !Array.isArray(dispositivoData.fotos)) {
+                throw new Error('Las fotos son requeridas y deben ser un array');
+            }
+
+            // Enviar los datos tal como están, sin modificar las fotos
             const response = await fetch(`${API_URL}/dispositivos`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
                 body: JSON.stringify(dispositivoData)
             });
-            return await response.json();
+            
+            const data = await response.json();
+            console.log('Respuesta del servidor:', data);
+
+            if (!response.ok) {
+                throw new Error(data.error || data.message || data.errores?.[0] || 'Error al registrar dispositivo');
+            }
+            return data;
         } catch (error) {
             console.error('Error al registrar dispositivo:', error);
             throw error;
