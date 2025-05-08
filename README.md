@@ -642,3 +642,56 @@ function authenticateToken(req, res, next) {
 
 ## Conclusión
 El proyecto CompuScan Security está diseñado para ser una solución integral para la gestión de usuarios y equipos, con un enfoque en la seguridad y la usabilidad. Las mejoras recientes han optimizado la experiencia del usuario y asegurado la compatibilidad con dispositivos móviles.
+
+## Configuración de Variables de Entorno
+
+Para configurar correctamente la aplicación, necesitas crear un archivo `.env` con las variables de entorno necesarias.
+
+### Usando el script de configuración
+
+1. Ejecuta el siguiente comando para configurar las variables de entorno usando nuestro script interactivo:
+
+```bash
+node setup-env.js
+```
+
+Este script te guiará a través del proceso de configuración y creará el archivo `.env` con los valores que proporciones.
+
+### Configuración manual
+
+Alternativamente, puedes crear manualmente un archivo `.env` en la raíz del proyecto con el siguiente contenido:
+
+```env
+# Configuración del entorno
+NODE_ENV=development
+
+# Configuración del servidor
+PORT=3000
+
+# Configuración de la base de datos
+DB_USER=postgres
+DB_HOST=localhost
+DB_NAME=compuscansecurity
+DB_PASSWORD=1234
+DB_PORT=5432
+
+# Configuración de JWT
+JWT_SECRET=compuscansecuritysecretkey2024
+JWT_EXPIRES_IN=24h
+
+# Nivel de logs
+LOG_LEVEL=info
+```
+
+Asegúrate de configurar correctamente los valores, especialmente los relacionados con la base de datos.
+
+## Inicialización de la Base de Datos
+
+Después de configurar las variables de entorno, puedes inicializar la base de datos ejecutando:
+
+```bash
+node database/setup_db.js
+node database/init_db.js
+```
+
+Estos comandos crearán la base de datos si no existe y configurarán el esquema necesario.

@@ -81,19 +81,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     function showSection(sectionId) {
         const isLoggedIn = checkSession();
         
-        // Si la sección es protegida y el usuario no está logueado, redirigir al inicio
+        // Si la sección es protegida y el usuario no está logueado, redirigir a login
         if ((sectionId === 'registros' || sectionId === 'equipos') && !isLoggedIn) {
-            mostrarNotificacion('❌ Debes iniciar sesión para acceder a esta sección', 'error');
-            sectionId = 'inicio';
+            window.location.href = 'login.html';
+            return;
         }
 
         // Ocultar todas las secciones primero
         sections.forEach(section => {
-            section.style.opacity = '0';
-            setTimeout(() => {
-                section.classList.remove('active');
-                section.style.display = 'none';
-            }, 300);
+            if (section) {
+                section.style.opacity = '0';
+                setTimeout(() => {
+                    section.classList.remove('active');
+                    section.style.display = 'none';
+                }, 300);
+            }
         });
 
         // Mostrar la sección seleccionada con transición
@@ -121,29 +123,45 @@ document.addEventListener("DOMContentLoaded", async () => {
         const mainContent = document.getElementById('main-content');
         
         if (sectionId === 'inicio') {
-            if (isLoggedIn) {
-                loginSection.style.display = 'none';
-                mainContent.style.display = 'block';
-                setTimeout(() => mainContent.classList.add('visible'), 50);
-            } else {
-                mainContent.classList.remove('visible');
-                setTimeout(() => {
-                    mainContent.style.display = 'none';
-                    loginSection.style.display = 'block';
-                }, 300);
+            if (loginSection && mainContent) {
+                if (isLoggedIn) {
+                    loginSection.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    setTimeout(() => mainContent.classList.add('visible'), 50);
+                } else {
+                    mainContent.classList.remove('visible');
+                    setTimeout(() => {
+                        mainContent.style.display = 'none';
+                        loginSection.style.display = 'block';
+                    }, 300);
+                }
             }
         } else {
-            loginSection.style.display = 'none';
-            mainContent.style.display = 'none';
+            if (loginSection) loginSection.style.display = 'none';
+            if (mainContent) mainContent.style.display = 'none';
         }
     }
 
+    // Modificamos los eventos de clic para manejar la redirección
     navLinks.forEach(link => {
+        if (link.id === 'registros-link') {
+            // Este enlace ya tiene href directo a login.html
+            return;
+        }
+        
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const sectionId = link.getAttribute('href').substring(1);
-            showSection(sectionId);
-            window.location.hash = sectionId;
+            const href = link.getAttribute('href');
+            
+            // Si es un enlace interno
+            if (href.startsWith('#')) {
+                const sectionId = href.substring(1);
+                showSection(sectionId);
+                window.location.hash = sectionId;
+            } else {
+                // Si es un enlace externo
+                window.location.href = href;
+            }
         });
     });
 

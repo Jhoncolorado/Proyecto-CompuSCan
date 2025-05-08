@@ -3,35 +3,54 @@ const pool = require('../config/database');
 const dispositivoModel = {
     getAllDispositivos: async () => {
         const query = `
-            SELECT id, tipo, marca, modelo, serial, procesador, cargador, mouse, foto, fecha_registro 
-            FROM dispositivo 
-            ORDER BY fecha_registro DESC`;
+            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, u.nombre as nombre_usuario
+            FROM dispositivo d
+            JOIN usuario u ON d.id_usuario = u.id
+            ORDER BY d.fecha_registro DESC`;
         const result = await pool.query(query);
         return result.rows;
     },
 
     getDispositivoById: async (id) => {
-        const query = 'SELECT * FROM dispositivo WHERE id = $1';
+        const query = `
+            SELECT d.*, u.nombre as nombre_usuario
+            FROM dispositivo d
+            JOIN usuario u ON d.id_usuario = u.id
+            WHERE d.id = $1`;
         const result = await pool.query(query, [id]);
         return result.rows[0];
     },
 
     getDispositivoBySerial: async (serial) => {
-        const query = 'SELECT * FROM dispositivo WHERE serial = $1';
+        const query = `
+            SELECT d.*, u.nombre as nombre_usuario
+            FROM dispositivo d
+            JOIN usuario u ON d.id_usuario = u.id
+            WHERE d.serial = $1`;
         const result = await pool.query(query, [serial]);
         return result.rows[0];
     },
 
+    getDispositivoByRFID: async (rfid) => {
+        const query = `
+            SELECT d.*, u.nombre as nombre_usuario
+            FROM dispositivo d
+            JOIN usuario u ON d.id_usuario = u.id
+            WHERE d.rfid = $1`;
+        const result = await pool.query(query, [rfid]);
+        return result.rows[0];
+    },
+
     createDispositivo: async ({ 
-        tipo, marca, modelo, serial, procesador, cargador, mouse, foto 
+        nombre, tipo, serial, rfid, foto, id_usuario
     }) => {
         const query = `
             INSERT INTO dispositivo (
-                tipo, marca, modelo, serial, procesador, cargador, mouse, foto
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+                nombre, tipo, serial, rfid, foto, id_usuario
+            ) VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *`;
         
-        const values = [tipo, marca, modelo, serial, procesador, cargador, mouse, foto];
+        const values = [nombre, tipo, serial, rfid, foto, id_usuario];
         console.log('Insertando dispositivo con valores:', values);
         
         const result = await pool.query(query, values);
@@ -40,23 +59,21 @@ const dispositivoModel = {
     },
 
     updateDispositivo: async (id, { 
-        tipo, marca, modelo, serial, procesador, cargador, mouse, foto 
+        nombre, tipo, serial, rfid, foto, id_usuario
     }) => {
         const query = `
             UPDATE dispositivo
             SET 
-                tipo = COALESCE($1, tipo),
-                marca = COALESCE($2, marca),
-                modelo = COALESCE($3, modelo),
-                serial = COALESCE($4, serial),
-                procesador = COALESCE($5, procesador),
-                cargador = COALESCE($6, cargador),
-                mouse = COALESCE($7, mouse),
-                foto = COALESCE($8, foto)
-            WHERE id = $9
+                nombre = COALESCE($1, nombre),
+                tipo = COALESCE($2, tipo),
+                serial = COALESCE($3, serial),
+                rfid = COALESCE($4, rfid),
+                foto = COALESCE($5, foto),
+                id_usuario = COALESCE($6, id_usuario)
+            WHERE id = $7
             RETURNING *`;
         
-        const values = [tipo, marca, modelo, serial, procesador, cargador, mouse, foto, id];
+        const values = [nombre, tipo, serial, rfid, foto, id_usuario, id];
         const result = await pool.query(query, values);
         return result.rows[0];
     },

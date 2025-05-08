@@ -259,4 +259,8 @@ router.put('/:id', usuarioController.updateUsuario);
  */
 router.delete('/:id', usuarioController.deleteUsuario);
 
+// Registro en dos pasos
+router.post('/register-step1', usuarioController.registerStep1);
+router.put('/register-step2/:id', usuarioController.registerStep2);
+
 module.exports = router;

@@ -1,11 +1,11 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'compuscan',
-    password: '1234', // IMPORTANTE: Reemplaza 'TU_CONTRASEÑA_AQUI' con tu contraseña real de PostgreSQL
-    port: 5432,
+    user: process.env.DB_USER || 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    database: process.env.DB_NAME || 'compuscansecurity',
+    password: process.env.DB_PASSWORD || '1234',
+    port: process.env.DB_PORT || 5432,
 });
 
 // Agregar manejo de errores y logging

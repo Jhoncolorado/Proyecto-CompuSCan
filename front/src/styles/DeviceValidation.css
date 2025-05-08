@@ -1,0 +1,179 @@
+.device-validation {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+.device-validation h2 {
+  color: #333;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.validation-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.pending-devices, .validation-form {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pending-devices h3, .validation-form h3 {
+  color: #444;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #eee;
+}
+
+.devices-list {
+  display: grid;
+  gap: 1rem;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.device-card {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.device-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.device-card.selected {
+  border-color: #4a90e2;
+  background: #e3f2fd;
+}
+
+.device-card h4 {
+  color: #333;
+  margin: 0 0 0.5rem 0;
+}
+
+.device-card p {
+  margin: 0.3rem 0;
+  color: #666;
+}
+
+.device-card strong {
+  color: #444;
+}
+
+.selected-device {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.selected-device h4 {
+  color: #333;
+  margin: 0 0 1rem 0;
+}
+
+.rfid-input {
+  margin-bottom: 1.5rem;
+}
+
+.rfid-input label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.rfid-input input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.rfid-input input:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.validate-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.validate-button:hover:not(:disabled) {
+  background-color: #357abd;
+}
+
+.validate-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.select-device-message {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.success-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.validation-error {
+  text-align: center;
+  color: #c62828;
+  padding: 2rem;
+  background: #ffebee;
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .validation-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .device-validation {
+    padding: 1rem;
+  }
+} 

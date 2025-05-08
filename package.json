@@ -1,16 +1,4 @@
 {
- develop
-  "name": "proyecto-compuscan",
-  "version": "1.0.0",
-  "description": "- `GET /api/usuarios`: Obtener todos los usuarios.\r - `POST /api/usuarios`: Crear un nuevo usuario.\r - `GET /api/usuarios/:id`: Obtener un usuario por ID.\r - `PUT /api/usuarios/:id`: Actualizar un usuario.\r - `DELETE /api/usuarios/:id`: Eliminar un usuario.",
-  "main": "javascript.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
-
     "name": "backend",
     "version": "1.0.0",
     "description": "Backend para el proyecto Compuscan",
@@ -24,11 +12,15 @@
         "migrate": "node ./database/migrate.js"
     },
     "dependencies": {
+        "@tensorflow-models/mobilenet": "^2.1.1",
+        "@tensorflow/tfjs": "^4.22.0",
+        "axios": "^1.9.0",
         "bcryptjs": "^3.0.2",
         "cors": "^2.8.5",
         "dotenv": "^16.4.7",
         "express": "^4.21.2",
         "express-rate-limit": "^7.5.0",
+        "express-validator": "^7.2.1",
         "helmet": "^8.1.0",
         "jsonwebtoken": "^9.0.2",
         "morgan": "^1.10.0",
@@ -44,5 +36,4 @@
         "nodemon": "^3.0.2",
         "supertest": "^7.1.0"
     }
- main
 }

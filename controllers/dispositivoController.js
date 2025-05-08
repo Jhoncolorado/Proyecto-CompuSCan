@@ -71,6 +71,7 @@ const dispositivoController = {
 
     createDispositivo: async (req, res) => {
         try {
+            console.log('REQ.BODY:', req.body);
             const { tipo, marca, modelo, serial, procesador, cargador, mouse, fotos } = req.body;
 
             // Validaciones

@@ -1,0 +1,45 @@
+:root {
+  /* Colores principales */
+  --primary-color: #2E7D32; /* Verde oscuro */
+  --primary-light: #4CAF50; /* Verde medio */
+  --primary-lighter: #81C784; /* Verde claro */
+  --primary-dark: #1B5E20; /* Verde muy oscuro */
+  
+  /* Colores de fondo */
+  --bg-primary: #FFFFFF; /* Blanco */
+  --bg-secondary: #F5F5F5; /* Gris muy claro */
+  --bg-tertiary: #E8F5E9; /* Verde muy claro */
+  
+  /* Colores de texto */
+  --text-primary: #333333; /* Casi negro */
+  --text-secondary: #666666; /* Gris oscuro */
+  --text-light: #FFFFFF; /* Blanco */
+  
+  /* Colores de estado */
+  --success: #4CAF50; /* Verde */
+  --error: #F44336; /* Rojo */
+  --warning: #FFC107; /* Amarillo */
+  --info: #2196F3; /* Azul */
+  
+  /* Sombras */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  
+  /* Espaciado */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Bordes */
+  --border-radius-sm: 4px;
+  --border-radius-md: 8px;
+  --border-radius-lg: 12px;
+  
+  /* Transiciones */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+} 
