@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
+import UserDevices from '../../components/UserDevices';
 import '../../styles/profile.css';
 
 const Profile = () => {
@@ -12,6 +13,10 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const [editMode, setEditMode] = useState(false);
+
+  // Verificar si el usuario es aprendiz o instructor
+  const isNormalUser = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -43,6 +48,10 @@ const Profile = () => {
     if (user && user.id) fetchUser();
   }, [user]);
 
+  // Permitir editar si es admin o validador (cualquier variante, sin tildes ni mayúsculas)
+  const normalizeRol = (rol) =>
+    (rol || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const canEdit = user && ['admin', 'administrador', 'validador'].includes(normalizeRol(user.rol));
   // Solo el usuario puede cambiar su foto
   const canChangeAvatar = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
 
@@ -69,6 +78,26 @@ const Profile = () => {
     }
   };
 
+  const handleEdit = () => setEditMode(true);
+  const handleCancel = () => { setEditMode(false); setMessage(''); setError(''); };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSave = async (e) => {
+    e.preventDefault();
+    setMessage(''); setError(''); setLoading(true);
+    try {
+      await axios.put(`http://localhost:3000/api/usuarios/${user.id}`, formData, { headers: { 'Content-Type': 'application/json' } });
+      setEditMode(false);
+      setMessage('Perfil actualizado');
+      const refreshed = await axios.get(`http://localhost:3000/api/usuarios/${user.id}`);
+      if (typeof updateUserInContext === 'function') updateUserInContext(refreshed.data);
+    } catch (err) {
+      setError('Error al actualizar perfil');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="profile-container">
       <h2>Mi Perfil</h2>
@@ -84,23 +113,96 @@ const Profile = () => {
             </label>
           )}
         </div>
-        <div className="profile-info">
-          <div className="profile-field"><span className="profile-label">Nombre:</span> <span className="profile-value">{formData.nombre || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Correo:</span> <span className="profile-value">{formData.correo || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Documento:</span> <span className="profile-value">{formData.documento || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Tipo de documento:</span> <span className="profile-value">{formData.tipo_documento || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Teléfono principal:</span> <span className="profile-value">{formData.telefono1 || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Teléfono secundario:</span> <span className="profile-value">{formData.telefono2 || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">RH:</span> <span className="profile-value">{formData.rh || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Ficha:</span> <span className="profile-value">{formData.ficha || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Observación:</span> <span className="profile-value">{formData.observacion || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Rol:</span> <span className="profile-value profile-role">{formData.rol || '-'}</span></div>
-          <div className="profile-field"><span className="profile-label">Fecha de registro:</span> <span className="profile-value">{formData.fecha_registro ? new Date(formData.fecha_registro).toLocaleDateString() : '-'}</span></div>
-        </div>
-        <div className="profile-actions">
-          <button className="btn btn-success" type="button">Cambiar Contraseña</button>
-        </div>
+        <form onSubmit={handleSave} className="profile-info">
+          <div className="profile-field">
+            <span className="profile-label">Nombre:</span>
+            {canEdit && editMode ? (
+              <input className="profile-input" type="text" name="nombre" value={formData.nombre} onChange={handleChange} />
+            ) : (
+              <span className="profile-value">{formData.nombre || '-'}</span>
+            )}
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Correo:</span>
+            {canEdit && editMode ? (
+              <input className="profile-input" type="email" name="correo" value={formData.correo} onChange={handleChange} />
+            ) : (
+              <span className="profile-value">{formData.correo || '-'}</span>
+            )}
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Documento:</span>
+            <span className="profile-value">{formData.documento || '-'}</span>
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Tipo de documento:</span>
+            <span className="profile-value">{formData.tipo_documento || '-'}</span>
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Teléfono principal:</span>
+            {canEdit && editMode ? (
+              <input className="profile-input" type="text" name="telefono1" value={formData.telefono1} onChange={handleChange} />
+            ) : (
+              <span className="profile-value">{formData.telefono1 || '-'}</span>
+            )}
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Teléfono secundario:</span>
+            {canEdit && editMode ? (
+              <input className="profile-input" type="text" name="telefono2" value={formData.telefono2} onChange={handleChange} />
+            ) : (
+              <span className="profile-value">{formData.telefono2 || '-'}</span>
+            )}
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">RH:</span>
+            {canEdit && editMode ? (
+              <input className="profile-input" type="text" name="rh" value={formData.rh} onChange={handleChange} />
+            ) : (
+              <span className="profile-value">{formData.rh || '-'}</span>
+            )}
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Ficha:</span>
+            {canEdit && editMode ? (
+              <input className="profile-input" type="text" name="ficha" value={formData.ficha} onChange={handleChange} />
+            ) : (
+              <span className="profile-value">{formData.ficha || '-'}</span>
+            )}
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Observación:</span>
+            {canEdit && editMode ? (
+              <textarea className="profile-input" name="observacion" value={formData.observacion} onChange={handleChange} />
+            ) : (
+              <span className="profile-value">{formData.observacion || '-'}</span>
+            )}
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Rol:</span>
+            <span className="profile-value profile-role">{formData.rol || '-'}</span>
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Fecha de registro:</span>
+            <span className="profile-value">{formData.fecha_registro ? new Date(formData.fecha_registro).toLocaleDateString() : '-'}</span>
+          </div>
+          <div className="profile-actions">
+            <button className="btn btn-success" type="button">Cambiar Contraseña</button>
+            {canEdit && !editMode && (
+              <button className="btn btn-primary" type="button" onClick={handleEdit}>Editar</button>
+            )}
+            {canEdit && editMode && (
+              <>
+                <button className="btn btn-primary" type="submit" disabled={loading}>Guardar</button>
+                <button className="btn btn-secondary" type="button" onClick={handleCancel}>Cancelar</button>
+              </>
+            )}
+          </div>
+        </form>
       </div>
+      
+      {/* Solo mostrar UserDevices si es un usuario normal */}
+      {isNormalUser && <UserDevices />}
     </div>
   );
 };

@@ -194,11 +194,26 @@ const usuarioController = {
             }
 
             // No enviar la contraseña en la respuesta
-            const { contrasena: _, ...usuarioSinContrasena } = usuario;
+            const usuarioResponse = {
+                id: usuario.id,
+                nombre: usuario.nombre,
+                correo: usuario.correo,
+                documento: usuario.documento,
+                tipo_documento: usuario.tipo_documento,
+                rol: usuario.rol,
+                telefono1: usuario.telefono1,
+                telefono2: usuario.telefono2,
+                rh: usuario.rh,
+                ficha: usuario.ficha,
+                observacion: usuario.observacion,
+                foto: usuario.foto,
+                fecha_registro: usuario.fecha_registro,
+                estado: usuario.estado
+            };
 
             res.json({
                 message: 'Login exitoso',
-                usuario: usuarioSinContrasena
+                usuario: usuarioResponse
             });
         } catch (error) {
             console.error('Error en login:', error); // Debug

@@ -74,6 +74,20 @@ router.get('/', dispositivoController.getAllDispositivos);
 
 /**
  * @swagger
+ * /api/dispositivos/pendientes:
+ *   get:
+ *     summary: Obtener dispositivos sin RFID
+ *     tags: [Dispositivos]
+ *     responses:
+ *       200:
+ *         description: Lista de dispositivos sin RFID
+ *       500:
+ *         description: Error del servidor
+ */
+router.get('/pendientes', dispositivoController.getDispositivosPendientes);
+
+/**
+ * @swagger
  * /api/dispositivos/{id}:
  *   get:
  *     summary: Obtener un dispositivo por ID
@@ -152,5 +166,26 @@ router.put('/:id', dispositivoController.updateDispositivo);
  *         description: Dispositivo no encontrado
  */
 router.delete('/:id', dispositivoController.deleteDispositivo);
+
+/**
+ * @swagger
+ * /api/dispositivos/usuario/{usuarioId}:
+ *   get:
+ *     summary: Obtener dispositivos de un usuario específico
+ *     tags: [Dispositivos]
+ *     parameters:
+ *       - in: path
+ *         name: usuarioId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Lista de dispositivos del usuario
+ *       500:
+ *         description: Error del servidor
+ */
+router.get('/usuario/:usuarioId', dispositivoController.getDispositivosByUsuario);
 
 module.exports = router;

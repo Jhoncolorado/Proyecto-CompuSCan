@@ -3,7 +3,7 @@ const pool = require('../config/database');
 const dispositivoModel = {
     getAllDispositivos: async () => {
         const query = `
-            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, u.nombre as nombre_usuario
+            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, d.estado_validacion, u.nombre as nombre_usuario
             FROM dispositivo d
             JOIN usuario u ON d.id_usuario = u.id
             ORDER BY d.fecha_registro DESC`;
@@ -49,17 +49,15 @@ const dispositivoModel = {
                 nombre, tipo, serial, rfid, foto, id_usuario
             ) VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *`;
-        
         const values = [nombre, tipo, serial, rfid, foto, id_usuario];
         console.log('Insertando dispositivo con valores:', values);
-        
         const result = await pool.query(query, values);
         console.log('Dispositivo insertado:', result.rows[0]);
         return result.rows[0];
     },
 
     updateDispositivo: async (id, { 
-        nombre, tipo, serial, rfid, foto, id_usuario
+        nombre, tipo, serial, rfid, foto, id_usuario, estado_validacion
     }) => {
         const query = `
             UPDATE dispositivo
@@ -69,11 +67,12 @@ const dispositivoModel = {
                 serial = COALESCE($3, serial),
                 rfid = COALESCE($4, rfid),
                 foto = COALESCE($5, foto),
-                id_usuario = COALESCE($6, id_usuario)
-            WHERE id = $7
+                id_usuario = COALESCE($6, id_usuario),
+                estado_validacion = COALESCE($7, estado_validacion)
+            WHERE id = $8
             RETURNING *`;
         
-        const values = [nombre, tipo, serial, rfid, foto, id_usuario, id];
+        const values = [nombre, tipo, serial, rfid, foto, id_usuario, estado_validacion, id];
         const result = await pool.query(query, values);
         return result.rows[0];
     },
@@ -82,6 +81,32 @@ const dispositivoModel = {
         const query = 'DELETE FROM dispositivo WHERE id = $1 RETURNING id';
         const result = await pool.query(query, [id]);
         return result.rows[0];
+    },
+
+    getDispositivosByUsuario: async (usuarioId) => {
+        const query = `
+            SELECT d.*, u.nombre as nombre_usuario
+            FROM dispositivo d
+            JOIN usuario u ON d.id_usuario = u.id
+            WHERE d.id_usuario = $1
+            ORDER BY d.fecha_registro DESC`;
+        const result = await pool.query(query, [usuarioId]);
+        return result.rows;
+    },
+
+    getDispositivosPendientes: async () => {
+        const query = `
+            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, d.estado_validacion, u.nombre as nombre_usuario
+            FROM dispositivo d
+            JOIN usuario u ON d.id_usuario = u.id
+            WHERE d.rfid IS NULL
+            ORDER BY d.fecha_registro DESC`;
+        const result = await pool.query(query);
+        // Forzar el campo foto a null para evitar problemas en el frontend
+        return result.rows.map(device => {
+            device.foto = null;
+            return device;
+        });
     }
 };
 

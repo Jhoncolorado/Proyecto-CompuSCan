@@ -71,70 +71,23 @@ const dispositivoController = {
 
     createDispositivo: async (req, res) => {
         try {
-            console.log('REQ.BODY:', req.body);
-            const { tipo, marca, modelo, serial, procesador, cargador, mouse, fotos } = req.body;
-
-            // Validaciones
-            const errores = [];
-
-            if (!tipo || !validarTipoDispositivo(tipo)) {
-                errores.push('Tipo de dispositivo inválido. Debe ser: laptop, tablet, camera o monitor');
-            }
-
-            if (!marca || !validarMarcaModelo(marca)) {
-                errores.push('Marca inválida. Debe tener al menos 2 caracteres y solo letras, números y guiones');
-            }
-
-            if (!modelo || !validarMarcaModelo(modelo)) {
-                errores.push('Modelo inválido. Debe tener al menos 2 caracteres y solo letras, números y guiones');
-            }
-
-            if (!serial || !validarSerial(serial)) {
-                errores.push('Serial inválido. Debe tener al menos 5 caracteres y contener números');
-            }
-
-            if (!fotos || !Array.isArray(fotos)) {
-                errores.push('Las fotos son requeridas y deben ser un array');
-            } else {
-                const validacionFotos = validarFotos(fotos);
-                if (!validacionFotos.valido) {
-                    errores.push(validacionFotos.mensaje);
-                }
-            }
-
-            if (errores.length > 0) {
-                return res.status(400).json({
-                    message: 'Error de validación',
-                    errores: errores
-                });
-            }
-
-            // Verificar si ya existe un dispositivo con el mismo serial
-            const existingDevice = await dispositivoModel.getDispositivoBySerial(serial);
-            if (existingDevice) {
-                return res.status(400).json({
-                    message: 'Error de validación',
-                    errores: ['Ya existe un dispositivo registrado con este número de serial']
-                });
-            }
-
+            const { nombre, tipo, serial, fotos, id_usuario } = req.body;
+            // Validaciones aquí si es necesario
+            // Convertir fotos a string JSON para guardar en la columna 'foto'
+            const foto = JSON.stringify(fotos);
             // Crear el dispositivo
             const newDevice = await dispositivoModel.createDispositivo({
+                nombre,
                 tipo: tipo.toLowerCase(),
-                marca,
-                modelo,
                 serial,
-                procesador: procesador || null,
-                cargador: cargador || 'No',
-                mouse: mouse || 'No',
-                foto: JSON.stringify(fotos)
+                rfid: null, // Se asigna después
+                foto,
+                id_usuario
             });
-
             res.status(201).json({
                 message: 'Dispositivo registrado exitosamente',
                 dispositivo: newDevice
             });
-
         } catch (error) {
             console.error('Error al crear dispositivo:', error);
             res.status(500).json({
@@ -147,7 +100,7 @@ const dispositivoController = {
     updateDispositivo: async (req, res) => {
         try {
             const { id } = req.params;
-            const { tipo, marca, modelo, serial, procesador, cargador, mouse, fotos } = req.body;
+            const { tipo, marca, modelo, serial, procesador, cargador, mouse, fotos, rfid, estado_validacion } = req.body;
 
             // Validar que el dispositivo exista
             const dispositivo = await dispositivoModel.getDispositivoById(id);
@@ -172,7 +125,9 @@ const dispositivoController = {
                 procesador: procesador || dispositivo.procesador,
                 cargador: cargador || dispositivo.cargador,
                 mouse: mouse || dispositivo.mouse,
-                foto: fotos ? JSON.stringify(fotos) : dispositivo.foto
+                foto: fotos ? JSON.stringify(fotos) : dispositivo.foto,
+                rfid: rfid !== undefined ? rfid : dispositivo.rfid,
+                estado_validacion: estado_validacion || dispositivo.estado_validacion
             };
 
             const updatedDispositivo = await dispositivoModel.updateDispositivo(id, dispositivoData);
@@ -209,6 +164,29 @@ const dispositivoController = {
                 message: 'Error al eliminar dispositivo',
                 error: error.message
             });
+        }
+    },
+
+    getDispositivosByUsuario: async (req, res) => {
+        try {
+            const { usuarioId } = req.params;
+            const dispositivos = await dispositivoModel.getDispositivosByUsuario(usuarioId);
+            res.json(dispositivos);
+        } catch (error) {
+            console.error('Error al obtener dispositivos del usuario:', error);
+            res.status(500).json({ 
+                message: 'Error al obtener los dispositivos del usuario',
+                error: error.message 
+            });
+        }
+    },
+
+    getDispositivosPendientes: async (req, res) => {
+        try {
+            const dispositivos = await dispositivoModel.getDispositivosPendientes();
+            res.json(dispositivos);
+        } catch (error) {
+            res.status(500).json({ message: 'Error al obtener dispositivos pendientes', error: error.message });
         }
     }
 };
