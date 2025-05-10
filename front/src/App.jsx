@@ -14,6 +14,7 @@ import Cases from './pages/cases/Cases';
 import Profile from './pages/profile/Profile';
 import PrivateRoute from './components/common/PrivateRoute';
 import DeviceValidation from './components/DeviceValidation';
+import AccessControl from './components/AccessControl';
 
 // Configuración de las banderas futuras de React Router
 const router = {
@@ -29,6 +30,7 @@ function App() {
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/acceso" element={<AccessControl />} />
           <Route
             path="/"
             element={

@@ -56,6 +56,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/usuarios', require('./routes/usuarioRoutes'));
 app.use('/api/dispositivos', require('./routes/dispositivoRoutes'));
+app.use('/api/acceso', require('./routes/accesoRoutes'));
 app.use('/api/alertas', require('./routes/alertaRoutes'));
 app.use('/api/historiales', require('./routes/historialDispositivoRoutes'));
 app.use('/api/programas', require('./routes/programaRoutes'));

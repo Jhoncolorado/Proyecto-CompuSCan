@@ -3,6 +3,7 @@ import { FaPlus, FaEdit, FaTrash, FaSearch, FaExclamationTriangle } from 'react-
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import './users.css';
+import UserDevices from '../../components/UserDevices';
 
 const formatDate = (dateString) => {
   if (!dateString || isNaN(Date.parse(dateString))) return '—';
@@ -51,10 +52,26 @@ const Users = () => {
   });
   const [formError, setFormError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const [showDevicesModal, setShowDevicesModal] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [deviceImage, setDeviceImage] = useState('');
 
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (showModal && editingUser && editingUser.id) {
+      axios.get(`http://localhost:3000/api/dispositivos/usuario/${editingUser.id}`)
+        .then(devRes => {
+          if (Array.isArray(devRes.data) && devRes.data.length > 0 && devRes.data[0].foto) {
+            setDeviceImage(devRes.data[0].foto);
+          } else {
+            setDeviceImage('');
+          }
+        });
+    }
+  }, [showModal, editingUser]);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -362,6 +379,15 @@ const Users = () => {
                     >
                       <FaTrash />
                     </button>
+                    <button
+                      className="btn-icon"
+                      title="Ver dispositivos"
+                      onClick={() => { setSelectedUserId(user.id); setShowDevicesModal(true); }}
+                      disabled={submitting}
+                      style={{ color: '#1976d2' }}
+                    >
+                      <span role="img" aria-label="devices">💻</span>
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -374,6 +400,17 @@ const Users = () => {
         <div className="modal-overlay">
           <div className="modal">
             <h2>{editingUser ? 'Editar Usuario' : 'Nuevo Usuario'}</h2>
+            <div style={{ textAlign: 'center', marginBottom: 20 }}>
+              {editingUser && editingUser.foto && (
+                <img src={editingUser.foto} alt="Avatar" style={{ width: 90, height: 90, borderRadius: '50%', objectFit: 'cover', border: '2px solid #4caf50', marginBottom: 10 }} />
+              )}
+              {deviceImage && (
+                <div style={{ marginTop: 10 }}>
+                  <span style={{ display: 'block', fontWeight: 500, color: '#1976d2', marginBottom: 6 }}>Equipo principal:</span>
+                  <img src={deviceImage} alt="Equipo principal" style={{ width: 120, height: 90, borderRadius: 10, objectFit: 'cover', border: '2px solid #2196f3' }} />
+                </div>
+              )}
+            </div>
             <form onSubmit={handleSubmit} autoComplete="off">
               <div className="form-group">
                 <label>Nombre</label>
@@ -510,6 +547,20 @@ const Users = () => {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showDevicesModal && (
+        <div className="modal-overlay">
+          <div className="modal" style={{ maxWidth: 700, minHeight: 400 }}>
+            <button
+              style={{ float: 'right', background: 'none', border: 'none', fontSize: 22, cursor: 'pointer' }}
+              onClick={() => setShowDevicesModal(false)}
+              title="Cerrar"
+            >✖</button>
+            <h2>Dispositivos del usuario</h2>
+            <UserDevices userId={selectedUserId} isAdminView />
           </div>
         </div>
       )}

@@ -256,26 +256,35 @@
 /* --- Modal --- */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.25);
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal {
-  background: white;
-  padding: 2rem;
+  background: #fff;
   border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 32px 24px 24px 24px;
+  position: relative;
+  z-index: 1100;
+  min-width: 350px;
+  max-width: 90vw;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.18);
+}
+
+.modal button[title="Cerrar"] {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  color: #c62828;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1200;
 }
 
 .modal h2 {

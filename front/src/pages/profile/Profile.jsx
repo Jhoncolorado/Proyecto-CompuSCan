@@ -14,6 +14,7 @@ const Profile = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
+  const [deviceImage, setDeviceImage] = useState('');
 
   // Verificar si el usuario es aprendiz o instructor
   const isNormalUser = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
@@ -38,8 +39,12 @@ const Profile = () => {
           fecha_registro: fullUser.fecha_registro || ''
         });
         setAvatarPreview(fullUser.foto || '');
-        if (typeof updateUserInContext === 'function') {
-          updateUserInContext(fullUser);
+        // Obtener el primer dispositivo y su foto
+        const devRes = await axios.get(`http://localhost:3000/api/dispositivos/usuario/${user.id}`);
+        if (Array.isArray(devRes.data) && devRes.data.length > 0 && devRes.data[0].foto) {
+          setDeviceImage(devRes.data[0].foto);
+        } else {
+          setDeviceImage('');
         }
       } catch (err) {
         setError('Error al cargar datos del perfil');
@@ -111,6 +116,12 @@ const Profile = () => {
               <span>Subir imagen</span>
               <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} disabled={loading} />
             </label>
+          )}
+          {deviceImage && (
+            <div style={{ marginTop: 20 }}>
+              <span style={{ display: 'block', fontWeight: 500, color: '#1976d2', marginBottom: 6 }}>Equipo principal:</span>
+              <img src={deviceImage} alt="Equipo principal" style={{ width: 120, height: 90, borderRadius: 10, objectFit: 'cover', border: '2px solid #2196f3' }} />
+            </div>
           )}
         </div>
         <form onSubmit={handleSave} className="profile-info">

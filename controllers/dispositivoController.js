@@ -100,8 +100,6 @@ const dispositivoController = {
     updateDispositivo: async (req, res) => {
         try {
             const { id } = req.params;
-            const { tipo, marca, modelo, serial, procesador, cargador, mouse, fotos, rfid, estado_validacion } = req.body;
-
             // Validar que el dispositivo exista
             const dispositivo = await dispositivoModel.getDispositivoById(id);
             if (!dispositivo) {
@@ -109,29 +107,30 @@ const dispositivoController = {
             }
 
             // Si se está actualizando el serial, verificar que no exista
-            if (serial && serial !== dispositivo.serial) {
-                const dispositivoExistente = await dispositivoModel.getDispositivoBySerial(serial);
+            if (req.body.serial && req.body.serial !== dispositivo.serial) {
+                const dispositivoExistente = await dispositivoModel.getDispositivoBySerial(req.body.serial);
                 if (dispositivoExistente) {
                     return res.status(400).json({ message: 'Ya existe un dispositivo con ese serial' });
                 }
             }
 
-            // Actualizar el dispositivo
+            // Procesar la foto (base64)
+            let fotoProcesada = dispositivo.foto;
+            if (req.body.foto && typeof req.body.foto === 'string' && req.body.foto.startsWith('data:')) {
+                fotoProcesada = req.body.foto.split(',')[1];
+            }
+
             const dispositivoData = {
-                tipo: tipo || dispositivo.tipo,
-                marca: marca || dispositivo.marca,
-                modelo: modelo || dispositivo.modelo,
-                serial: serial || dispositivo.serial,
-                procesador: procesador || dispositivo.procesador,
-                cargador: cargador || dispositivo.cargador,
-                mouse: mouse || dispositivo.mouse,
-                foto: fotos ? JSON.stringify(fotos) : dispositivo.foto,
-                rfid: rfid !== undefined ? rfid : dispositivo.rfid,
-                estado_validacion: estado_validacion || dispositivo.estado_validacion
+                nombre: req.body.nombre || dispositivo.nombre,
+                tipo: req.body.tipo || dispositivo.tipo,
+                serial: req.body.serial || dispositivo.serial,
+                rfid: req.body.rfid !== undefined ? req.body.rfid : dispositivo.rfid,
+                foto: fotoProcesada,
+                id_usuario: req.body.id_usuario || dispositivo.id_usuario,
+                estado_validacion: req.body.estado_validacion || dispositivo.estado_validacion
             };
 
             const updatedDispositivo = await dispositivoModel.updateDispositivo(id, dispositivoData);
-            
             res.json({
                 message: 'Dispositivo actualizado exitosamente',
                 dispositivo: updatedDispositivo
