@@ -24,7 +24,7 @@ const Profile = () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/usuarios/${user.id}`);
         const fullUser = response.data;
-        setFormData({
+      setFormData({
           nombre: fullUser.nombre || '',
           correo: fullUser.correo || '',
           documento: fullUser.documento || '',
@@ -48,7 +48,7 @@ const Profile = () => {
         }
       } catch (err) {
         setError('Error al cargar datos del perfil');
-      }
+        }
     };
     if (user && user.id) fetchUser();
   }, [user]);
@@ -113,9 +113,9 @@ const Profile = () => {
           <img className="profile-avatar" src={avatarPreview || '/default-avatar.png'} alt="avatar" />
           {canChangeAvatar && (
             <label className="btn-avatar-upload" style={{ marginTop: '1rem', cursor: 'pointer' }}>
-              <span>Subir imagen</span>
+                <span>Subir imagen</span>
               <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} disabled={loading} />
-            </label>
+              </label>
           )}
           {deviceImage && (
             <div style={{ marginTop: 20 }}>
@@ -197,19 +197,19 @@ const Profile = () => {
             <span className="profile-label">Fecha de registro:</span>
             <span className="profile-value">{formData.fecha_registro ? new Date(formData.fecha_registro).toLocaleDateString() : '-'}</span>
           </div>
-          <div className="profile-actions">
+        <div className="profile-actions">
             <button className="btn btn-success" type="button">Cambiar Contraseña</button>
             {canEdit && !editMode && (
               <button className="btn btn-primary" type="button" onClick={handleEdit}>Editar</button>
             )}
             {canEdit && editMode && (
-              <>
+            <>
                 <button className="btn btn-primary" type="submit" disabled={loading}>Guardar</button>
                 <button className="btn btn-secondary" type="button" onClick={handleCancel}>Cancelar</button>
-              </>
-            )}
-          </div>
-        </form>
+            </>
+          )}
+            </div>
+          </form>
       </div>
       
       {/* Solo mostrar UserDevices si es un usuario normal */}

@@ -8,6 +8,7 @@ const fs = require('fs');
 const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
+const dashboardController = require('./controllers/dashboardController');
 
 // Mostrar las variables de entorno cargadas (solo para desarrollo)
 console.log('Variables de entorno:');
@@ -63,6 +64,7 @@ app.use('/api/programas', require('./routes/programaRoutes'));
 app.use('/api/carnets', require('./routes/carnetRoutes'));
 app.use('/api/casos', require('./routes/casoRoutes'));
 app.use('/api/historial-alertas', require('./routes/historialAlertaRoutes'));
+app.use('/api/dashboard/stats', dashboardController.getDashboardStats);
 
 // Ruta de prueba para verificar CORS
 app.get('/api/test-cors', (req, res) => {

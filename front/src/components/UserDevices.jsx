@@ -14,7 +14,8 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
     nombre: '',
     tipo: '',
     serial: '',
-    foto: null
+    foto: null,
+    mimeType: ''
   });
   const [editId, setEditId] = useState(null);
   const [formError, setFormError] = useState('');
@@ -24,12 +25,12 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
   const handleShowForm = () => {
     setShowForm(true);
     setEditId(null);
-    setForm({ nombre: '', tipo: '', serial: '', foto: null });
+    setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
   };
   const handleHideForm = () => {
     setShowForm(false);
     setEditId(null);
-    setForm({ nombre: '', tipo: '', serial: '', foto: null });
+    setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
   };
 
   const canRegisterDevice = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
@@ -57,7 +58,8 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
   const handleFormChange = (e) => {
     const { name, value, files } = e.target;
     if (name === 'foto') {
-      setForm({ ...form, foto: files[0] });
+      const file = files[0];
+      setForm({ ...form, foto: file, mimeType: file ? file.type : '' });
     } else {
       setForm({ ...form, [name]: value });
     }
@@ -70,7 +72,8 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
       nombre: device.nombre || '',
       tipo: device.tipo || '',
       serial: device.serial || '',
-      foto: null // No precargamos la foto, solo permitimos subir una nueva
+      foto: null, // No precargamos la foto, solo permitimos subir una nueva
+      mimeType: ''
     });
   };
 
@@ -99,7 +102,8 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
           nombre: form.nombre,
           tipo: form.tipo,
           serial: form.serial,
-          foto: fotoBase64
+          foto: fotoBase64,
+          mimeType: form.mimeType
         });
         setSuccessMessage('¡Dispositivo actualizado exitosamente!');
         setTimeout(() => {
@@ -108,12 +112,22 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
           setSuccessMessage('');
         }, 1500);
       } else {
-        // Registro (lógica existente, no tocada)
-        setFormError('Solo edición implementada aquí. Usa el registro normal para nuevos.');
-        setFormLoading(false);
-        return;
+        // Registro de nuevo dispositivo
+        await axios.post('http://localhost:3000/api/dispositivos', {
+          nombre: form.nombre,
+          tipo: form.tipo,
+          serial: form.serial,
+          foto: fotoBase64,
+          mimeType: form.mimeType,
+          id_usuario: userId
+        });
+        setSuccessMessage('¡Dispositivo registrado exitosamente!');
+        setTimeout(() => {
+          setShowForm(false);
+          setSuccessMessage('');
+        }, 1500);
       }
-      setForm({ nombre: '', tipo: '', serial: '', foto: null });
+      setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
       setFormError('');
       setFormLoading(false);
       // Recargar dispositivos
@@ -132,11 +146,6 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
     <div className="user-devices">
       <div className="section-header">
         <h2>Mis Dispositivos</h2>
-        {canRegisterDevice && devices.length === 0 && (
-          <button className="add-device-button" onClick={handleShowForm}>
-            Registrar Dispositivo
-          </button>
-        )}
       </div>
 
       {showForm && (

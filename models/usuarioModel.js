@@ -148,6 +148,11 @@ const usuarioModel = {
         const query = 'DELETE FROM usuario WHERE id = $1 RETURNING id';
         const result = await pool.query(query, [id]);
         return result.rows[0];
+    },
+
+    countUsuarios: async () => {
+        const result = await pool.query('SELECT COUNT(*) FROM usuario');
+        return parseInt(result.rows[0].count, 10);
     }
 };
 

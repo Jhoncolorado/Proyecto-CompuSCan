@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/auth.css';
-import { FaUser, FaEnvelope, FaLock, FaIdCard, FaPhone, FaTint, FaIdBadge } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaLock, FaIdCard, FaPhone, FaTint, FaIdBadge, FaEye, FaEyeSlash } from 'react-icons/fa';
 import logo from '../../assets/Imagen .jpg';
 
 const Login = () => {
@@ -26,6 +26,9 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+  const [showRegisterConfirm, setShowRegisterConfirm] = useState(false);
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -194,13 +197,23 @@ const Login = () => {
               <div className="input-icon-group">
                 <FaLock className="input-icon" />
                 <input
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   name="password"
                   placeholder="Contraseña"
                   value={loginData.password}
                   onChange={handleLoginChange}
                   required
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="show-password-btn"
+                  tabIndex={-1}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 8 }}
+                  aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
               </div>
               {error && <div className="auth-error">{error}</div>}
               <button type="submit" className="btn btn-primary" disabled={loading}>
@@ -265,24 +278,44 @@ const Login = () => {
                     <div className="input-icon-group">
                       <FaLock className="input-icon" />
                       <input
-                        type="password"
+                        type={showRegisterPassword ? 'text' : 'password'}
                         name="contrasena"
                         placeholder="Contraseña"
                         value={registerData.contrasena}
                         onChange={handleRegisterChange}
                         required
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                        className="show-password-btn"
+                        tabIndex={-1}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 8 }}
+                        aria-label={showRegisterPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                      >
+                        {showRegisterPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
                     </div>
                     <div className="input-icon-group">
                       <FaLock className="input-icon" />
                       <input
-                        type="password"
+                        type={showRegisterConfirm ? 'text' : 'password'}
                         name="confirmar_contrasena"
                         placeholder="Confirmar contraseña"
                         value={registerData.confirmar_contrasena}
                         onChange={handleRegisterChange}
                         required
                       />
+                      <button
+                        type="button"
+                        onClick={() => setShowRegisterConfirm(!showRegisterConfirm)}
+                        className="show-password-btn"
+                        tabIndex={-1}
+                        style={{ background: 'none', border: 'none', cursor: 'pointer', marginLeft: 8 }}
+                        aria-label={showRegisterConfirm ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                      >
+                        {showRegisterConfirm ? <FaEyeSlash /> : <FaEye />}
+                      </button>
                     </div>
                   </>
                 ) : (

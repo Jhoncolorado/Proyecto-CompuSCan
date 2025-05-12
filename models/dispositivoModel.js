@@ -3,12 +3,19 @@ const pool = require('../config/database');
 const dispositivoModel = {
     getAllDispositivos: async () => {
         const query = `
-            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, d.estado_validacion, u.nombre as nombre_usuario
+            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, d.estado_validacion, d.mime_type, u.nombre as nombre_usuario
             FROM dispositivo d
             JOIN usuario u ON d.id_usuario = u.id
             ORDER BY d.fecha_registro DESC`;
         const result = await pool.query(query);
-        return result.rows;
+        // Convertir foto a base64 si existe
+        return result.rows.map(device => {
+            if (device.foto) {
+                const mime = device.mime_type || device.mimeType || 'image/jpeg';
+                device.foto = `data:${mime};base64,` + Buffer.from(device.foto).toString('base64');
+            }
+            return device;
+        });
     },
 
     getDispositivoById: async (id) => {
@@ -40,7 +47,8 @@ const dispositivoModel = {
         const result = await pool.query(query, [rfid]);
         const dispositivo = result.rows[0];
         if (dispositivo && dispositivo.foto) {
-            dispositivo.foto = 'data:image/jpeg;base64,' + Buffer.from(dispositivo.foto).toString('base64');
+            const mime = dispositivo.mime_type || dispositivo.mimeType || 'image/jpeg';
+            dispositivo.foto = `data:${mime};base64,` + Buffer.from(dispositivo.foto).toString('base64');
         }
         return dispositivo;
     },
@@ -113,7 +121,8 @@ const dispositivoModel = {
         // Convertir foto a base64 si existe
         return result.rows.map(device => {
             if (device.foto) {
-                device.foto = 'data:image/jpeg;base64,' + Buffer.from(device.foto).toString('base64');
+                const mime = device.mime_type || device.mimeType || 'image/jpeg';
+                device.foto = `data:${mime};base64,` + Buffer.from(device.foto).toString('base64');
             }
             return device;
         });
@@ -132,6 +141,11 @@ const dispositivoModel = {
             device.foto = null;
             return device;
         });
+    },
+
+    countDispositivos: async () => {
+        const result = await pool.query('SELECT COUNT(*) FROM dispositivo');
+        return parseInt(result.rows[0].count, 10);
     }
 };
 

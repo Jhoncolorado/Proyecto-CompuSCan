@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaSearch, FaExclamationTriangle } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaSearch, FaExclamationTriangle, FaUserCircle } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import './users.css';
@@ -242,328 +242,183 @@ const Users = () => {
   };
 
   if (loading) return (
-    <div className="loading">
-      <div className="loading-spinner"></div>
-      <p>Cargando usuarios...</p>
+    <div className="users-container">
+      <div className="users-header">
+        <h1>Gestión de Usuarios</h1>
+        <button className="btn btn-primary" onClick={() => { setShowModal(true); setEditingUser(null); }}>
+          <FaPlus /> Nuevo Usuario
+        </button>
+      </div>
+      <div className="users-table-container">
+        <div className="users-loading">
+          <span className="spinner"></span>
+          <span>Cargando usuarios...</span>
+        </div>
+      </div>
     </div>
   );
 
   return (
-    <div className="users-container">
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '20px',
-        background: '#fff',
-        padding: '15px 20px',
-        borderRadius: '8px',
-        boxShadow: '0 2px 8px rgba(44, 62, 80, 0.1)',
-        borderBottom: '2px solid #2e7d32'
-      }}>
-        <h1 style={{
-          color: '#1b5e20',
-          fontSize: '2rem',
-          fontWeight: 'bold',
-          margin: 0
-        }}>Gestión de Usuarios</h1>
-        <button
-          style={{
-            background: '#2e7d32',
-            color: 'white',
-            border: '2px solid #1b5e20',
-            borderRadius: '8px',
-            padding: '10px 20px',
-            fontWeight: 'bold',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-          onClick={() => {
-            setShowModal(true);
-            setEditingUser(null);
-            setFormData({ 
-              nombre: '', 
-              correo: '', 
-              rol: '',
-              telefono1: '',
-              telefono2: '',
-              rh: '',
-              ficha: '',
-              observacion: '',
-              estado: 'activo',
-              documento: '',
-              tipo_documento: '',
-              foto: ''
-            });
-            setFormError('');
-          }}
-          disabled={submitting}
-        >
-          <FaPlus /> Nuevo Usuario
-        </button>
-      </div>
-
-      {error && (
-        <div className="error-message">
-          <FaExclamationTriangle /> {error}
+    <div className="users-bg">
+      <div className="users-panel">
+        <div className="users-header">
+          <h1>Gestión de Usuarios</h1>
+          <button className="btn btn-primary" onClick={() => { setShowModal(true); setEditingUser(null); }}>
+            <FaPlus /> Nuevo Usuario
+          </button>
         </div>
-      )}
-      
-      {success && (
-        <div className="success-message">
-          {success}
+        <div className="search-bar">
+          <FaSearch className="search-icon" />
+          <input
+            type="text"
+            placeholder="Buscar usuario..."
+            value={searchTerm}
+            onChange={handleSearch}
+          />
         </div>
-      )}
-
-      <div className="search-bar">
-        <FaSearch className="search-icon" />
-        <input
-          type="text"
-          placeholder="Buscar usuarios..."
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-      </div>
-      
-      <div className="users-table-container">
+        {error && (
+          <div className="users-error-message">
+            <FaExclamationTriangle style={{marginRight:8}}/>{error}
+          </div>
+        )}
+        {success && (
+          <div className="users-success-message">
+            {success}
+          </div>
+        )}
         {filteredUsers.length === 0 ? (
-          <div className="no-results">
-            {searchTerm 
-              ? `No se encontraron usuarios que coincidan con "${searchTerm}"`
-              : "No hay usuarios registrados en el sistema"}
+          <div className="users-info-message">
+            <FaExclamationTriangle style={{marginRight:8}}/>
+            No hay usuarios registrados.
           </div>
         ) : (
-          <table className="users-table">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Rol</th>
-                <th>Estado</th>
-                <th>Fecha de registro</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map(user => (
-                <tr key={user.id}>
-                  <td>{user.nombre || '—'}</td>
-                  <td>{user.correo || '—'}</td>
-                  <td>
-                    <span className={`role-badge ${user.rol || 'unknown'}`}>
-                      {capitalize(user.rol)}
-                    </span>
-                  </td>
-                  <td>
-                    <span className={`status-badge ${user.estado || 'unknown'}`}>
-                      {capitalize(user.estado)}
-                    </span>
-                  </td>
-                  <td>{formatDate(user.fecha_registro)}</td>
-                  <td className="actions">
-                    <button 
-                      className="btn-icon" 
-                      title="Editar" 
-                      onClick={() => handleEdit(user)}
-                      disabled={submitting}
-                    >
-                      <FaEdit />
-                    </button>
-                    <button 
-                      className="btn-icon delete" 
-                      title="Eliminar" 
-                      onClick={() => handleDelete(user.id)}
-                      disabled={submitting}
-                    >
-                      <FaTrash />
-                    </button>
-                    <button
-                      className="btn-icon"
-                      title="Ver dispositivos"
-                      onClick={() => { setSelectedUserId(user.id); setShowDevicesModal(true); }}
-                      disabled={submitting}
-                      style={{ color: '#1976d2' }}
-                    >
-                      <span role="img" aria-label="devices">💻</span>
-                    </button>
-                  </td>
+          <div className="users-table-container">
+            <table className="users-table">
+              <thead>
+                <tr>
+                  <th>Foto</th>
+                  <th>Nombre</th>
+                  <th>Correo</th>
+                  <th>Rol</th>
+                  <th>Estado</th>
+                  <th>Documento</th>
+                  <th>Teléfono</th>
+                  <th>Acciones</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {filteredUsers.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.foto ? <img src={user.foto} alt="Avatar" className="user-avatar" /> : <FaUserCircle className="user-avatar-placeholder" />}</td>
+                    <td>{user.nombre}</td>
+                    <td>{user.correo}</td>
+                    <td><span className={`role-badge ${user.rol}`}>{capitalize(user.rol)}</span></td>
+                    <td><span className={`status-badge ${user.estado}`}>{capitalize(user.estado)}</span></td>
+                    <td>{user.documento}</td>
+                    <td>{user.telefono1 || '—'}</td>
+                    <td className="actions">
+                      <button className="btn-icon edit" title="Editar" onClick={() => handleEdit(user)}><FaEdit /></button>
+                      <button className="btn-icon delete" title="Eliminar" onClick={() => handleDelete(user.id)}><FaTrash /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {showModal && (
+          <div className="modal-overlay">
+            <div className="modal">
+              <button className="close-modal" onClick={handleCloseModal} title="Cerrar">✖</button>
+              <h2>{editingUser ? 'Editar Usuario' : 'Nuevo Usuario'}</h2>
+              <div className="form-avatar-preview">
+                {editingUser && editingUser.foto ? (
+                  <img src={editingUser.foto} alt="Avatar" className="user-avatar-large" />
+                ) : (
+                  <FaUserCircle className="user-avatar-placeholder-large" />
+                )}
+              </div>
+              <form onSubmit={handleSubmit} autoComplete="off" className="form-grid">
+                <div className="form-control">
+                  <label className="label">Nombre</label>
+                  <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required autoFocus disabled={submitting} className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                  <label className="label">Correo</label>
+                  <input type="email" name="correo" value={formData.correo} onChange={handleChange} required disabled={submitting} className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                  <label className="label">Rol</label>
+                  <select name="rol" value={formData.rol} onChange={handleChange} required disabled={submitting} className="select select-bordered">
+                    <option value="">Seleccionar rol</option>
+                    <option value="administrador">Administrador/Validador</option>
+                    <option value="instructor">Instructor</option>
+                    <option value="aprendiz">Aprendiz</option>
+                  </select>
+                </div>
+                <div className="form-control">
+                  <label className="label">Teléfono Principal</label>
+                  <input type="tel" name="telefono1" value={formData.telefono1} onChange={handleChange} disabled={submitting} className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                  <label className="label">Teléfono Secundario</label>
+                  <input type="tel" name="telefono2" value={formData.telefono2} onChange={handleChange} disabled={submitting} className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                  <label className="label">RH</label>
+                  <input type="text" name="rh" value={formData.rh} onChange={handleChange} disabled={submitting} maxLength="3" placeholder="Ej: O+, A-, B+, AB+" className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                  <label className="label">Ficha</label>
+                  <input type="text" name="ficha" value={formData.ficha} onChange={handleChange} disabled={submitting} placeholder="Número de ficha (solo para aprendices)" className="input input-bordered" />
+                </div>
+                <div className="form-control md:col-span-2">
+                  <label className="label">Observación</label>
+                  <textarea name="observacion" value={formData.observacion} onChange={handleChange} disabled={submitting} placeholder="Observaciones adicionales" className="textarea textarea-bordered"></textarea>
+                </div>
+                <div className="form-control">
+                  <label className="label">Estado</label>
+                  <select name="estado" value={formData.estado} onChange={handleChange} required disabled={submitting} className="select select-bordered">
+                    <option value="activo">Activo</option>
+                    <option value="inactivo">Inactivo</option>
+                    <option value="pendiente">Pendiente</option>
+                  </select>
+                </div>
+                <div className="form-control">
+                  <label className="label">Documento</label>
+                  <input type="text" name="documento" value={formData.documento} onChange={handleChange} disabled={submitting} className="input input-bordered" />
+                </div>
+                <div className="form-control">
+                  <label className="label">Tipo de Documento</label>
+                  <input type="text" name="tipo_documento" value={formData.tipo_documento} onChange={handleChange} disabled={submitting} className="input input-bordered" />
+                </div>
+                {formError && (
+                  <div className="alert alert-error shadow-lg col-span-2">
+                    {formError}
+                  </div>
+                )}
+                <div className="modal-actions">
+                  <button type="submit" className="btn btn-primary" disabled={submitting}>
+                    {submitting ? 'Procesando...' : editingUser ? 'Guardar Cambios' : 'Crear Usuario'}
+                  </button>
+                  <button type="button" className="btn btn-secondary" onClick={handleCloseModal} disabled={submitting}>
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+        {showDevicesModal && (
+          <div className="modal-overlay">
+            <div className="modal" style={{ maxWidth: 700, minHeight: 400 }}>
+              <button className="close-modal" onClick={() => setShowDevicesModal(false)} title="Cerrar">✖</button>
+              <h2>Dispositivos del usuario</h2>
+              <UserDevices userId={selectedUserId} isAdminView />
+            </div>
+          </div>
         )}
       </div>
-
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h2>{editingUser ? 'Editar Usuario' : 'Nuevo Usuario'}</h2>
-            <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              {editingUser && editingUser.foto && (
-                <img src={editingUser.foto} alt="Avatar" style={{ width: 90, height: 90, borderRadius: '50%', objectFit: 'cover', border: '2px solid #4caf50', marginBottom: 10 }} />
-              )}
-              {deviceImage && (
-                <div style={{ marginTop: 10 }}>
-                  <span style={{ display: 'block', fontWeight: 500, color: '#1976d2', marginBottom: 6 }}>Equipo principal:</span>
-                  <img src={deviceImage} alt="Equipo principal" style={{ width: 120, height: 90, borderRadius: 10, objectFit: 'cover', border: '2px solid #2196f3' }} />
-                </div>
-              )}
-            </div>
-            <form onSubmit={handleSubmit} autoComplete="off">
-              <div className="form-group">
-                <label>Nombre</label>
-                <input
-                  type="text"
-                  name="nombre"
-                  value={formData.nombre}
-                  onChange={handleChange}
-                  required
-                  autoFocus
-                  disabled={submitting}
-                />
-              </div>
-              <div className="form-group">
-                <label>Correo</label>
-                <input
-                  type="email"
-                  name="correo"
-                  value={formData.correo}
-                  onChange={handleChange}
-                  required
-                  disabled={submitting}
-                />
-              </div>
-              <div className="form-group">
-                <label>Rol</label>
-                <select 
-                  name="rol" 
-                  value={formData.rol} 
-                  onChange={handleChange} 
-                  required
-                  disabled={submitting}
-                >
-                  <option value="">Seleccionar rol</option>
-                  <option value="administrador">Administrador/Validador</option>
-                  <option value="instructor">Instructor</option>
-                  <option value="aprendiz">Aprendiz</option>
-                </select>
-              </div>
-              <div className="form-group">
-                <label>Teléfono Principal</label>
-                <input
-                  type="tel"
-                  name="telefono1"
-                  value={formData.telefono1}
-                  onChange={handleChange}
-                  disabled={submitting}
-                />
-              </div>
-              <div className="form-group">
-                <label>Teléfono Secundario</label>
-                <input
-                  type="tel"
-                  name="telefono2"
-                  value={formData.telefono2}
-                  onChange={handleChange}
-                  disabled={submitting}
-                />
-              </div>
-              <div className="form-group">
-                <label>RH</label>
-                <input
-                  type="text"
-                  name="rh"
-                  value={formData.rh}
-                  onChange={handleChange}
-                  disabled={submitting}
-                  maxLength="3"
-                  placeholder="Ej: O+, A-, B+, AB+"
-                />
-              </div>
-              <div className="form-group">
-                <label>Ficha</label>
-                <input
-                  type="text"
-                  name="ficha"
-                  value={formData.ficha}
-                  onChange={handleChange}
-                  disabled={submitting}
-                  placeholder="Número de ficha (solo para aprendices)"
-                />
-              </div>
-              <div className="form-group">
-                <label>Observación</label>
-                <textarea
-                  name="observacion"
-                  value={formData.observacion}
-                  onChange={handleChange}
-                  disabled={submitting}
-                  placeholder="Observaciones adicionales"
-                />
-              </div>
-              <div className="form-group">
-                <label>Estado</label>
-                <select 
-                  name="estado" 
-                  value={formData.estado} 
-                  onChange={handleChange} 
-                  required
-                  disabled={submitting}
-                >
-                  <option value="activo">Activo</option>
-                  <option value="inactivo">Inactivo</option>
-                  <option value="pendiente">Pendiente</option>
-                </select>
-              </div>
-              
-              {formError && (
-                <div className="form-error">
-                  <FaExclamationTriangle /> {formError}
-                </div>
-              )}
-              
-              <div className="modal-actions">
-                <button 
-                  type="submit" 
-                  className="btn btn-primary"
-                  disabled={submitting}
-                >
-                  {submitting
-                    ? 'Procesando...'
-                    : editingUser 
-                      ? 'Guardar Cambios' 
-                      : 'Crear Usuario'
-                  }
-                </button>
-                <button 
-                  type="button" 
-                  className="btn btn-secondary" 
-                  onClick={handleCloseModal}
-                  disabled={submitting}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {showDevicesModal && (
-        <div className="modal-overlay">
-          <div className="modal" style={{ maxWidth: 700, minHeight: 400 }}>
-            <button
-              style={{ float: 'right', background: 'none', border: 'none', fontSize: 22, cursor: 'pointer' }}
-              onClick={() => setShowDevicesModal(false)}
-              title="Cerrar"
-            >✖</button>
-            <h2>Dispositivos del usuario</h2>
-            <UserDevices userId={selectedUserId} isAdminView />
-          </div>
-        </div>
-      )}
     </div>
   );
 };

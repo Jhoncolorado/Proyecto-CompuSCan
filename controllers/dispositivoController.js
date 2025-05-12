@@ -71,17 +71,20 @@ const dispositivoController = {
 
     createDispositivo: async (req, res) => {
         try {
-            const { nombre, tipo, serial, fotos, id_usuario } = req.body;
-            // Validaciones aquí si es necesario
-            // Convertir fotos a string JSON para guardar en la columna 'foto'
-            const foto = JSON.stringify(fotos);
+            const { nombre, tipo, serial, foto, mimeType, id_usuario } = req.body;
+            // Procesar la foto (base64)
+            let fotoProcesada = null;
+            if (foto && typeof foto === 'string' && foto.startsWith('data:')) {
+                fotoProcesada = foto.split(',')[1];
+            }
             // Crear el dispositivo
             const newDevice = await dispositivoModel.createDispositivo({
                 nombre,
                 tipo: tipo.toLowerCase(),
                 serial,
                 rfid: null, // Se asigna después
-                foto,
+                foto: fotoProcesada,
+                mimeType,
                 id_usuario
             });
             res.status(201).json({
@@ -126,6 +129,7 @@ const dispositivoController = {
                 serial: req.body.serial || dispositivo.serial,
                 rfid: req.body.rfid !== undefined ? req.body.rfid : dispositivo.rfid,
                 foto: fotoProcesada,
+                mimeType: req.body.mimeType || dispositivo.mimeType,
                 id_usuario: req.body.id_usuario || dispositivo.id_usuario,
                 estado_validacion: req.body.estado_validacion || dispositivo.estado_validacion
             };

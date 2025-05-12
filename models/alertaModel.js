@@ -102,6 +102,11 @@ const alertaModel = {
             ORDER BY a.fecha DESC`;
         const result = await pool.query(query, [dispositivo_id]);
         return result.rows;
+    },
+
+    countAlertasPendientes: async () => {
+        const result = await pool.query("SELECT COUNT(*) FROM alerta WHERE estado = 'pendiente'");
+        return parseInt(result.rows[0].count, 10);
     }
 };
 

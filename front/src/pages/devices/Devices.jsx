@@ -1,10 +1,87 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { FaCheckCircle, FaTimesCircle, FaHourglassHalf, FaExclamationCircle } from 'react-icons/fa';
+import './Devices.css';
+
+const estadoBadge = (estado) => {
+  if (estado === 'aprobado') return <span className="badge badge-success device-badge"><FaCheckCircle style={{marginRight:4}}/>Aprobado</span>;
+  if (estado === 'rechazado') return <span className="badge badge-error device-badge"><FaTimesCircle style={{marginRight:4}}/>Rechazado</span>;
+  if (estado === 'pendiente') return <span className="badge badge-warning device-badge"><FaHourglassHalf style={{marginRight:4}}/>Pendiente</span>;
+  return <span className="badge badge-secondary device-badge"><FaExclamationCircle style={{marginRight:4}}/>Sin estado</span>;
+};
 
 const Devices = () => {
+  const [devices, setDevices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const fetchDevices = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        const res = await fetch('http://localhost:3000/api/dispositivos');
+        if (!res.ok) throw new Error('Error al cargar dispositivos');
+        const data = await res.json();
+        setDevices(Array.isArray(data) ? data : []);
+      } catch (err) {
+        setError('No se pudieron cargar los dispositivos.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDevices();
+  }, []);
+
   return (
-    <div className="container">
-      <h1>Gestión de Dispositivos</h1>
-      <p>Página en construcción</p>
+    <div className="devices-container">
+      <h1 className="devices-title">Gestión de Dispositivos</h1>
+      {loading ? (
+        <div className="devices-loading">
+          <span className="spinner"></span>
+          <span className="ml-4">Cargando dispositivos...</span>
+        </div>
+      ) : error ? (
+        <div className="devices-error">
+          <FaExclamationCircle style={{marginRight:8, color:'#c62828', fontSize:22}}/>
+          <span>{error}</span>
+        </div>
+      ) : devices.length === 0 ? (
+        <div className="devices-info">
+          <FaExclamationCircle style={{marginRight:8, color:'#1976d2', fontSize:22}}/>
+          No hay dispositivos registrados.
+        </div>
+      ) : (
+        <div className="devices-table-wrapper">
+          <table className="devices-table">
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Serial</th>
+                <th>Usuario</th>
+                <th>RFID</th>
+                <th>Estado</th>
+                <th>Fecha Registro</th>
+              </tr>
+            </thead>
+            <tbody>
+              {devices.map(device => (
+                <tr key={device.id}>
+                  <td>{device.foto ? <img src={device.foto} alt="foto" className="device-img" /> : <span className="device-noimg">(Sin imagen)</span>}</td>
+                  <td>{device.nombre}</td>
+                  <td>{device.tipo}</td>
+                  <td>{device.serial}</td>
+                  <td>{device.nombre_usuario}</td>
+                  <td>{device.rfid || <span className="device-norfid">No asignado</span>}</td>
+                  <td>{estadoBadge(device.estado_validacion || 'pendiente')}</td>
+                  <td>{device.fecha_registro ? new Date(device.fecha_registro).toLocaleDateString() : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
