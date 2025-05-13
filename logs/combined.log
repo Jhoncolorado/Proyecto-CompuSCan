@@ -149,3 +149,12 @@
 2025-05-12 10:48:13 [[32minfo[39m]: Login exitoso para usuario: 15
 2025-05-12 10:50:40 [[32minfo[39m]: Login exitoso para usuario: 22
 2025-05-12 10:55:10 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-05-12 21:55:58 [[33mwarn[39m]: Intento de login fallido - Contraseña incorrecta para usuario: 16
+2025-05-12 21:56:06 [[32minfo[39m]: Login exitoso para usuario: 16
+2025-05-12 21:56:39 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-05-12 22:09:17 [[32minfo[39m]: Login exitoso para usuario: 16
+2025-05-12 22:45:14 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-05-12 22:51:41 [[33mwarn[39m]: Intento de login fallido - Contraseña incorrecta para usuario: 16
+2025-05-12 22:51:47 [[32minfo[39m]: Login exitoso para usuario: 16
+2025-05-12 23:25:08 [[33mwarn[39m]: Intento de login fallido - Contraseña incorrecta para usuario: 15
+2025-05-12 23:25:13 [[32minfo[39m]: Login exitoso para usuario: 15

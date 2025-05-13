@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaSearch, FaExclamationTriangle, FaUserCircle } from 'react-icons/fa';
+import { FaPlus, FaEdit, FaTrash, FaSearch, FaExclamationTriangle, FaUserCircle, FaLaptop } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import './users.css';
@@ -110,6 +110,7 @@ const Users = () => {
   });
 
   const handleEdit = (user) => {
+    console.log('EDITAR USUARIO:', user);
     setEditingUser(user);
     setFormData({
       nombre: user.nombre || '',
@@ -261,20 +262,20 @@ const Users = () => {
   return (
     <div className="users-bg">
       <div className="users-panel">
-        <div className="users-header">
+        <div className="users-header-row">
           <h1>Gestión de Usuarios</h1>
+          <div className="search-bar">
+            <FaSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Buscar usuario..."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </div>
           <button className="btn btn-primary" onClick={() => { setShowModal(true); setEditingUser(null); }}>
             <FaPlus /> Nuevo Usuario
           </button>
-        </div>
-        <div className="search-bar">
-          <FaSearch className="search-icon" />
-          <input
-            type="text"
-            placeholder="Buscar usuario..."
-            value={searchTerm}
-            onChange={handleSearch}
-          />
         </div>
         {error && (
           <div className="users-error-message">
@@ -286,13 +287,13 @@ const Users = () => {
             {success}
           </div>
         )}
-        {filteredUsers.length === 0 ? (
-          <div className="users-info-message">
-            <FaExclamationTriangle style={{marginRight:8}}/>
-            No hay usuarios registrados.
-          </div>
-        ) : (
-          <div className="users-table-container">
+        <div className="users-table-container">
+          {filteredUsers.length === 0 ? (
+            <div className="users-info-message">
+              <FaExclamationTriangle style={{marginRight:8}}/>
+              No hay usuarios registrados.
+            </div>
+          ) : (
             <table className="users-table">
               <thead>
                 <tr>
@@ -319,13 +320,16 @@ const Users = () => {
                     <td className="actions">
                       <button className="btn-icon edit" title="Editar" onClick={() => handleEdit(user)}><FaEdit /></button>
                       <button className="btn-icon delete" title="Eliminar" onClick={() => handleDelete(user.id)}><FaTrash /></button>
+                      <button className="btn-icon device" title="Editar Dispositivos" onClick={() => { console.log('EDITAR DISPOSITIVOS USUARIO:', user); setSelectedUserId(user.id); setShowDevicesModal(true); }}>
+                        <FaLaptop />
+                      </button>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-          </div>
-        )}
+          )}
+        </div>
         {showModal && (
           <div className="modal-overlay">
             <div className="modal">

@@ -1,11 +1,70 @@
+/* --- PERFIL MÁS COMPACTO --- */
 .profile-container {
-  max-width: 700px;
-  margin: 2.5rem auto;
-  padding: 2rem;
+  max-width: 540px;
+  margin: 0 auto;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.10);
+  box-shadow: 0 4px 24px rgba(44,62,80,0.10);
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  overflow-y: visible !important;
+  overflow-x: visible !important;
 }
+
+body, html {
+  overflow-y: auto !important;
+}
+
+.profile-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .profile-fields {
+    grid-template-columns: 1fr;
+    gap: 0.3rem 0;
+  }
+}
+
+.profile-field {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  font-size: 0.97rem;
+  margin-bottom: 0.1rem;
+}
+
+.profile-label {
+  font-weight: 600;
+  color: #1b5e20;
+  min-width: 110px;
+  font-size: 0.97rem;
+}
+
+.profile-value {
+  color: #222;
+  font-size: 0.97rem;
+  word-break: break-word;
+}
+
+.profile-role {
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+@media (max-width: 600px) {
+  .profile-container {
+    padding: 0.7rem 0.3rem;
+  }
+  .profile-label, .profile-value {
+    font-size: 0.93rem;
+  }
+}
+
 .profile-container h2 {
   text-align: center;
   color: var(--primary-dark);
@@ -83,25 +142,6 @@
   gap: 1rem;
   font-size: 1.1rem;
   color: var(--text-primary);
-}
-.profile-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-.profile-label {
-  font-weight: 600;
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-}
-.profile-value {
-  font-size: 1.1rem;
-  padding: 0.4rem 0;
-}
-.profile-role {
-  color: var(--primary-color);
-  font-weight: 600;
-  text-transform: capitalize;
 }
 .profile-input {
   padding: 0.7rem 1rem;

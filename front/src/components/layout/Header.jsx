@@ -148,9 +148,8 @@ const Header = () => {
               whiteSpace: 'nowrap'
             }}
           >
-            {menuItems
-              .filter(item => item.path !== '/users' || (user && user.rol === 'administrador'))
-              .map((item) => (
+            {user && (user.rol === 'administrador' || user.rol === 'validador') ? (
+              menuItems.map((item) => (
                 <li key={item.path} style={{ minWidth: 70, textAlign: 'center' }}>
                   <NavLink
                     to={item.path}
@@ -171,7 +170,51 @@ const Header = () => {
                     {item.label}
                   </NavLink>
                 </li>
-              ))}
+              ))
+            ) : (
+              <>
+                <li style={{ minWidth: 70, textAlign: 'center' }}>
+                  <NavLink
+                    to="/"
+                    className={({ isActive }) =>
+                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                    }
+                    end
+                    style={{
+                      fontSize: 15,
+                      color: '#222',
+                      fontWeight: 500,
+                      padding: '4px 0',
+                      display: 'inline-block',
+                      whiteSpace: 'nowrap'
+                    }}
+                    aria-label="Inicio"
+                  >
+                    Inicio
+                  </NavLink>
+                </li>
+                <li style={{ minWidth: 70, textAlign: 'center' }}>
+                  <NavLink
+                    to="/profile"
+                    className={({ isActive }) =>
+                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                    }
+                    end
+                    style={{
+                      fontSize: 15,
+                      color: '#222',
+                      fontWeight: 500,
+                      padding: '4px 0',
+                      display: 'inline-block',
+                      whiteSpace: 'nowrap'
+                    }}
+                    aria-label="Mi Perfil"
+                  >
+                    Mi Perfil
+                  </NavLink>
+                </li>
+              </>
+            )}
           </ul>
         </nav>
         {/* DERECHA: Usuario, fecha/hora y logout */}

@@ -5,6 +5,7 @@
   padding: 2.5rem 1.5rem 2rem 1.5rem;
   background: #f7f9fb;
   min-height: 100vh;
+  /* overflow-x: unset; */
 }
 
 .devices-title {
@@ -13,6 +14,7 @@
   color: #1976d2;
   margin-bottom: 2.2rem;
   letter-spacing: 0.5px;
+  /* Siempre visible arriba */
 }
 
 .devices-table-wrapper {
@@ -21,6 +23,7 @@
   box-shadow: 0 4px 24px 0 rgba(44,62,80,0.10);
   overflow-x: auto;
   padding: 1.5rem 1rem;
+  /* El scroll horizontal solo aquí */
 }
 
 .devices-table {
