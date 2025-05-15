@@ -11,8 +11,7 @@ const menuItems = [
   { path: '/alerts', label: 'Alertas' },
   { path: '/history', label: 'Historial' },
   { path: '/programs', label: 'Programas' },
-  { path: '/cards', label: 'Carnets' },
-  { path: '/cases', label: 'Casos' }
+  { path: '/device-validation', label: 'Validación de Dispositivos' }
 ];
 
 const Header = () => {
@@ -52,10 +51,27 @@ const Header = () => {
     style.innerHTML = `
       .main-header-menu-link {
         transition: color 0.18s, border-color 0.18s;
+        display: inline-block;
+        position: relative;
+        padding-bottom: 2px;
+        text-align: center;
+        line-height: 1.15;
+        min-width: 90px;
       }
       .main-header-menu-link:hover, .main-header-menu-link.active {
         color: #0d6efd !important;
-        border-bottom: 2.5px solid #0d6efd !important;
+      }
+      .main-header-menu-link.active::after, .main-header-menu-link:hover::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -2px;
+        width: 70%;
+        height: 3px;
+        background: #0d6efd;
+        border-radius: 2px;
       }
       .main-header-separator {
         height: 44px;
@@ -92,33 +108,32 @@ const Header = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          minHeight: 90,
+          minHeight: 80,
           width: '100vw',
           margin: 0,
-          padding: '0 24px',
+          padding: '0 32px',
           boxSizing: 'border-box',
-          overflow: 'visible'
+          overflow: 'visible',
+          gap: 0
         }}
       >
         {/* IZQUIERDA: Logo y nombre */}
-        <div style={{ display: 'flex', alignItems: 'center', minWidth: 220, flexShrink: 0 }}>
-          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 12 }} aria-label="Inicio CompuScan">
-            <img
-              src={logo}
-              alt="Logo CompuScan"
-              style={{
-                width: 54,
-                height: 54,
-                borderRadius: 12,
-                border: '2px solid #0d6efd',
-                backgroundColor: 'white',
-                padding: '2px',
-                objectFit: 'contain',
-                boxShadow: '0 2px 8px 0 rgba(0,0,0,0.06)'
-              }}
-            />
-            <span className="fw-bold fs-3 text-primary" style={{ fontWeight: 800, fontSize: 30, letterSpacing: 0.5, whiteSpace: 'nowrap' }}>CompuSCan</span>
-          </a>
+        <div style={{ display: 'flex', alignItems: 'center', minWidth: 0, maxWidth: 220, flexShrink: 0, gap: 10 }}>
+          <img
+            src={logo}
+            alt="Logo CompuScan"
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 10,
+              border: '2px solid #0d6efd',
+              backgroundColor: 'white',
+              padding: '2px',
+              objectFit: 'contain',
+              boxShadow: '0 2px 8px 0 rgba(0,0,0,0.06)'
+            }}
+          />
+          <span className="fw-bold fs-3 text-primary" style={{ fontWeight: 800, fontSize: 22, letterSpacing: 0.5, whiteSpace: 'nowrap', marginLeft: 6 }}>CompuSCan</span>
         </div>
         {/* CENTRO: Menú de navegación */}
         <nav
@@ -130,14 +145,16 @@ const Header = () => {
             justifyContent: 'center',
             alignItems: 'center',
             minWidth: 0,
+            padding: '0 16px',
             overflow: 'hidden',
-            padding: '0 16px'
+            maxWidth: 950
           }}
         >
           <ul
             style={{
               display: 'flex',
-              gap: 24,
+              flex: 1,
+              gap: 0,
               margin: 0,
               padding: 0,
               listStyle: 'none',
@@ -150,7 +167,21 @@ const Header = () => {
           >
             {user && (user.rol === 'administrador' || user.rol === 'validador') ? (
               menuItems.map((item) => (
-                <li key={item.path} style={{ minWidth: 70, textAlign: 'center' }}>
+                <li
+                  key={item.path}
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: 48,
+                    height: 48,
+                    padding: 0
+                  }}
+                >
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
@@ -158,12 +189,17 @@ const Header = () => {
                     }
                     end={item.path === '/'}
                     style={{
-                      fontSize: 15,
+                      fontSize: item.label === 'Validación de Dispositivos' ? 13 : 15,
                       color: '#222',
                       fontWeight: 500,
-                      padding: '4px 0',
+                      padding: 0,
+                      margin: 0,
                       display: 'inline-block',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: item.label === 'Validación de Dispositivos' ? 'normal' : 'nowrap',
+                      width: '100%',
+                      lineHeight: 1.15,
+                      height: 'auto',
+                      minHeight: 24
                     }}
                     aria-label={item.label}
                   >
@@ -173,7 +209,7 @@ const Header = () => {
               ))
             ) : (
               <>
-                <li style={{ minWidth: 70, textAlign: 'center' }}>
+                <li style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
                   <NavLink
                     to="/"
                     className={({ isActive }) =>
@@ -186,14 +222,15 @@ const Header = () => {
                       fontWeight: 500,
                       padding: '4px 0',
                       display: 'inline-block',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      width: '100%'
                     }}
                     aria-label="Inicio"
                   >
                     Inicio
                   </NavLink>
                 </li>
-                <li style={{ minWidth: 70, textAlign: 'center' }}>
+                <li style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
                   <NavLink
                     to="/profile"
                     className={({ isActive }) =>
@@ -206,7 +243,8 @@ const Header = () => {
                       fontWeight: 500,
                       padding: '4px 0',
                       display: 'inline-block',
-                      whiteSpace: 'nowrap'
+                      whiteSpace: 'nowrap',
+                      width: '100%'
                     }}
                     aria-label="Mi Perfil"
                   >
@@ -218,21 +256,22 @@ const Header = () => {
           </ul>
         </nav>
         {/* DERECHA: Usuario, fecha/hora y logout */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', minWidth: 280, flexShrink: 0, gap: 20 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 100 }}>
-            <span style={{ fontWeight: 700, fontSize: 17, color: '#222' }}>{user?.nombre || 'Usuario'}</span>
-            <span style={{ fontSize: 13, color: '#888', fontWeight: 500 }}>{user?.rol || 'Rol'}</span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 100 }}>
-            <span style={{ fontSize: 13, color: '#888' }}>{formatDate(currentTime)}</span>
-            <span style={{ fontFamily: 'monospace', fontSize: 15, color: '#0d6efd', fontWeight: 700 }}>{formatTime(currentTime)}</span>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', minWidth: 220, flexShrink: 1, gap: 12 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 80, maxWidth: 180, lineHeight: 1.1 }}>
+            <span style={{ fontWeight: 700, fontSize: 15, color: '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 180 }}>
+              {user?.nombre || 'Usuario'}
+            </span>
+            <span style={{ fontSize: 13, color: '#1976d2', fontWeight: 700, marginTop: '-2px', letterSpacing: 0.2 }}>{user?.rol || 'Rol'}</span>
+            <span style={{ fontSize: 12, color: '#444', fontWeight: 500, marginTop: '2px' }}>
+              {formatDate(currentTime)} <span style={{ color: '#0d6efd', fontFamily: 'monospace', fontWeight: 700, fontSize: 13, marginLeft: 6 }}>{formatTime(currentTime)}</span>
+            </span>
           </div>
           <button
             className="btn btn-outline-danger d-flex align-items-center gap-2"
             style={{
-              fontSize: 15,
-              padding: '7px 16px',
-              minWidth: '110px',
+              fontSize: 13,
+              padding: '5px 12px',
+              minWidth: '90px',
               justifyContent: 'center',
               fontWeight: 600,
               borderWidth: 2
@@ -240,7 +279,7 @@ const Header = () => {
             onClick={logout}
             aria-label="Cerrar sesión"
           >
-            <FaSignOutAlt style={{ fontSize: 18 }} />
+            <FaSignOutAlt style={{ fontSize: 16 }} />
             <span>Cerrar Sesión</span>
           </button>
         </div>
