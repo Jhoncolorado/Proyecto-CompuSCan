@@ -260,22 +260,28 @@ const Users = () => {
   );
 
   return (
-    <div className="users-bg">
-      <div className="users-panel">
-        <div className="users-header-row">
-          <h1>Gestión de Usuarios</h1>
-          <div className="search-bar">
+    <div className="users-bg" style={{ background: '#f7f9fb', minHeight: '100vh', width: '100vw', display: 'block', margin: 0, padding: 0, overflowX: 'hidden' }}>
+      <div className="users-panel" style={{ background: '#fff', borderRadius: 0, boxShadow: '0 8px 32px rgba(44, 62, 80, 0.12)', width: '100vw', maxWidth: '100vw', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+        <div className="users-table-container" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: '0 32px', overflowY: 'auto' }}>
+          <div className="users-header-row" style={{ marginTop: '6rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.2rem', flexWrap: 'wrap', minWidth: 900 }}>
+            <h1 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#1b5e20', margin: 0, letterSpacing: 1, textAlign: 'left', lineHeight: 1.1, flex: '0 0 auto' }}>
+              Gestión de Usuarios
+            </h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.1rem', flex: '1 1 auto', justifyContent: 'flex-end', height: '44px' }}>
+              <div className="search-bar" style={{ height: '44px', display: 'flex', alignItems: 'center' }}>
             <FaSearch className="search-icon" />
             <input
               type="text"
               placeholder="Buscar usuario..."
               value={searchTerm}
               onChange={handleSearch}
+                  style={{ height: '36px', fontSize: '0.97rem' }}
             />
           </div>
-          <button className="btn btn-primary" onClick={() => { setShowModal(true); setEditingUser(null); }}>
+              <button className="btn btn-primary" style={{ height: '36px', display: 'flex', alignItems: 'center', fontSize: '0.98rem', padding: '0 22px' }} onClick={() => { setShowModal(true); setEditingUser(null); }}>
             <FaPlus /> Nuevo Usuario
           </button>
+            </div>
         </div>
         {error && (
           <div className="users-error-message">
@@ -287,14 +293,13 @@ const Users = () => {
             {success}
           </div>
         )}
-        <div className="users-table-container">
           {filteredUsers.length === 0 ? (
             <div className="users-info-message">
               <FaExclamationTriangle style={{marginRight:8}}/>
               No hay usuarios registrados.
             </div>
           ) : (
-            <table className="users-table">
+            <table className="users-table" style={{ fontSize: '0.93rem', width: '100%', minWidth: 900, borderRadius: 12, tableLayout: 'auto' }}>
               <thead>
                 <tr>
                   <th>Foto</th>

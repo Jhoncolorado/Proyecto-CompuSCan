@@ -115,4 +115,47 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Acceso por RFID (nuevo endpoint)
+router.post('/acceso-rfid', async (req, res) => {
+  try {
+    const { rfid } = req.body;
+    // Buscar el dispositivo por RFID
+    const dispositivoRes = await pool.query('SELECT * FROM dispositivo WHERE rfid = $1', [rfid]);
+    if (dispositivoRes.rows.length === 0) {
+      return res.status(404).json({ message: 'No se encontró un dispositivo con ese RFID' });
+    }
+    const dispositivo = dispositivoRes.rows[0];
+
+    // Buscar el usuario asociado
+    const usuarioRes = await pool.query('SELECT * FROM usuario WHERE id = $1', [dispositivo.id_usuario]);
+    const usuario = usuarioRes.rows[0];
+
+    // Alternancia ENTRADA/SALIDA
+    const ultimoEventoRes = await pool.query(
+      'SELECT descripcion FROM historial_dispositivo WHERE id_dispositivo = $1 ORDER BY fecha_hora DESC LIMIT 1',
+      [dispositivo.id_dispositivo]
+    );
+    let tipoEvento = 'ENTRADA';
+    if (ultimoEventoRes.rows.length > 0) {
+      const ultimaDescripcion = ultimoEventoRes.rows[0].descripcion;
+      if (ultimaDescripcion.includes('Acceso autorizado: ENTRADA')) tipoEvento = 'SALIDA';
+      else if (ultimaDescripcion.includes('Acceso autorizado: SALIDA')) tipoEvento = 'ENTRADA';
+    }
+    const descripcion = `Acceso autorizado: ${tipoEvento} - RFID: ${rfid} - Usuario: ${usuario.nombre}`;
+    await registrarEvento(dispositivo.id_dispositivo, descripcion);
+
+    console.log(`[ACCESO] ${descripcion} - Dispositivo: ${dispositivo.nombre}`);
+
+    res.json({
+      usuario,
+      dispositivo,
+      tipoEvento,
+      mensaje: `Acceso autorizado: ${tipoEvento}`
+    });
+  } catch (error) {
+    console.error('[ERROR] Error en acceso RFID:', error);
+    res.status(500).json({ message: 'Error al buscar por RFID', error: error.message });
+  }
+});
+
 module.exports = router; 

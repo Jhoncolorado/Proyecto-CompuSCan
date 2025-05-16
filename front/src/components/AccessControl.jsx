@@ -21,7 +21,7 @@ const AccessControl = () => {
     e.preventDefault();
     if (!rfid) return;
     try {
-      const res = await axios.get(`http://localhost:3000/api/acceso/rfid/${rfid}`);
+      const res = await axios.post('http://localhost:3000/api/dispositivos/acceso-rfid', { rfid });
       setData(res.data);
       console.log('Respuesta del backend:', res.data);
       setError('');
@@ -52,6 +52,17 @@ const AccessControl = () => {
       {error && <div style={{ color: 'red', margin: 10 }}>{error}</div>}
       {data && data.usuario && data.dispositivo && (
         <div style={{ marginTop: 30, textAlign: 'center', background: '#f8f8f8', borderRadius: 10, padding: 20, boxShadow: '0 2px 8px #0001' }}>
+          <div style={{ 
+            padding: '10px 20px', 
+            borderRadius: 5, 
+            marginBottom: 20,
+            backgroundColor: data.tipoEvento === 'ENTRADA' ? '#4caf50' : '#f44336',
+            color: 'white',
+            fontSize: '1.2em',
+            fontWeight: 'bold'
+          }}>
+            {data.tipoEvento}
+          </div>
           <h3 style={{ marginBottom: 20 }}>Datos del Aprendiz</h3>
           <img
             src={data.usuario.foto || '/images/default-avatar.png'}

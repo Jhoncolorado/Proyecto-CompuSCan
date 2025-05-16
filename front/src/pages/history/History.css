@@ -1,48 +1,109 @@
-.container {
-  padding: 20px;
+/* Contenedor general */
+.history-container {
   max-width: 1200px;
   margin: 0 auto;
+  padding: 2.5rem 1.5rem 2rem 1.5rem;
+  background: #f7f9fb;
+  min-height: 100vh;
 }
 
+/* Tabla de historial */
 .history-table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background-color: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.97rem;
+  background: #fff;
+  min-width: 900px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(44, 62, 80, 0.08);
 }
 
 .history-table th,
 .history-table td {
-  padding: 12px 15px;
+  padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
 }
 
 .history-table th {
-  background-color: #f5f5f5;
-  font-weight: 600;
-  color: #333;
+  background: #2e7d32;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  white-space: nowrap;
+}
+
+.history-table tr:nth-child(even) {
+  background: #f8fafc;
 }
 
 .history-table tr:hover {
-  background-color: #f9f9f9;
+  background: #e3eaf2;
 }
 
-.dashboard-loading,
-.dashboard-error {
+/* Mensajes de estado */
+.history-loading,
+.history-error,
+.history-info {
+  margin: 2.5rem auto 0 auto;
   text-align: center;
-  padding: 20px;
-  margin: 20px 0;
-  border-radius: 4px;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  min-height: 60px;
 }
 
-.dashboard-loading {
-  background-color: #e3f2fd;
-  color: #1976d2;
-}
-
-.dashboard-error {
-  background-color: #ffebee;
+.history-error {
   color: #d32f2f;
+  background: #ffebee;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #ffcdd2;
+}
+
+.history-info {
+  color: #1976d2;
+  background: #e3f2fd;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #bbdefb;
+}
+
+/* Header y contenedor de tabla */
+.history-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  margin-top: 4.0rem;
+}
+
+.history-header-row h1 {
+  color: #1b5e20;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+  flex: 0 0 auto;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .history-header-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+}
+
+/* Forzar visibilidad y evitar scroll horizontal */
+html, body {
+  overflow-x: hidden !important;
+  width: 100vw;
+  position: relative;
 } 

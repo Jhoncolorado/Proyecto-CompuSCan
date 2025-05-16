@@ -33,8 +33,14 @@ const Devices = () => {
   }, []);
 
   return (
-    <div className="devices-container">
-      <h1 className="devices-title">Gestión de Dispositivos</h1>
+    <div className="devices-bg" style={{ background: '#f7f9fb', minHeight: '100vh', width: '100vw', display: 'block', margin: 0, padding: 0, overflowX: 'hidden' }}>
+      <div className="devices-panel" style={{ background: '#fff', borderRadius: 0, boxShadow: '0 8px 32px rgba(44, 62, 80, 0.12)', width: '100vw', maxWidth: '100vw', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+        <div className="devices-table-container" style={{ width: '100%', maxWidth: '100%', margin: 0, padding: '0 32px', overflowY: 'auto' }}>
+          <div className="devices-header-row" style={{ marginTop: '2.5rem', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '1.2rem', flexWrap: 'wrap', minWidth: 900 }}>
+            <h1 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#1b5e20', margin: 0, letterSpacing: 1, textAlign: 'left', lineHeight: 1.1, flex: '0 0 auto' }}>
+              Gestión de Dispositivos
+            </h1>
+          </div>
       {loading ? (
         <div className="devices-loading">
           <span className="spinner"></span>
@@ -51,8 +57,7 @@ const Devices = () => {
           No hay dispositivos registrados.
         </div>
       ) : (
-        <div className="devices-table-wrapper">
-          <table className="devices-table">
+            <table className="devices-table" style={{ fontSize: '0.93rem', width: '100%', minWidth: 900, borderRadius: 12, tableLayout: 'auto' }}>
             <thead>
               <tr>
                 <th>Foto</th>
@@ -80,8 +85,9 @@ const Devices = () => {
               ))}
             </tbody>
           </table>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 };

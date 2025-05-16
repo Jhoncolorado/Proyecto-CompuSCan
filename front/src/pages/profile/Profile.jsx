@@ -15,6 +15,7 @@ const Profile = () => {
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [deviceImage, setDeviceImage] = useState('');
+  const [userHistorial, setUserHistorial] = useState([]);
 
   // Verificar si el usuario es aprendiz o instructor
   const isNormalUser = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
@@ -51,6 +52,23 @@ const Profile = () => {
         }
     };
     if (user && user.id) fetchUser();
+  }, [user]);
+
+  // Obtener historial de accesos del usuario
+  useEffect(() => {
+    const fetchHistorial = async () => {
+      try {
+        if (user && user.id) {
+          const res = await axios.get(`http://localhost:3000/api/historiales`);
+          // Filtrar solo los eventos de dispositivos del usuario
+          const userEvents = res.data.filter(ev => ev.descripcion && ev.descripcion.includes(user.nombre));
+          setUserHistorial(userEvents.slice(0, 5)); // Solo los últimos 5
+        }
+      } catch (err) {
+        // No mostrar error aquí para no molestar el perfil
+      }
+    };
+    fetchHistorial();
   }, [user]);
 
   // Permitir editar si es admin o validador (cualquier variante, sin tildes ni mayúsculas)
@@ -214,6 +232,23 @@ const Profile = () => {
       
       {/* Solo mostrar UserDevices si es un usuario normal */}
       {isNormalUser && <UserDevices />}
+
+      {/* Historial de accesos */}
+      <div style={{ marginTop: 32, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #0001', padding: 24, maxWidth: 500, marginLeft: 'auto', marginRight: 'auto' }}>
+        <h3 style={{ color: '#1976d2', marginBottom: 16 }}>Últimos accesos</h3>
+        {userHistorial.length === 0 ? (
+          <div style={{ color: '#888', textAlign: 'center' }}>No hay registros recientes de acceso.</div>
+        ) : (
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            {userHistorial.map((ev) => (
+              <li key={ev.id_historial} style={{ marginBottom: 12 }}>
+                <span style={{ fontWeight: 'bold', color: '#1976d2' }}>{ev.descripcion}</span>
+                <span style={{ color: '#888', fontSize: 13, marginLeft: 8 }}>{new Date(ev.fecha_hora).toLocaleString()}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };
