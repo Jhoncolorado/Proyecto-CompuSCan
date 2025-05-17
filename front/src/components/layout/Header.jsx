@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FaSignOutAlt } from 'react-icons/fa';
 import logo from '../../assets/Imagen .jpg';
@@ -18,6 +18,8 @@ const Header = () => {
   const { user, logout } = useAuth();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const isHistory = location.pathname.startsWith('/history');
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -92,14 +94,15 @@ const Header = () => {
       aria-label="Barra de navegación principal"
       style={{ 
         background: '#fff', 
-        borderBottom: '1.5px solid #e5e7eb', 
-        boxShadow: scrolled ? '0 4px 18px 0 rgba(0,0,0,0.10)' : '0 2px 8px 0 rgba(0,0,0,0.03)', 
+        borderBottom: isHistory ? 'none' : '1.5px solid #e5e7eb', 
+        boxShadow: isHistory ? 'none' : (scrolled ? '0 4px 18px 0 rgba(0,0,0,0.10)' : '0 2px 8px 0 rgba(0,0,0,0.03)'), 
         padding: 0, 
         position: 'sticky', 
         top: 0, 
         zIndex: 100,
         width: '100vw',
-        left: 0
+        left: 0,
+        marginBottom: isHistory ? '20px' : undefined
       }}
     >
       <div
