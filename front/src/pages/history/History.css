@@ -1,13 +1,18 @@
 /* Contenedor general */
 .history-bg {
-  background: #fff;
-  min-height: 100vh;
+  background: #f7f9fb;
+  height: calc(100vh - 62px);
   width: 100%;
   margin: 0;
-  padding: 1rem 2rem;
+  padding: 0;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  position: fixed;
+  top: 62px;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 /* Estilos adicionales cuando está dentro del layout */
@@ -23,99 +28,155 @@
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: 2rem;
+  padding: 2rem 1.5rem 1.2rem;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Header y contenedor de tabla */
+.history-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  background: #fff;
+  border-bottom: none;
+  position: relative;
+  padding-right: 0;
+  height: 44px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.history-header-row h1 {
+  color: #1b5e20;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+  flex: 1;
+  min-width: 200px;
+}
+
+/* --- Contenedor de controles --- */
+.history-controls-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+  flex-shrink: 0;
+  width: auto;
+  height: 44px;
+  margin-right: 1.0rem;
 }
 
 /* Tabla de historial */
 .history-table-container {
-  width: 100%;
-  overflow-x: auto;
-  background: #fff;
-  border-radius: 0;
-  margin-top: 0;
+  margin-top: 1rem;
+  overflow: auto;
+  margin-bottom: 0;
   flex-grow: 1;
-  max-height: calc(100vh - 150px);
+  position: relative;
+  border-radius: 6px 6px 0 0;
+  overflow: auto;
+  height: calc(100% - 44px - 1rem);
+  border: 1px solid #e0e0e0;
+  border-bottom: none;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 0;
 }
 
 .history-table {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 0.97rem;
+  font-size: 0.95rem;
   background: #fff;
   min-width: 900px;
+  margin: 0;
+  table-layout: fixed;
 }
 
-.history-table th,
-.history-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
+.history-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .history-table th {
   background: #2e7d32;
   color: #fff;
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.8rem 1rem;
+  text-align: left;
   white-space: nowrap;
-  position: sticky;
-  top: 0;
-  z-index: 1;
+  z-index: 5;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+  height: 44px;
 }
 
-.history-table th:first-child {
-  border-top-left-radius: 8px;
+.history-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95rem;
 }
 
-.history-table th:last-child {
-  border-top-right-radius: 8px;
+.history-table tr:nth-child(even) {
+  background-color: #f5f8f5;
 }
 
 .history-table tr:last-child td {
   border-bottom: none;
 }
 
-.history-table tr:nth-child(even) {
-  background: #f8fafc;
+.history-table tr:hover {
+  background: rgba(46, 125, 50, 0.08);
 }
 
-.history-table tr:hover {
-  background: #e3eaf2;
+/* Asegurar que la columna de acciones tenga suficiente espacio */
+.history-table th:last-child,
+.history-table td:last-child {
+  min-width: 180px;
+  text-align: right;
+  padding-right: 1.5rem;
 }
 
 /* Badges para estados */
 .history-badge {
-  display: inline-block;
-  padding: 0.35rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
   border-radius: 4px;
   font-weight: 600;
   font-size: 0.85rem;
-  margin-right: 0.5rem;
+  margin-right: 0.8rem;
   text-align: center;
-  min-width: 80px;
+  min-width: 90px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
 .badge-success {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-  border: 1px solid #c8e6c9;
+  background-color: #4caf50;
+  color: white;
+  border: 1px solid #388e3c;
 }
 
 .badge-danger {
-  background-color: #ffebee;
-  color: #d32f2f;
-  border: 1px solid #ffcdd2;
+  background-color: #f44336;
+  color: white;
+  border: 1px solid #d32f2f;
 }
 
 .badge-default {
-  background-color: #eceff1;
-  color: #455a64;
-  border: 1px solid #cfd8dc;
+  background-color: #78909c;
+  color: white;
+  border: 1px solid #546e7a;
 }
 
 /* Mensajes de estado */
@@ -186,29 +247,6 @@
   color: #78909c;
 }
 
-/* Header y contenedor de tabla */
-.history-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin: 40px 0 25px 0;
-  flex-wrap: wrap;
-  padding: 0 0 15px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.history-header-row h1 {
-  color: #1b5e20;
-  font-size: 2.2rem;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: 0.5px;
-  display: block;
-  width: 100%;
-  line-height: 1.2;
-}
-
 /* Animación para el spinner */
 .spinner {
   width: 24px;
@@ -226,16 +264,22 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-  .history-panel {
+  .history-bg {
     padding: 1rem;
+    height: calc(100vh - 58px);
   }
   
   .history-header-row h1 {
     font-size: 1.5rem;
   }
   
+  .history-table-container {
+    height: calc(100vh - 180px);
+  }
+  
   .history-empty {
     padding: 2rem 1rem;
+    height: calc(100vh - 180px);
   }
   
   .history-empty h3 {

@@ -7,8 +7,10 @@ const Layout = () => {
   const isDevices = location.pathname.startsWith('/devices');
   const isUsers = location.pathname.startsWith('/users');
   const isHistory = location.pathname.startsWith('/history');
+  const isHome = location.pathname === '/'; // Detectar si estamos en la página de inicio
 
-  const useFullWidth = isDevices || isUsers || isHistory;
+  // Añadimos isHome a las páginas que usan ancho completo
+  const useFullWidth = isDevices || isUsers || isHistory || isHome;
   
   // Estilos específicos para la página de historial
   const getPageStyles = () => {
@@ -19,6 +21,12 @@ const Layout = () => {
         borderRadius: 0,
         boxShadow: 'none',
         marginBottom: 0
+      };
+    }
+    // Reducir el padding para la página de inicio para aprovechar mejor el espacio
+    if (isHome) {
+      return {
+        padding: '1rem'
       };
     }
     return {};
