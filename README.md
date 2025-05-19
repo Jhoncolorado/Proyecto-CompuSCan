@@ -1,77 +1,139 @@
-# CompuSCan - Sistema de Control y Gestión
+# CompuSCan - Sistema de Control y Gestión de Dispositivos
 
 ## Descripción General
-CompuSCan es un sistema integral para la gestión y control de dispositivos, usuarios, historial de accesos, alertas, carnets y casos de incidentes. Permite registrar, monitorear y auditar el uso de dispositivos mediante tecnología RFID, así como gestionar usuarios y eventos de seguridad en una plataforma web moderna.
+
+CompuSCan es una plataforma web desarrollada específicamente para el **SENA - Centro de Comercio y Turismo**. Su objetivo es optimizar y modernizar el registro, consulta y administración de dispositivos institucionales, utilizando tecnología RFID para agilizar el proceso y reducir errores manuales. El sistema responde a la necesidad del SENA de controlar y trazar sus equipos tecnológicos de manera eficiente, segura y alineada con los procesos institucionales.  
+
 
 ---
 
-## Estructura del Proyecto (Backend y Frontend)
+## Tabla de Contenidos
+
+1. [Características](#características)
+2. [Estructura del Proyecto](#estructura-del-proyecto)
+3. [Instalación y Despliegue](#instalación-y-despliegue)
+4. [Explicación de Carpetas y Archivos](#explicación-de-carpetas-y-archivos)
+5. [Ejemplos de Código Clave](#ejemplos-de-código-clave)
+6. [Tecnologías Utilizadas](#tecnologías-utilizadas)
+7. [Contribuciones](#contribuciones)
+8. [Licencia](#licencia)
+9. [Documentación Oficial](#documentación-oficial)
+
+---
+
+## Características
+
+- **Gestión de dispositivos**:  
+  - Alta, edición, consulta y eliminación de dispositivos.
+  - Búsqueda y filtrado por nombre, serial o RFID.
+  - Visualización de detalles de cada equipo.
+
+- **Panel de control**:  
+  - Dashboard con resumen de dispositivos registrados y actividad reciente.
+
+- **Seguridad**:  
+  - Autenticación de usuarios para acceso a la plataforma.
+
+- **Integración RFID**:  
+  - Registro y consulta de dispositivos mediante etiquetas RFID.
+
+---
+
+## Estructura del Proyecto
 
 ```
 Proyecto-CompuSCan/
 │
-├── app.js                      # Archivo principal del backend (Node.js/Express)
-├── package.json                # Dependencias y scripts del backend
+├── app.js                      # Backend principal (Node.js/Express)
+├── package.json                # Dependencias y scripts backend
 ├── config/
-│   ├── database.js             # Configuración y conexión a la base de datos (pool de PostgreSQL)
-│   └── swagger.js              # Configuración de Swagger para documentación de la API
-├── controllers/                # Lógica de negocio de cada entidad
+│   ├── database.js             # Conexión a PostgreSQL
+│   └── swagger.js              # Documentación API
+├── controllers/                # Lógica de negocio
 │   ├── dispositivoController.js
-│   ├── usuarioController.js
-│   └── ...otros controladores
-├── models/                     # Acceso a la base de datos (consultas SQL)
+│   └── ...
+├── models/                     # Consultas SQL y acceso a datos
 │   ├── dispositivoModel.js
-│   ├── usuarioModel.js
-│   └── ...otros modelos
-├── routes/                     # Rutas de la API (Express Routers)
+│   └── ...
+├── routes/                     # Endpoints API
 │   ├── dispositivoRoutes.js
-│   ├── usuarioRoutes.js
-│   └── ...otras rutas
-├── public/                     # Archivos estáticos (frontend compilado, imágenes, etc.)
+│   └── ...
+├── public/                     # Archivos estáticos
 │   └── index.html
 │
-└── front/                      # Carpeta del frontend (React + Vite)
+└── front/                      # Frontend (React + Vite)
     ├── src/
-    │   ├── App.jsx             # Componente principal de React (enrutador)
-    │   ├── main.jsx            # Punto de entrada de React
-    │   ├── components/         # Componentes reutilizables (Header, Sidebar, etc.)
+    │   ├── App.jsx             # Enrutador principal
+    │   ├── main.jsx            # Entrada de React
+    │   ├── components/         # Componentes reutilizables
     │   │   ├── layout/
-    │   │   │   ├── Layout.jsx  # Layout general de la app (estructura de página)
-    │   │   │   ├── Header.jsx  # Header superior (logo, menú, usuario)
-    │   │   │   └── Sidebar.jsx # (si existe) Menú lateral
-    │   │   ├── AccessControl.jsx # Pantalla de control de acceso RFID
-    │   │   └── ...otros componentes
-    │   ├── pages/              # Páginas principales (cada sección)
-    │   │   ├── users/          # Página de usuarios
+    │   │   │   ├── Layout.jsx  # Layout general
+    │   │   │   ├── Header.jsx  # Header superior
+    │   │   │   └── Sidebar.jsx # Sidebar (si existe)
+    │   │   └── ...
+    │   ├── pages/              # Vistas principales
     │   │   ├── devices/        # Página de dispositivos
-    │   │   ├── history/        # Página de historial de accesos
-    │   │   │   ├── History.jsx # Componente de la tabla de historial
-    │   │   │   └── History.css # Estilos de la tabla de historial
-    │   │   └── ...otras páginas
-    │   └── styles/             # Archivos CSS globales
-    └── ...otros archivos de Vite/React
+    │   │   └── ...
+    │   └── styles/             # CSS global
+    └── ...
 ```
 
 ---
 
-## Backend (Node.js/Express)
+## Instalación y Despliegue
 
-### app.js
-- **Función:** Archivo principal del backend. Configura middlewares, rutas, Swagger, y arranca el servidor Express.
-- **Ejemplo de arranque:**
-```js
-node app.js
+### Requisitos previos
+- Node.js (v16+)
+- **PostgreSQL**
+
+### Pasos rápidos
+
+```bash
+# Clona el repositorio
+git clone https://github.com/tu-usuario/compuscan.git
+cd compuscan
+
+# Instala dependencias del frontend
+cd front
+npm install
+
+# Instala dependencias del backend
+cd ../back
+npm install
+
+# Configura variables de entorno (ver documentación en Notion)
+# Inicia el backend
+npm start
+
+# Inicia el frontend
+cd ../front
+npm start
 ```
-- **Incluye:**
-  - Carga de variables de entorno
-  - Configuración de CORS
-  - Rutas API (`/api/usuarios`, `/api/dispositivos`, etc.)
-  - Servir archivos estáticos y frontend
-  - Manejo global de errores
 
-### config/database.js
-- **Función:** Configura y exporta el pool de conexiones a PostgreSQL usando `pg`.
-- **Ejemplo:**
+---
+
+## Explicación de Carpetas y Archivos
+
+### Backend
+- **app.js:** Configura middlewares, rutas, Swagger, y arranca el servidor Express.
+- **config/database.js:** Pool de conexiones a **PostgreSQL**.
+- **controllers/:** Lógica de negocio (por ejemplo, dispositivos).
+- **models/:** Acceso directo a la base de datos.
+- **routes/:** Endpoints de la API agrupados por entidad.
+- **public/:** Archivos estáticos.
+
+### Frontend
+- **src/App.jsx:** Rutas del frontend usando React Router.
+- **src/components/layout/Layout.jsx:** Layout general de la app.
+- **src/components/layout/Header.jsx:** Header superior con logo, menú y usuario.
+- **src/pages/devices/:** Página de gestión de dispositivos.
+- **src/styles/:** CSS global.
+
+---
+
+## Ejemplos de Código Clave
+
+### Conexión a PostgreSQL (`config/database.js`)
 ```js
 const { Pool } = require('pg');
 const pool = new Pool({
@@ -84,181 +146,72 @@ const pool = new Pool({
 module.exports = pool;
 ```
 
-### controllers/
-- **Función:** Lógica de negocio de cada entidad. Recibe la petición, valida datos, llama a los modelos y responde.
-- **Ejemplo:**
-  - `dispositivoController.js`: Alta, baja, modificación y consulta de dispositivos.
-  - `usuarioController.js`: Gestión de usuarios.
-
-### models/
-- **Función:** Acceso directo a la base de datos. Define funciones para CRUD y consultas complejas.
-- **Ejemplo:**
-  - `dispositivoModel.js`:
-    ```js
-    getDispositivoByRFID: async (rfid) => {
-      const result = await pool.query('SELECT * FROM dispositivo WHERE rfid = $1', [rfid]);
-      return result.rows[0];
-    }
-    ```
-
-### routes/
-- **Función:** Define los endpoints de la API agrupados por entidad.
-- **Ejemplo:**
-  - `dispositivoRoutes.js`:
-    - `GET /api/dispositivos` (listar)
-    - `POST /api/dispositivos` (crear)
-    - `POST /api/dispositivos/acceso-rfid` (registrar acceso RFID)
-
-### public/
-- **Función:** Carpeta de archivos estáticos. Aquí se sirve el frontend compilado y recursos como imágenes.
-
----
-
-## Frontend (React + Vite)
-
-### src/App.jsx
-- **Función:** Define las rutas del frontend usando React Router.
-- **Ejemplo:**
-```jsx
-<Route path="/usuarios" element={<UsersPage />} />
-<Route path="/dispositivos" element={<DevicesPage />} />
-<Route path="/historial" element={<HistoryPage />} />
-```
-
-### src/components/layout/Layout.jsx
-- **Función:** Layout general de la app. Incluye el header y el contenedor principal centrado.
-- **Ejemplo:**
-```jsx
-<div className="container-fluid p-0 min-vh-100 bg-light">
-  <Header />
-  <div className="main-content">...</div>
-</div>
-```
-
-### src/components/layout/Header.jsx
-- **Función:** Header superior con logo, menú de navegación y usuario.
-- **Incluye:**
-  - Logo
-  - Menú de navegación (Inicio, Usuarios, Dispositivos, etc.)
-  - Info de usuario y botón de cerrar sesión
-
-### src/pages/users/
-- **Función:** Página de gestión de usuarios. Tabla, búsqueda, creación y edición de usuarios.
-- **Componentes:**
-  - Tabla de usuarios
-  - Barra de búsqueda
-  - Botón "Nuevo Usuario"
-
-### src/pages/devices/
-- **Función:** Página de gestión de dispositivos. Tabla, búsqueda, creación y edición de dispositivos.
-- **Componentes:**
-  - Tabla de dispositivos
-  - Barra de búsqueda
-  - Botón "Nuevo Dispositivo"
-
-### src/pages/history/History.jsx
-- **Función:** Página de historial de accesos. Muestra una tabla con todos los eventos de entrada/salida de dispositivos.
-- **Componentes:**
-  - Tabla de historial (fecha, descripción, dispositivo, serial)
-  - Estilos iguales a usuarios/dispositivos
-
-### src/components/AccessControl.jsx
-- **Función:** Pantalla para pasar la tarjeta RFID.
-- **Flujo:**
-  1. El input está enfocado automáticamente.
-  2. Al pasar la tarjeta, se envía el código RFID al backend (`POST /api/dispositivos/acceso-rfid`).
-  3. El backend registra el evento (entrada/salida) y responde con el resultado.
-  4. Se muestra el mensaje de acceso autorizado y los datos del usuario/dispositivo.
-
----
-
-## Flujo de Acceso RFID (de extremo a extremo)
-
-1. **El usuario pasa la tarjeta RFID en la pantalla de control de acceso** (`AccessControl.jsx`).
-2. **El frontend envía una petición POST al backend:**
-   - Endpoint: `/api/dispositivos/acceso-rfid`
-   - Payload: `{ rfid: 'codigo_rfid' }`
-3. **El backend busca el dispositivo y usuario asociado, alterna ENTRADA/SALIDA, registra el evento en la base de datos y responde.**
-4. **El frontend muestra el resultado y el evento aparece en la tabla de historial.**
-
----
-
-## ¿Cómo abrir varias pantallas en Vite/React?
-- Simplemente abre varias pestañas del navegador y navega a la URL que quieras (por ejemplo, `/usuarios` en una y `/historial` en otra).
-- Cada pestaña funciona de forma independiente gracias a React Router.
-
----
-
-## ¿Dónde está la pantalla para pasar la tarjeta RFID?
-- **Archivo:** `front/src/components/AccessControl.jsx`
-- **Función:** Permite leer el código RFID y registrar el acceso en el sistema.
-- **Ubicación:** Puede estar en el menú principal o como una ruta protegida.
-
----
-
-## ¿Dónde se guarda y visualiza el historial?
-- **Base de datos:** Tabla `historial_dispositivo`.
-- **Backend:** Endpoints en `routes/historialDispositivoRoutes.js` y lógica en `controllers/historialDispositivoController.js`.
-- **Frontend:** Página `/historial` (`front/src/pages/history/History.jsx`).
-
----
-
-## Alternancia ENTRADA/SALIDA
-- El backend revisa el último evento del dispositivo y alterna automáticamente entre ENTRADA y SALIDA.
-- Ejemplo de código:
+### Endpoint para registrar dispositivo (`routes/dispositivoRoutes.js`)
 ```js
-const ultimoEventoRes = await pool.query(
-  'SELECT descripcion FROM historial_dispositivo WHERE id_dispositivo = $1 ORDER BY fecha_hora DESC LIMIT 1',
-  [dispositivo.id]
-);
-let tipoEvento = 'ENTRADA';
-if (ultimoEventoRes.rows.length > 0) {
-  const ultimaDescripcion = ultimoEventoRes.rows[0].descripcion;
-  if (ultimaDescripcion.includes('Acceso autorizado: ENTRADA')) tipoEvento = 'SALIDA';
-  else if (ultimaDescripcion.includes('Acceso autorizado: SALIDA')) tipoEvento = 'ENTRADA';
-}
+router.post('/api/dispositivos', dispositivoController.crearDispositivo);
+```
+
+### Controlador de registro de dispositivo (`controllers/dispositivoController.js`)
+```js
+exports.crearDispositivo = async (req, res) => {
+  const { nombre, serial, rfid } = req.body;
+  try {
+    const nuevo = await dispositivoModel.crearDispositivo({ nombre, serial, rfid });
+    res.status(201).json(nuevo);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al registrar dispositivo' });
+  }
+};
+```
+
+### Modelo de dispositivo (`models/dispositivoModel.js`)
+```js
+const pool = require('../config/database');
+exports.crearDispositivo = async ({ nombre, serial, rfid }) => {
+  const result = await pool.query(
+    'INSERT INTO dispositivo (nombre, serial, rfid) VALUES ($1, $2, $3) RETURNING *',
+    [nombre, serial, rfid]
+  );
+  return result.rows[0];
+};
+```
+
+### Ejemplo de uso de RFID en el backend
+```js
+// Registrar acceso RFID
+router.post('/api/dispositivos/acceso-rfid', async (req, res) => {
+  const { rfid } = req.body;
+  // Buscar dispositivo por RFID y registrar evento...
+});
 ```
 
 ---
 
-## Respuestas rápidas a dudas frecuentes
+## Tecnologías Utilizadas
 
-- **¿Cómo tener dos pantallas en Vite?**
-  Solo abre dos pestañas en el navegador, cada una con la URL que quieras.
-
-- **¿Dónde está la pantalla para pasar la tarjeta?**
-  En el componente `AccessControl.jsx` del frontend.
-
-- **¿Dónde se guarda el historial?**
-  En la base de datos, tabla `historial_dispositivo`, y se muestra en la página `/historial`.
-
-- **¿Cómo se alterna entre ENTRADA y SALIDA?**
-  El backend revisa el último evento del dispositivo y alterna automáticamente.
-
-- **¿Cómo se ve el historial?**
-  En la página `/historial`, con una tabla igual a la de usuarios y dispositivos.
+- **Frontend:** React, Bootstrap, CSS personalizado
+- **Backend:** Node.js, Express, **PostgreSQL**
+- **Otros:** React Router, Context API, react-icons, JWT
 
 ---
 
-## Consejos para tu equipo
+## Contribuciones
 
-- **Todo está modularizado:**
-  - Backend: rutas, controladores, modelos.
-  - Frontend: páginas, componentes, layout.
-- **Puedes abrir cualquier sección en cualquier pestaña.**
-- **El control de acceso RFID es automático y centralizado.**
-- **El historial es global y se actualiza con cada evento.**
+¿Quieres contribuir?  
+Lee la [guía de contribución](https://www.notion.so/CompuSCan-Proyectos-77faef643c4c471d90e582c54537902c) y sigue las buenas prácticas del equipo.
 
 ---
 
-## Ejemplo de flujo completo de acceso RFID
+## Licencia
 
-1. El usuario pasa la tarjeta en la pantalla de control de acceso.
-2. El frontend envía el código RFID al backend.
-3. El backend registra el evento (entrada/salida) y responde.
-4. El frontend muestra el resultado.
-5. El evento aparece en la tabla de historial.
+Este proyecto está bajo la licencia MIT.  
+Consulta el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
 
-¿Dudas? Consulta este README o revisa el código fuente en los archivos y rutas indicadas.
+## Documentación Oficial
+
+La documentación ampliada, manuales y guías de uso están disponibles en Notion:  
+👉 [CompuSCan Proyectos - Documentación Oficial](https://www.notion.so/CompuSCan-Proyectos-77faef643c4c471d90e582c54537902c)
+
+> Para dudas, sugerencias o reportes, revisa la documentación en Notion. 

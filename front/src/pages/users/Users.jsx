@@ -246,12 +246,12 @@ const Users = () => {
     <div className="users-bg">
       <div className="users-panel">
         <div className="users-header-row">
-          <h1>Gestión de Usuarios</h1>
-        </div>
-        <div className="users-table-container">
-          <div className="users-loading">
-            <span className="spinner"></span>
-            <span>Cargando usuarios...</span>
+        <h1>Gestión de Usuarios</h1>
+      </div>
+      <div className="users-table-container">
+        <div className="users-loading">
+          <span className="spinner"></span>
+          <span>Cargando usuarios...</span>
           </div>
         </div>
       </div>
@@ -265,19 +265,19 @@ const Users = () => {
           <h1>Gestión de Usuarios</h1>
           <div className="controls-wrapper">
             <div className="search-bar">
-              <FaSearch className="search-icon" />
-              <input
-                type="text"
-                placeholder="Buscar usuario..."
-                value={searchTerm}
-                onChange={handleSearch}
-              />
-            </div>
+            <FaSearch className="search-icon" />
+            <input
+              type="text"
+              placeholder="Buscar usuario..."
+              value={searchTerm}
+              onChange={handleSearch}
+            />
+          </div>
             <button className="btn btn-primary" onClick={() => { setShowModal(true); setEditingUser(null); }} title="Agregar nuevo usuario">
               <FaPlus />
               Nuevo Usuario
-            </button>
-          </div>
+          </button>
+            </div>
         </div>
         
         {error && (

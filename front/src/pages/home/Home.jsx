@@ -356,7 +356,7 @@ const Home = () => {
               <div className="activity-item">
                 <FaSignInAlt className="in-icon" />
                 <span>{stats?.actividad?.entradas || 0}</span>
-              </div>
+                </div>
               <div className="activity-item">
                 <FaSignOutAlt className="out-icon" />
                 <span>{stats?.actividad?.salidas || 0}</span>
@@ -386,7 +386,7 @@ const Home = () => {
               </div>
               <div className="status-count">{stats?.estadoDispositivos?.pendientes || 0}</div>
               <div className="status-label">Pendientes</div>
-            </div>
+                </div>
             <div className="status-item">
               <div className="status-icon rejected">
                 <FaTimesCircle />
@@ -441,8 +441,8 @@ const Home = () => {
               <div className="no-alerts">
                 <FaCheckCircle />
                 <p>No hay alertas activas</p>
-              </div>
-            )}
+        </div>
+      )}
           </div>
         </div>
       </div>
