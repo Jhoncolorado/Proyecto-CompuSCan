@@ -85,6 +85,10 @@ const Home = () => {
     fetchStats();
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
+
   if (loading) {
     return (
       <div className="dashboard-container">

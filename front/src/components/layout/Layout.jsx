@@ -40,6 +40,9 @@ const Layout = () => {
         background: '#fff'
       };
     }
+    if (isHome) {
+      return { marginTop: 300 };
+    }
     return { marginTop: 60 };
   };
 
