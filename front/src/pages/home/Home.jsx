@@ -117,8 +117,8 @@ const Home = () => {
 
   return (
     <div className="dashboard-container">
-      {/* Header Section */}
-      <header className="dashboard-header">
+      {/* Header Section ELIMINADO */}
+      {/* <header className="dashboard-header">
         <div className="welcome-message">
           <div className="user-avatar">
             {user?.foto ? (
@@ -133,10 +133,8 @@ const Home = () => {
           </div>
         </div>
         <CurrentDateDisplay />
-      </header>
-      
+      </header> */}
       <h1 className="dashboard-title">Panel de Control</h1>
-      
       {/* Panel de Bienvenida con estilos directos */}
       <div style={{
         background: '#fff',
@@ -146,13 +144,33 @@ const Home = () => {
         overflow: 'hidden',
         border: '1px solid rgba(230, 235, 240, 0.6)'
       }}>
-        {/* Encabezado verde */}
+        {/* Encabezado verde con foto y nombre */}
         <div style={{
-          backgroundColor: '#71c585',
+          background: 'linear-gradient(90deg, #388e3c 80%, #43a047 100%)',
           padding: '1.3rem 2rem',
           textAlign: 'left',
-          color: 'white'
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem'
         }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            borderRadius: '50%',
+            backgroundColor: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            boxShadow: '0 2px 8px 0 rgba(44,62,80,0.10)'
+          }}>
+            {user?.foto ? (
+              <img src={user.foto} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <FaUserCircle style={{ color: '#71c585', fontSize: '2rem' }} />
+            )}
+          </div>
           <h2 style={{
             fontSize: '1.5rem',
             fontWeight: '600',

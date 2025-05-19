@@ -10,7 +10,6 @@ const menuItems = [
   { path: '/devices', label: 'Dispositivos' },
   { path: '/alerts', label: 'Alertas' },
   { path: '/history', label: 'Historial' },
-  { path: '/programs', label: 'Programas' },
   { path: '/device-validation', label: 'Validación de Dispositivos' }
 ];
 
@@ -59,9 +58,11 @@ const Header = () => {
         text-align: center;
         line-height: 1.15;
         min-width: 90px;
+        color: #fff !important;
+        text-shadow: 0 1px 6px rgba(44, 62, 80, 0.18);
       }
       .main-header-menu-link:hover, .main-header-menu-link.active {
-        color: #0d6efd !important;
+        color: #fff !important;
       }
       .main-header-menu-link.active::after, .main-header-menu-link:hover::after {
         content: '';
@@ -72,7 +73,7 @@ const Header = () => {
         bottom: -2px;
         width: 70%;
         height: 3px;
-        background: #0d6efd;
+        background: #fff;
         border-radius: 2px;
       }
       .main-header-separator {
@@ -82,6 +83,17 @@ const Header = () => {
         margin: 0 18px;
         border-radius: 2px;
         align-self: center;
+      }
+      .btn-outline-danger {
+        color: #43a047 !important;
+        border-color: #43a047 !important;
+        background: #fff !important;
+        transition: background 0.2s, color 0.2s;
+      }
+      .btn-outline-danger:hover {
+        background: #43a047 !important;
+        color: #fff !important;
+        border-color: #388e3c !important;
       }
     `;
     document.head.appendChild(style);
@@ -93,7 +105,8 @@ const Header = () => {
       role="banner"
       aria-label="Barra de navegación principal"
       style={{ 
-        background: '#fff', 
+        background: 'linear-gradient(90deg, #388e3c 80%, #43a047 100%)',
+        color: '#fff',
         borderBottom: isHistory ? 'none' : '1.5px solid #e5e7eb', 
         boxShadow: isHistory ? 'none' : (scrolled ? '0 4px 18px 0 rgba(0,0,0,0.10)' : '0 2px 8px 0 rgba(0,0,0,0.03)'), 
         padding: 0, 
@@ -129,14 +142,14 @@ const Header = () => {
               width: 44,
               height: 44,
               borderRadius: 10,
-              border: '2px solid #0d6efd',
+              border: '2px solid #2e7d32',
               backgroundColor: 'white',
               padding: '2px',
               objectFit: 'contain',
               boxShadow: '0 2px 8px 0 rgba(0,0,0,0.06)'
             }}
           />
-          <span className="fw-bold fs-3 text-primary" style={{ fontWeight: 800, fontSize: 22, letterSpacing: 0.5, whiteSpace: 'nowrap', marginLeft: 6 }}>CompuSCan</span>
+          <span className="fw-bold fs-3" style={{ fontWeight: 800, fontSize: 22, letterSpacing: 0.5, whiteSpace: 'nowrap', marginLeft: 6, color: '#fff', textShadow: '0 2px 8px rgba(44, 62, 80, 0.10)' }}>CompuSCan</span>
         </div>
         {/* CENTRO: Menú de navegación */}
         <nav
@@ -258,15 +271,14 @@ const Header = () => {
             )}
           </ul>
         </nav>
-        {/* DERECHA: Usuario, fecha/hora y logout */}
+        {/* DERECHA: Solo fecha/hora y logout */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', minWidth: 220, flexShrink: 1, gap: 12 }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 80, maxWidth: 180, lineHeight: 1.1 }}>
-            <span style={{ fontWeight: 700, fontSize: 15, color: '#222', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 180 }}>
-              {user?.nombre || 'Usuario'}
+            <span style={{ fontSize: 13, color: '#fff', fontWeight: 700, letterSpacing: 0.2, textShadow: '0 1px 6px rgba(26,35,126,0.18)' }}>
+              {formatDate(currentTime)}
             </span>
-            <span style={{ fontSize: 13, color: '#1976d2', fontWeight: 700, marginTop: '-2px', letterSpacing: 0.2 }}>{user?.rol || 'Rol'}</span>
-            <span style={{ fontSize: 12, color: '#444', fontWeight: 500, marginTop: '2px' }}>
-              {formatDate(currentTime)} <span style={{ color: '#0d6efd', fontFamily: 'monospace', fontWeight: 700, fontSize: 13, marginLeft: 6 }}>{formatTime(currentTime)}</span>
+            <span style={{ color: '#fff', fontFamily: 'monospace', fontWeight: 700, fontSize: 18, marginTop: 2, textShadow: '0 1px 6px rgba(26,35,126,0.18)' }}>
+              {formatTime(currentTime)}
             </span>
           </div>
           <button
@@ -277,7 +289,8 @@ const Header = () => {
               minWidth: '90px',
               justifyContent: 'center',
               fontWeight: 600,
-              borderWidth: 2
+              borderWidth: 2,
+              boxShadow: '0 2px 8px 0 rgba(67,160,71,0.08)'
             }}
             onClick={logout}
             aria-label="Cerrar sesión"

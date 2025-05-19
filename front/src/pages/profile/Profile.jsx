@@ -209,7 +209,7 @@ const Profile = () => {
           </div>
           <div className="profile-field">
             <span className="profile-label">Rol:</span>
-            <span className="profile-value profile-role">{formData.rol || '-'}</span>
+            <span className="profile-role-badge">{formData.rol || '-'}</span>
           </div>
           <div className="profile-field">
             <span className="profile-label">Fecha de registro:</span>

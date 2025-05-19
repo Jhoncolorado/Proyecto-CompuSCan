@@ -11,7 +11,6 @@ const Sidebar = () => {
     { path: '/devices', label: 'Dispositivos', icon: 'fa fa-laptop' },
     { path: '/alerts', label: 'Alertas', icon: 'fa fa-bell' },
     { path: '/history', label: 'Historial', icon: 'fa fa-history' },
-    { path: '/programs', label: 'Programas', icon: 'fa fa-graduation-cap' },
     { path: '/cards', label: 'Carnets', icon: 'fa fa-id-card' },
     { path: '/cases', label: 'Casos', icon: 'fa fa-folder' }
   ];

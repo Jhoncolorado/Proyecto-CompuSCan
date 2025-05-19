@@ -55,6 +55,8 @@ const Users = () => {
   const [showDevicesModal, setShowDevicesModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [deviceImage, setDeviceImage] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -130,22 +132,32 @@ const Users = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (userId) => {
-    if (!window.confirm('¿Está seguro de eliminar este usuario?')) return;
-    
+  const handleDelete = (userId) => {
+    setUserToDelete(userId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!userToDelete) return;
     setError('');
     setSuccess('');
     setSubmitting(true);
-    
     try {
-      const response = await axios.delete(`http://localhost:3000/api/usuarios/${userId}`);
+      const response = await axios.delete(`http://localhost:3000/api/usuarios/${userToDelete}`);
       setSuccess('Usuario eliminado correctamente');
       fetchUsers();
     } catch (err) {
       setError(`Error al eliminar usuario: ${err.response?.data?.message || err.message}`);
     } finally {
       setSubmitting(false);
+      setShowDeleteModal(false);
+      setUserToDelete(null);
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false);
+    setUserToDelete(null);
   };
 
   const handleSubmit = async (e) => {
@@ -337,9 +349,10 @@ const Users = () => {
         
         {showModal && (
           <div className="modal-overlay">
-            <div className="modal">
+            <div className="modal modal-narrow">
               <button className="close-modal" onClick={handleCloseModal} title="Cerrar">✖</button>
-              <h2>{editingUser ? 'Editar Usuario' : 'Nuevo Usuario'}</h2>
+              <div className="modal-content-scroll">
+                <h2 className="modal-title">{editingUser ? 'Editar Usuario' : 'Nuevo Usuario'}</h2>
               <div className="form-avatar-preview">
                 {editingUser && editingUser.foto ? (
                   <img src={editingUser.foto} alt="Avatar" className="user-avatar-large" />
@@ -347,74 +360,25 @@ const Users = () => {
                   <FaUserCircle className="user-avatar-placeholder-large" />
                 )}
               </div>
-              <form onSubmit={handleSubmit} autoComplete="off" className="form-grid">
-                <div className="form-control">
-                  <label className="label">Nombre</label>
-                  <input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required autoFocus disabled={submitting} className="input input-bordered" />
+                <div className="form-card">
+                  <form onSubmit={handleSubmit} autoComplete="off" className="form-user-profile-singlecol">
+                    <div className="form-control"><label className="label">Nombre</label><input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required autoFocus disabled={submitting} className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">Correo</label><input type="email" name="correo" value={formData.correo} onChange={handleChange} required disabled={submitting} className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">Rol</label><select name="rol" value={formData.rol} onChange={handleChange} required disabled={submitting} className="select select-bordered"><option value="">Seleccionar rol</option><option value="administrador">Administrador/Validador</option><option value="instructor">Instructor</option><option value="aprendiz">Aprendiz</option></select></div>
+                    <div className="form-control"><label className="label">Teléfono Principal</label><input type="tel" name="telefono1" value={formData.telefono1} onChange={handleChange} disabled={submitting} className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">Documento</label><input type="text" name="documento" value={formData.documento} onChange={handleChange} disabled={submitting} className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">Tipo de Documento</label><input type="text" name="tipo_documento" value={formData.tipo_documento} onChange={handleChange} disabled={submitting} className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">RH</label><input type="text" name="rh" value={formData.rh} onChange={handleChange} disabled={submitting} maxLength="3" placeholder="Ej: O+, A-, B+, AB+" className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">Estado</label><select name="estado" value={formData.estado} onChange={handleChange} required disabled={submitting} className="select select-bordered"><option value="activo">Activo</option><option value="inactivo">Inactivo</option><option value="pendiente">Pendiente</option></select></div>
+                    <div className="form-control form-control-full"><label className="label">Observación</label><textarea name="observacion" value={formData.observacion} onChange={handleChange} disabled={submitting} placeholder="Observaciones adicionales" className="textarea textarea-bordered"></textarea></div>
+                    {formError && (<div className="alert alert-error shadow-lg form-control-full">{formError}</div>)}
+                    <div className="modal-actions form-control-full inline-buttons">
+                      <button type="submit" className="btn btn-primary" disabled={submitting}>{submitting ? 'Procesando...' : editingUser ? 'Guardar Cambios' : 'Crear Usuario'}</button>
+                      <button type="button" className="btn btn-secondary" onClick={handleCloseModal} disabled={submitting}>Cancelar</button>
                 </div>
-                <div className="form-control">
-                  <label className="label">Correo</label>
-                  <input type="email" name="correo" value={formData.correo} onChange={handleChange} required disabled={submitting} className="input input-bordered" />
+                  </form>
                 </div>
-                <div className="form-control">
-                  <label className="label">Rol</label>
-                  <select name="rol" value={formData.rol} onChange={handleChange} required disabled={submitting} className="select select-bordered">
-                    <option value="">Seleccionar rol</option>
-                    <option value="administrador">Administrador/Validador</option>
-                    <option value="instructor">Instructor</option>
-                    <option value="aprendiz">Aprendiz</option>
-                  </select>
                 </div>
-                <div className="form-control">
-                  <label className="label">Teléfono Principal</label>
-                  <input type="tel" name="telefono1" value={formData.telefono1} onChange={handleChange} disabled={submitting} className="input input-bordered" />
-                </div>
-                <div className="form-control">
-                  <label className="label">Teléfono Secundario</label>
-                  <input type="tel" name="telefono2" value={formData.telefono2} onChange={handleChange} disabled={submitting} className="input input-bordered" />
-                </div>
-                <div className="form-control">
-                  <label className="label">RH</label>
-                  <input type="text" name="rh" value={formData.rh} onChange={handleChange} disabled={submitting} maxLength="3" placeholder="Ej: O+, A-, B+, AB+" className="input input-bordered" />
-                </div>
-                <div className="form-control">
-                  <label className="label">Ficha</label>
-                  <input type="text" name="ficha" value={formData.ficha} onChange={handleChange} disabled={submitting} placeholder="Número de ficha (solo para aprendices)" className="input input-bordered" />
-                </div>
-                <div className="form-control md:col-span-2">
-                  <label className="label">Observación</label>
-                  <textarea name="observacion" value={formData.observacion} onChange={handleChange} disabled={submitting} placeholder="Observaciones adicionales" className="textarea textarea-bordered"></textarea>
-                </div>
-                <div className="form-control">
-                  <label className="label">Estado</label>
-                  <select name="estado" value={formData.estado} onChange={handleChange} required disabled={submitting} className="select select-bordered">
-                    <option value="activo">Activo</option>
-                    <option value="inactivo">Inactivo</option>
-                    <option value="pendiente">Pendiente</option>
-                  </select>
-                </div>
-                <div className="form-control">
-                  <label className="label">Documento</label>
-                  <input type="text" name="documento" value={formData.documento} onChange={handleChange} disabled={submitting} className="input input-bordered" />
-                </div>
-                <div className="form-control">
-                  <label className="label">Tipo de Documento</label>
-                  <input type="text" name="tipo_documento" value={formData.tipo_documento} onChange={handleChange} disabled={submitting} className="input input-bordered" />
-                </div>
-                {formError && (
-                  <div className="alert alert-error shadow-lg col-span-2">
-                    {formError}
-                  </div>
-                )}
-                <div className="modal-actions">
-                  <button type="submit" className="btn btn-primary" disabled={submitting}>
-                    {submitting ? 'Procesando...' : editingUser ? 'Guardar Cambios' : 'Crear Usuario'}
-                  </button>
-                  <button type="button" className="btn btn-secondary" onClick={handleCloseModal} disabled={submitting}>
-                    Cancelar
-                  </button>
-                </div>
-              </form>
             </div>
           </div>
         )}
@@ -424,6 +388,19 @@ const Users = () => {
               <button className="close-modal" onClick={() => setShowDevicesModal(false)} title="Cerrar">✖</button>
               <h2>Dispositivos del usuario</h2>
               <UserDevices userId={selectedUserId} isAdminView />
+            </div>
+          </div>
+        )}
+        {showDeleteModal && (
+          <div className="modal-overlay">
+            <div className="modal modal-confirm">
+              <div className="modal-icon-warning"><FaExclamationTriangle size={32} color="#c62828" /></div>
+              <h3 className="modal-title">¿Está seguro de eliminar este usuario?</h3>
+              <div className="modal-actions inline-buttons">
+                <button className="btn btn-secondary" onClick={cancelDelete} disabled={submitting}>Cancelar</button>
+                <button className="btn btn-danger" onClick={confirmDelete} disabled={submitting}>Eliminar</button>
+              </div>
+              <div className="modal-warning-text">Esta acción no se puede deshacer.</div>
             </div>
           </div>
         )}

@@ -56,12 +56,34 @@ body, html {
   color: #2e7d32;
 }
 
+.profile-role-badge {
+  display: inline-block;
+  background: #e8f5e9;
+  color: #1b5e20;
+  border: 1.5px solid #1b5e20;
+  border-radius: 16px;
+  padding: 0.3em 1em;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-left: 0.5em;
+  letter-spacing: 0.5px;
+  text-transform: capitalize;
+}
+
 @media (max-width: 600px) {
   .profile-container {
-    padding: 0.7rem 0.3rem;
+    padding: 0.4rem 0.1rem;
+    max-width: 99vw;
   }
-  .profile-label, .profile-value {
+  .profile-avatar, .profile-avatar-placeholder {
+    width: 80px;
+    height: 80px;
+  }
+  .profile-label, .profile-value, .profile-role-badge {
     font-size: 0.93rem;
+  }
+  .profile-info {
+    gap: 0.5rem;
   }
 }
 

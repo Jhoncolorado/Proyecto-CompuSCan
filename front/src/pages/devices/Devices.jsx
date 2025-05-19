@@ -36,55 +36,55 @@ const Devices = () => {
     <div className="devices-bg">
       <div className="devices-panel">
         <div className="devices-header-row">
-          <h1 style={{ fontSize: '2.1rem', fontWeight: 800, color: '#1b5e20', margin: 0, letterSpacing: 1 }}>
-            Gestión de Dispositivos
-          </h1>
-        </div>
+          <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#1b5e20', margin: 0, letterSpacing: 0.5 }}>
+              Gestión de Dispositivos
+            </h1>
+          </div>
         <div className="devices-table-wrapper">
-          {loading ? (
-            <div className="devices-loading">
-              <span className="spinner"></span>
-              <span className="ml-4">Cargando dispositivos...</span>
-            </div>
-          ) : error ? (
-            <div className="devices-error">
-              <FaExclamationCircle style={{marginRight:8, color:'#c62828', fontSize:22}}/>
-              <span>{error}</span>
-            </div>
-          ) : devices.length === 0 ? (
-            <div className="devices-info">
-              <FaExclamationCircle style={{marginRight:8, color:'#1976d2', fontSize:22}}/>
-              No hay dispositivos registrados.
-            </div>
-          ) : (
+      {loading ? (
+        <div className="devices-loading">
+          <span className="spinner"></span>
+          <span className="ml-4">Cargando dispositivos...</span>
+        </div>
+      ) : error ? (
+        <div className="devices-error">
+          <FaExclamationCircle style={{marginRight:8, color:'#c62828', fontSize:22}}/>
+          <span>{error}</span>
+        </div>
+      ) : devices.length === 0 ? (
+        <div className="devices-info">
+          <FaExclamationCircle style={{marginRight:8, color:'#1976d2', fontSize:22}}/>
+          No hay dispositivos registrados.
+        </div>
+      ) : (
             <table className="devices-table">
-              <thead>
-                <tr>
-                  <th>Foto</th>
-                  <th>Nombre</th>
-                  <th>Tipo</th>
-                  <th>Serial</th>
-                  <th>Usuario</th>
-                  <th>RFID</th>
-                  <th>Estado</th>
-                  <th>Fecha Registro</th>
+            <thead>
+              <tr>
+                <th>Foto</th>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Serial</th>
+                <th>Usuario</th>
+                <th>RFID</th>
+                <th>Estado</th>
+                <th>Fecha Registro</th>
+              </tr>
+            </thead>
+            <tbody>
+              {devices.map(device => (
+                <tr key={device.id}>
+                  <td>{device.foto ? <img src={device.foto} alt="foto" className="device-img" /> : <span className="device-noimg">(Sin imagen)</span>}</td>
+                  <td>{device.nombre}</td>
+                  <td>{device.tipo}</td>
+                  <td>{device.serial}</td>
+                  <td>{device.nombre_usuario}</td>
+                  <td>{device.rfid || <span className="device-norfid">No asignado</span>}</td>
+                  <td>{estadoBadge(device.estado_validacion || 'pendiente')}</td>
+                  <td>{device.fecha_registro ? new Date(device.fecha_registro).toLocaleDateString() : ''}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {devices.map(device => (
-                  <tr key={device.id}>
-                    <td>{device.foto ? <img src={device.foto} alt="foto" className="device-img" /> : <span className="device-noimg">(Sin imagen)</span>}</td>
-                    <td>{device.nombre}</td>
-                    <td>{device.tipo}</td>
-                    <td>{device.serial}</td>
-                    <td>{device.nombre_usuario}</td>
-                    <td>{device.rfid || <span className="device-norfid">No asignado</span>}</td>
-                    <td>{estadoBadge(device.estado_validacion || 'pendiente')}</td>
-                    <td>{device.fecha_registro ? new Date(device.fecha_registro).toLocaleDateString() : ''}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              ))}
+            </tbody>
+          </table>
           )}
         </div>
       </div>

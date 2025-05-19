@@ -190,7 +190,7 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
               <label>Foto (opcional, reemplaza la actual):</label>
               <input type="file" name="foto" accept="image/*" onChange={handleFormChange} />
             </div>
-            <div className="form-actions">
+            <div className="form-actions inline-buttons">
               <button type="submit" className="add-device-button" disabled={formLoading}>
                 {formLoading ? 'Guardando...' : 'Guardar'}
               </button>
@@ -202,19 +202,27 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
         </div>
       )}
 
-      {devices && devices.length > 0 ? (
+      {!showForm && devices && devices.length > 0 ? (
         <div className="devices-list">
           {devices.map(device => (
             <div key={device.id} className="device-card">
               <h3>{device.nombre}</h3>
-              <p><strong>Tipo:</strong> {device.tipo}</p>
-              <p><strong>Serial:</strong> {device.serial}</p>
-              <p><strong>Estado:</strong> {device.estado_validacion || 'Pendiente'}</p>
-              {device.rfid ? (
-                <p><strong>RFID:</strong> {device.rfid}</p>
-              ) : device.estado_validacion === 'aprobado' && (
-                <p className="pending-rfid">Esperando asignación de RFID</p>
-              )}
+              <div className="device-info-row">
+                <span className="device-info-label">Tipo:</span>
+                <span className="device-info-value">{device.tipo}</span>
+              </div>
+              <div className="device-info-row">
+                <span className="device-info-label">Serial:</span>
+                <span className="device-info-value">{device.serial}</span>
+              </div>
+              <div className="device-info-row">
+                <span className="device-info-label">Estado:</span>
+                <span className="device-info-value">{device.estado_validacion || 'Pendiente'}</span>
+              </div>
+              <div className="device-info-row">
+                <span className="device-info-label">RFID:</span>
+                <span className="device-info-value">{device.rfid || '—'}</span>
+              </div>
               {canEditDevice && (
                 <button className="edit-device-button" onClick={() => handleEdit(device)}>
                   Editar
@@ -223,7 +231,8 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
             </div>
           ))}
         </div>
-      ) : (
+      ) : null}
+      {!showForm && (!devices || devices.length === 0) && (
         <div className="no-devices">
           <p>No tienes dispositivos registrados</p>
           {canRegisterDevice && (
