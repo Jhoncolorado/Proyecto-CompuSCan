@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf, FaExclamationCircle } from 'react-icons/fa';
 import './Devices.css';
+import { useAuth } from '../../context/AuthContext';
 
 const estadoBadge = (estado) => {
   if (estado === 'aprobado') return <span className="badge badge-success device-badge"><FaCheckCircle style={{marginRight:4}}/>Aprobado</span>;
@@ -10,6 +11,7 @@ const estadoBadge = (estado) => {
 };
 
 const Devices = () => {
+  const { user } = useAuth();
   const [devices, setDevices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -19,7 +21,11 @@ const Devices = () => {
       try {
         setLoading(true);
         setError('');
-        const res = await fetch('http://localhost:3000/api/dispositivos');
+        let url = 'http://localhost:3000/api/dispositivos';
+        if (user && (user.rol === 'aprendiz' || user.rol === 'instructor')) {
+          url = `http://localhost:3000/api/dispositivos/usuario/${user.id}`;
+        }
+        const res = await fetch(url);
         if (!res.ok) throw new Error('Error al cargar dispositivos');
         const data = await res.json();
         setDevices(Array.isArray(data) ? data : []);
@@ -30,7 +36,7 @@ const Devices = () => {
       }
     };
     fetchDevices();
-  }, []);
+  }, [user]);
 
   return (
     <div className="devices-bg">
@@ -92,4 +98,5 @@ const Devices = () => {
   );
 };
 
-export default Devices; 
+export default Devices;
+export const UserDevicesPage = Devices; 

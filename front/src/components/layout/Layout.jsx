@@ -8,9 +8,10 @@ const Layout = () => {
   const isUsers = location.pathname.startsWith('/users');
   const isHistory = location.pathname.startsWith('/history');
   const isHome = location.pathname === '/'; // Detectar si estamos en la página de inicio
+  const isProfile = location.pathname.startsWith('/profile');
 
-  // Añadimos isHome a las páginas que usan ancho completo
-  const useFullWidth = isDevices || isUsers || isHistory || isHome;
+  // Añadimos isHome y isProfile a las páginas que usan ancho completo
+  const useFullWidth = isDevices || isUsers || isHistory || isHome || isProfile;
   
   // Estilos específicos para la página de historial
   const getPageStyles = () => {
@@ -26,7 +27,9 @@ const Layout = () => {
     // Reducir el padding para la página de inicio para aprovechar mejor el espacio
     if (isHome) {
       return {
-        padding: '1rem'
+        padding: '0.75rem',
+        marginTop: 0,
+        marginBottom: 0
       };
     }
     return {};
@@ -36,14 +39,14 @@ const Layout = () => {
   const getMainContentStyles = () => {
     if (isHistory) {
       return { 
-        marginTop: 0,
+        paddingTop: '80px', // Espacio para el header fijo
         background: '#fff'
       };
     }
     if (isHome) {
-      return { marginTop: 300 };
+      return { paddingTop: '80px', paddingBottom: 0 }; // Espacio para el header fijo
     }
-    return { marginTop: 60 };
+    return { paddingTop: '80px' }; // Espacio para el header fijo
   };
 
   // Fondo específico para cada página
@@ -57,9 +60,9 @@ const Layout = () => {
   // Contenedor principal, eliminamos bg-light para historial
   const getMainContainerClass = () => {
     if (isHistory) {
-      return "container-fluid p-0 min-vh-100";
+      return "container-fluid p-0";
     }
-    return "container-fluid p-0 min-vh-100 bg-light";
+    return "container-fluid p-0 bg-light";
   };
 
   return (
@@ -67,8 +70,8 @@ const Layout = () => {
       <Header />
       <div className="main-content" style={getMainContentStyles()}>
         <div className={getContainerClass()}>
-          <div className="w-100" style={useFullWidth ? {} : { maxWidth: 900 }}>
-            <div className={`bg-white rounded-4 shadow p-4 mb-4 ${isHistory ? 'history-content' : ''}`} style={getPageStyles()}>
+          <div className="w-100" style={useFullWidth ? { maxWidth: '100%' } : { maxWidth: 900 }}>
+            <div className={`bg-white rounded-4 shadow p-3 mb-2 ${isHistory ? 'history-content' : ''}`} style={getPageStyles()}>
               <Outlet />
             </div>
           </div>

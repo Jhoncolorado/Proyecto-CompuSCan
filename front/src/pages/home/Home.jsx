@@ -491,5 +491,63 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;
+
+// Inicio de usuario (aprendiz/instructor)
+export const HomeUser = () => {
+  const { user } = useAuth();
+  return (
+    <div className="dashboard-container">
+      <div style={{
+        background: '#fff',
+        borderRadius: '16px',
+        marginBottom: '1.8rem',
+        boxShadow: '0 10px 25px -5px rgba(0,0,0,0.07)',
+        overflow: 'hidden',
+        border: '1px solid rgba(230, 235, 240, 0.6)'
+      }}>
+        <div style={{
+          background: 'linear-gradient(90deg, #388e3c 80%, #43a047 100%)',
+          padding: '1.3rem 2rem',
+          textAlign: 'left',
+          color: 'white',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem'
+        }}>
+          <div style={{
+            width: '48px',
+            height: '48px',
+            borderRadius: '50%',
+            backgroundColor: '#fff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            overflow: 'hidden',
+            boxShadow: '0 2px 8px 0 rgba(44,62,80,0.10)'
+          }}>
+            {user?.foto ? (
+              <img src={user.foto} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            ) : (
+              <FaUserCircle style={{ color: '#71c585', fontSize: '2rem' }} />
+            )}
+          </div>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            margin: '0'
+          }}>
+            ¡Bienvenido, <span style={{
+              color: 'white',
+              fontWeight: '700'
+            }}>{user?.nombre || 'Usuario'}</span>!
+          </h2>
+        </div>
+        <div style={{ padding: '2rem', fontSize: '1.1rem', color: '#333' }}>
+          <p>Este es tu panel personal. Desde aquí puedes ver tu perfil y tus dispositivos registrados.</p>
+        </div>
+      </div>
+    </div>
+  );
+}; 
 

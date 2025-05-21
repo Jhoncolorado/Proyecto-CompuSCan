@@ -153,6 +153,11 @@ const usuarioModel = {
     countUsuarios: async () => {
         const result = await pool.query('SELECT COUNT(*) FROM usuario');
         return parseInt(result.rows[0].count, 10);
+    },
+
+    updateUltimoAcceso: async (id) => {
+        const query = 'UPDATE usuario SET ultimo_acceso = NOW() WHERE id = $1';
+        await pool.query(query, [id]);
     }
 };
 

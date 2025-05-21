@@ -47,7 +47,9 @@ const Sidebar = () => {
     return (
       <aside className="sidebar">
         <nav className="sidebar-nav">
+          <NavLink to="/home-user" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaHome /> <span>Inicio</span></NavLink>
           <NavLink to="/profile" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaUserCog /> <span>Mi Perfil</span></NavLink>
+          <NavLink to="/my-devices" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaDesktop /> <span>Mis Dispositivos</span></NavLink>
         </nav>
       </aside>
     );

@@ -1,0 +1,108 @@
+/* Estilos para forzar ancho completo */
+#root {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.container-fluid {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+.main-content {
+  width: 100% !important;
+  margin-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-top: 60px !important; /* Espacio para el header fijo */
+}
+
+.dashboard-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 1rem !important;
+  overflow: visible !important;
+}
+
+/* Eliminar restricciones de ancho en la estructura principal */
+.d-flex.justify-content-center {
+  width: 100% !important;
+}
+
+.w-100 {
+  max-width: 100% !important;
+}
+
+/* Asegurar que los elementos internos no tengan restricciones */
+.bg-white.rounded-4 {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  padding: 1rem !important;
+}
+
+/* Mantener el diseño original con tarjetas y sombras */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  width: 100% !important;
+}
+
+.dashboard-panels {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  width: 100% !important;
+}
+
+/* Asegurar que las tarjetas sean visibles */
+.stat-card, .dashboard-panel {
+  overflow: visible !important;
+}
+
+/* Asegurar que el contenido de la página sea visible completo */
+.min-vh-100 {
+  min-height: auto !important;
+  height: auto !important;
+}
+
+/* Ajustar alturas para que todo sea visible */
+html, body {
+  height: auto !important;
+  min-height: auto !important;
+  overflow-y: auto !important;
+}
+
+/* Ajustar el título del dashboard */
+.dashboard-title {
+  margin-top: 0 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Ajustes para dispositivos más pequeños */
+@media (max-width: 1200px) {
+  .dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .dashboard-panels {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-stats,
+  .dashboard-panels {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-container {
+    padding: 0.5rem !important;
+  }
+} 
