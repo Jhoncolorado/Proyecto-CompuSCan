@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FaSignOutAlt } from 'react-icons/fa';
 import logo from '../../assets/Imagen .jpg';
+import './Header.css';
 
 const menuItems = [
   { path: '/', label: 'Inicio' },
@@ -19,6 +20,7 @@ const Header = () => {
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHistory = location.pathname.startsWith('/history');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,10 +31,17 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 8);
+      if (window.scrollY > 10) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
     };
+
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const formatDate = (date) => {
@@ -100,8 +109,13 @@ const Header = () => {
     return () => { document.head.removeChild(style); };
   }, []);
 
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
+
   return (
-    <header 
+    <header className={`header-fixed ${scrolled ? 'scrolled' : ''}`}
       role="banner"
       aria-label="Barra de navegación principal"
       style={{ 
@@ -110,10 +124,10 @@ const Header = () => {
         borderBottom: isHistory ? 'none' : '1.5px solid #e5e7eb', 
         boxShadow: isHistory ? 'none' : (scrolled ? '0 4px 18px 0 rgba(0,0,0,0.10)' : '0 2px 8px 0 rgba(0,0,0,0.03)'), 
         padding: 0, 
-        position: 'sticky', 
+        position: 'fixed',
         top: 0, 
-        zIndex: 100,
-        width: '100vw',
+        zIndex: 1000,
+        width: '100%',
         left: 0,
         marginBottom: isHistory ? '20px' : undefined
       }}
@@ -267,6 +281,48 @@ const Header = () => {
                     Mi Perfil
                   </NavLink>
                 </li>
+                <li style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+                  <NavLink
+                    to="/my-devices"
+                    className={({ isActive }) =>
+                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                    }
+                    end
+                    style={{
+                      fontSize: 15,
+                      color: '#222',
+                      fontWeight: 500,
+                      padding: '4px 0',
+                      display: 'inline-block',
+                      whiteSpace: 'nowrap',
+                      width: '100%'
+                    }}
+                    aria-label="Mis Dispositivos"
+                  >
+                    Mis Dispositivos
+                  </NavLink>
+                </li>
+                <li style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+                  <NavLink
+                    to="/my-history"
+                    className={({ isActive }) =>
+                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                    }
+                    end
+                    style={{
+                      fontSize: 15,
+                      color: '#222',
+                      fontWeight: 500,
+                      padding: '4px 0',
+                      display: 'inline-block',
+                      whiteSpace: 'nowrap',
+                      width: '100%'
+                    }}
+                    aria-label="Mi Historial"
+                  >
+                    Mi Historial
+                  </NavLink>
+                </li>
               </>
             )}
           </ul>
@@ -292,7 +348,7 @@ const Header = () => {
               borderWidth: 2,
               boxShadow: '0 2px 8px 0 rgba(67,160,71,0.08)'
             }}
-            onClick={logout}
+            onClick={handleLogout}
             aria-label="Cerrar sesión"
           >
             <FaSignOutAlt style={{ fontSize: 16 }} />

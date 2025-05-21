@@ -193,6 +193,9 @@ const usuarioController = {
                 return res.status(401).json({ error: 'Credenciales inválidas' });
             }
 
+            // Actualizar último acceso
+            await usuarioModel.updateUltimoAcceso(usuario.id);
+
             // No enviar la contraseña en la respuesta
             const usuarioResponse = {
                 id: usuario.id,

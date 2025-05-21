@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 import Layout from './components/layout/Layout';
 import Login from './pages/auth/Login';
 import Home from './pages/home/Home';
@@ -15,6 +15,11 @@ import Profile from './pages/profile/Profile';
 import PrivateRoute from './components/common/PrivateRoute';
 import DeviceValidation from './components/DeviceValidation';
 import AccessControl from './components/AccessControl';
+import { HomeUser } from './pages/home/Home';
+import { UserDevicesPage } from './pages/devices/Devices';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserHistory } from './pages/history/History';
 
 // Configuración de las banderas futuras de React Router
 const router = {
@@ -23,6 +28,23 @@ const router = {
     v7_relativeSplatPath: true
   }
 };
+
+function IndexRedirect() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      if (user.rol === 'aprendiz' || user.rol === 'instructor') {
+        navigate('/home-user', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
+    }
+  }, [user, navigate]);
+
+  return null;
+}
 
 function App() {
   return (
@@ -39,7 +61,8 @@ function App() {
               </PrivateRoute>
             }
           >
-            <Route index element={<Home />} />
+            <Route index element={<IndexRedirect />} />
+            <Route path="dashboard" element={<Home />} />
             <Route path="devices" element={<Devices />} />
             <Route 
               path="users" 
@@ -63,6 +86,9 @@ function App() {
               } 
             />
             <Route path="device-validation" element={<DeviceValidation />} />
+            <Route path="home-user" element={<HomeUser />} />
+            <Route path="my-devices" element={<UserDevicesPage />} />
+            <Route path="my-history" element={<UserHistory />} />
           </Route>
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

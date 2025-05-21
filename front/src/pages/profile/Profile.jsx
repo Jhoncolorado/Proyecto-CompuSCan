@@ -123,7 +123,7 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h2>Mi Perfil</h2>
+      <h2 className="profile-title" style={{marginTop: '2.5rem', marginBottom: '2.5rem'}}>Mi Perfil</h2>
       {error && <div className="profile-error">{error}</div>}
       {message && <div className="profile-success">{message}</div>}
       <div className="profile-card">
@@ -134,12 +134,6 @@ const Profile = () => {
                 <span>Subir imagen</span>
               <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} disabled={loading} />
               </label>
-          )}
-          {deviceImage && (
-            <div style={{ marginTop: 20 }}>
-              <span style={{ display: 'block', fontWeight: 500, color: '#1976d2', marginBottom: 6 }}>Equipo principal:</span>
-              <img src={deviceImage} alt="Equipo principal" style={{ width: 120, height: 90, borderRadius: 10, objectFit: 'cover', border: '2px solid #2196f3' }} />
-            </div>
           )}
         </div>
         <form onSubmit={handleSave} className="profile-info">
@@ -215,6 +209,10 @@ const Profile = () => {
             <span className="profile-label">Fecha de registro:</span>
             <span className="profile-value">{formData.fecha_registro ? new Date(formData.fecha_registro).toLocaleDateString() : '-'}</span>
           </div>
+          <div className="profile-field">
+            <span className="profile-label">Último acceso:</span>
+            <span className="profile-value">{user.ultimo_acceso ? new Date(user.ultimo_acceso).toLocaleString('es-CO') : '-'}</span>
+          </div>
         <div className="profile-actions">
             <button className="btn btn-success" type="button">Cambiar Contraseña</button>
             {canEdit && !editMode && (
@@ -231,9 +229,10 @@ const Profile = () => {
       </div>
       
       {/* Solo mostrar UserDevices si es un usuario normal */}
-      {isNormalUser && <UserDevices />}
+      {/* {isNormalUser && <UserDevices />} */}
 
       {/* Historial de accesos */}
+      {/*
       <div style={{ marginTop: 32, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #0001', padding: 24, maxWidth: 500, marginLeft: 'auto', marginRight: 'auto' }}>
         <h3 style={{ color: '#1976d2', marginBottom: 16 }}>Últimos accesos</h3>
         {userHistorial.length === 0 ? (
@@ -249,8 +248,9 @@ const Profile = () => {
           </ul>
         )}
       </div>
+      */}
     </div>
   );
 };
 
-export default Profile; 
+export default Profile;   
