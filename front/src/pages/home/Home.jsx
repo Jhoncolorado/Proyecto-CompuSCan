@@ -19,6 +19,7 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import './home.css';
 import { Link } from 'react-router-dom';
+import logo from '../../assets/CompuSCan2025.jfif';
 
 // Componente para mostrar la fecha actual
 const CurrentDateDisplay = () => {
@@ -35,7 +36,7 @@ const CurrentDateDisplay = () => {
     weekday: 'long', 
     year: 'numeric', 
     month: 'long', 
-    day: 'numeric',
+    day: 'numeric', 
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'
@@ -496,56 +497,411 @@ export default Home;
 // Inicio de usuario (aprendiz/instructor)
 export const HomeUser = () => {
   const { user } = useAuth();
+  const [deviceCount, setDeviceCount] = useState(0);
+  const [userDevices, setUserDevices] = useState([]);
+  const [lastAccess, setLastAccess] = useState(null);
+  const [recentActivity, setRecentActivity] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        setLoading(true);
+        // Obtener dispositivos del usuario
+        if (user?.id) {
+          const devRes = await fetch(`http://localhost:3000/api/dispositivos/usuario/${user.id}`);
+          if (devRes.ok) {
+            const devices = await devRes.json();
+            setDeviceCount(devices.length);
+            setUserDevices(devices); // Guardar los dispositivos del usuario
+          }
+          
+          // Obtener historial reciente
+          const historyRes = await fetch(`http://localhost:3000/api/historiales`);
+          if (historyRes.ok) {
+            const history = await historyRes.json();
+            // Filtrar solo los eventos relacionados con este usuario
+            const userEvents = history.filter(ev => 
+              ev.descripcion && ev.descripcion.includes(user.nombre)
+            ).slice(0, 5); // Solo los 5 más recientes
+            setRecentActivity(userEvents);
+          }
+        }
+      } catch (err) {
+        console.error("Error al cargar datos del usuario:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchUserData();
+    
+    // Actualizar último acceso
+    if (user?.ultimo_acceso) {
+      setLastAccess(new Date(user.ultimo_acceso));
+    } else {
+      setLastAccess(new Date());
+    }
+  }, [user]);
+
+  // Función para obtener el nombre del dispositivo
+  const getDeviceName = () => {
+    if (userDevices && userDevices.length > 0) {
+      // Si el usuario tiene dispositivos registrados, mostrar el nombre del primero
+      return userDevices[0].nombre || `${userDevices[0].marca} ${userDevices[0].modelo}` || `PC-${userDevices[0].id_dispositivo}`;
+    }
+    return "PC de Control de Acceso";
+  };
+
+  // Función para formatear fechas
+  const formatDate = (date) => {
+    if (!date) return "No disponible";
+    return new Intl.DateTimeFormat('es-ES', {
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit', 
+      minute: '2-digit'
+    }).format(date);
+  };
+
   return (
     <div className="dashboard-container">
-      <div style={{
-        background: '#fff',
+      {/* Panel de bienvenida mejorado */}
+      <div className="welcome-panel" style={{
+        background: 'linear-gradient(135deg, #43a047 0%, #2e7d32 100%)',
         borderRadius: '16px',
-        marginBottom: '1.8rem',
-        boxShadow: '0 10px 25px -5px rgba(0,0,0,0.07)',
+        marginBottom: '2rem',
+        boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)',
         overflow: 'hidden',
-        border: '1px solid rgba(230, 235, 240, 0.6)'
+        border: '1px solid rgba(230, 235, 240, 0.6)',
+        position: 'relative'
       }}>
+        {/* Patrón de fondo */}
         <div style={{
-          background: 'linear-gradient(90deg, #388e3c 80%, #43a047 100%)',
-          padding: '1.3rem 2rem',
-          textAlign: 'left',
-          color: 'white',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+          opacity: 0.5
+        }}></div>
+        
+        <div style={{
+          padding: '2.5rem 3rem',
+          position: 'relative',
+          zIndex: 2,
           display: 'flex',
           alignItems: 'center',
-          gap: '1rem'
+          justifyContent: 'space-between'
         }}>
           <div style={{
-            width: '48px',
-            height: '48px',
-            borderRadius: '50%',
-            backgroundColor: '#fff',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            overflow: 'hidden',
-            boxShadow: '0 2px 8px 0 rgba(44,62,80,0.10)'
+            gap: '1.5rem'
           }}>
-            {user?.foto ? (
-              <img src={user.foto} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            ) : (
-              <FaUserCircle style={{ color: '#71c585', fontSize: '2rem' }} />
+            <div style={{
+              width: '80px',
+              height: '80px',
+              borderRadius: '50%',
+              backgroundColor: '#fff',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px 0 rgba(0,0,0,0.15)'
+            }}>
+              {user?.foto ? (
+                <img src={user.foto} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <FaUserCircle style={{ color: '#71c585', fontSize: '3.5rem' }} />
+              )}
+            </div>
+            <div>
+              <h1 style={{
+                fontSize: '2.2rem',
+                fontWeight: '700',
+                margin: '0 0 0.5rem',
+                color: 'white',
+                textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+              }}>
+                ¡Bienvenido, {user?.nombre || 'Usuario'}!
+              </h1>
+              <p style={{
+                fontSize: '1.1rem',
+                color: 'rgba(255,255,255,0.9)',
+                margin: 0
+              }}>
+                <FaRegClock style={{ marginRight: '0.5rem' }} /> 
+                Último acceso: {formatDate(lastAccess)}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Título de sección */}
+      <h2 className="dashboard-title" style={{
+        textAlign: 'center',
+        marginBottom: '2rem',
+        fontSize: '1.8rem',
+        fontWeight: '600',
+        color: '#2e7d32',
+        position: 'relative',
+        display: 'inline-block',
+        left: '50%',
+        transform: 'translateX(-50%)'
+      }}>
+        Mi Panel Personal
+        <div style={{
+          height: '4px',
+          width: '60%',
+          background: 'linear-gradient(90deg, #43a047, #2e7d32)',
+          borderRadius: '2px',
+          margin: '0.5rem auto 0'
+        }}></div>
+      </h2>
+
+      {/* Tarjetas de información */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+        gap: '1.5rem',
+        marginBottom: '2rem'
+      }}>
+        {/* Tarjeta de perfil */}
+        <div style={{
+          background: 'white',
+          borderRadius: '12px',
+          padding: '1.5rem',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '1rem'
+          }}>
+            <div style={{
+              background: '#e8f5e9',
+              padding: '0.8rem',
+              borderRadius: '12px',
+              marginRight: '1rem'
+            }}>
+              <FaIdCard style={{ fontSize: '1.8rem', color: '#43a047' }} />
+            </div>
+            <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: '600' }}>Mi Perfil</h3>
+          </div>
+          
+          <div style={{ flex: 1 }}>
+            <div style={{ marginBottom: '1rem' }}>
+              <p style={{ margin: '0 0 0.3rem', color: '#666', fontSize: '0.9rem' }}>Rol</p>
+              <p style={{ 
+                margin: 0, 
+                fontWeight: '600',
+                background: '#e8f5e9',
+                color: '#2e7d32',
+                display: 'inline-block',
+                padding: '0.3rem 0.8rem',
+                borderRadius: '4px',
+                fontSize: '0.9rem'
+              }}>{user?.rol || 'Usuario'}</p>
+            </div>
+            
+            <div style={{ marginBottom: '1rem' }}>
+              <p style={{ margin: '0 0 0.3rem', color: '#666', fontSize: '0.9rem' }}>Documento</p>
+              <p style={{ margin: 0, fontWeight: '600' }}>{user?.documento || 'No disponible'}</p>
+            </div>
+            
+            {user?.rol === 'aprendiz' && (
+              <div style={{ marginBottom: '1rem' }}>
+                <p style={{ margin: '0 0 0.3rem', color: '#666', fontSize: '0.9rem' }}>Ficha</p>
+                <p style={{ margin: 0, fontWeight: '600' }}>{user?.ficha || 'No disponible'}</p>
+              </div>
             )}
           </div>
-          <h2 style={{
-            fontSize: '1.5rem',
+          
+          <Link to="/profile" style={{
+            background: '#43a047',
+            color: 'white',
+            padding: '0.8rem',
+            borderRadius: '8px',
+            textAlign: 'center',
+            textDecoration: 'none',
             fontWeight: '600',
-            margin: '0'
+            marginTop: '1rem',
+            display: 'block',
+            transition: 'background-color 0.2s'
           }}>
-            ¡Bienvenido, <span style={{
-              color: 'white',
-              fontWeight: '700'
-            }}>{user?.nombre || 'Usuario'}</span>!
-          </h2>
+            Ver perfil completo
+          </Link>
         </div>
-        <div style={{ padding: '2rem', fontSize: '1.1rem', color: '#333' }}>
-          <p>Este es tu panel personal. Desde aquí puedes ver tu perfil y tus dispositivos registrados.</p>
+        
+        {/* Tarjeta de dispositivos */}
+        <div style={{
+          background: 'white',
+          borderRadius: '12px',
+          padding: '1.5rem',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%'
+        }}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginBottom: '1rem'
+          }}>
+            <div style={{
+              background: '#e8f5e9',
+              padding: '0.8rem',
+              borderRadius: '12px',
+              marginRight: '1rem'
+            }}>
+              <FaDesktop style={{ fontSize: '1.8rem', color: '#43a047' }} />
+            </div>
+            <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: '600' }}>Mis Dispositivos</h3>
+          </div>
+          
+          <div style={{ 
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '1.5rem 0'
+          }}>
+            <div style={{
+              width: '120px',
+              height: '120px',
+              borderRadius: '50%',
+              background: '#e8f5e9',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: '1rem'
+            }}>
+              <span style={{ fontSize: '3rem', fontWeight: '700', color: '#43a047' }}>{deviceCount}</span>
+            </div>
+            <p style={{ 
+              margin: 0, 
+              fontSize: '1.1rem', 
+              fontWeight: '600',
+              textAlign: 'center'
+            }}>
+              {deviceCount === 0 ? 'No tienes dispositivos registrados' : 
+                deviceCount === 1 ? 'Dispositivo registrado' : 
+                'Dispositivos registrados'}
+            </p>
+          </div>
+          
+          <Link to="/devices" style={{
+            background: '#43a047',
+            color: 'white',
+            padding: '0.8rem',
+            borderRadius: '8px',
+            textAlign: 'center',
+            textDecoration: 'none',
+            fontWeight: '600',
+            marginTop: '1rem',
+            display: 'block',
+            transition: 'background-color 0.2s'
+          }}>
+            {deviceCount === 0 ? 'Registrar dispositivo' : 'Administrar dispositivos'}
+          </Link>
         </div>
+      </div>
+
+      {/* Actividad reciente */}
+      <div style={{
+        background: 'white',
+        borderRadius: '12px',
+        padding: '1.5rem',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
+        marginBottom: '2rem'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          marginBottom: '1.5rem'
+        }}>
+          <div style={{
+            background: '#e8f5e9',
+            padding: '0.8rem',
+            borderRadius: '12px',
+            marginRight: '1rem'
+          }}>
+            <FaChartLine style={{ fontSize: '1.8rem', color: '#43a047' }} />
+          </div>
+          <h3 style={{ margin: 0, fontSize: '1.3rem', fontWeight: '600' }}>Actividad Reciente</h3>
+        </div>
+
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '2rem' }}>
+            <div className="spinner" style={{ margin: '0 auto 1rem' }}></div>
+            <p>Cargando actividad...</p>
+          </div>
+        ) : recentActivity.length > 0 ? (
+          <div style={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem'
+          }}>
+            {recentActivity.map((activity, index) => (
+              <div key={activity.id_historial || index} style={{
+                padding: '1rem',
+                borderRadius: '8px',
+                background: '#f9f9f9',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                border: '1px solid #eee'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{
+                    background: activity.descripcion?.includes('entrada') ? '#e8f5e9' : '#fbe9e7',
+                    padding: '0.5rem',
+                    borderRadius: '8px'
+                  }}>
+                    {activity.descripcion?.includes('entrada') ? (
+                      <FaSignInAlt style={{ color: '#43a047', fontSize: '1.2rem' }} />
+                    ) : (
+                      <FaSignOutAlt style={{ color: '#e53935', fontSize: '1.2rem' }} />
+                    )}
+                  </div>
+                  <div>
+                    <p style={{ margin: '0 0 0.3rem', fontWeight: '600' }}>{activity.descripcion}</p>
+                    <p style={{ margin: 0, fontSize: '0.9rem', color: '#666' }}>
+                      Dispositivo: {getDeviceName()}
+                    </p>
+                  </div>
+                </div>
+                <div style={{
+                  fontSize: '0.9rem',
+                  color: '#666',
+                  whiteSpace: 'nowrap'
+                }}>
+                  {activity.fecha_hora ? formatDate(new Date(activity.fecha_hora)) : 'Fecha desconocida'}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={{
+            padding: '2rem',
+            textAlign: 'center',
+            color: '#666',
+            background: '#f9f9f9',
+            borderRadius: '8px'
+          }}>
+            <FaClock style={{ fontSize: '3rem', color: '#ccc', marginBottom: '1rem' }} />
+            <p style={{ margin: 0, fontWeight: '600' }}>No hay actividad reciente registrada</p>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import './index.css'
 import './fullwidth.css'
+import './styles/PageTransition.css'
 // import './index.css'; // Eliminado porque ya no existe
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { ToastContainer } from 'react-toastify';

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/auth.css';
 import { FaUser, FaEnvelope, FaLock, FaIdCard, FaPhone, FaTint, FaIdBadge, FaEye, FaEyeSlash } from 'react-icons/fa';
-import logo from '../../assets/Imagen .jpg';
+import logo from '../../assets/CompuSCan2025.jfif';
 
 const Login = () => {
   const { login } = useAuth();
@@ -159,10 +159,26 @@ const Login = () => {
 
   return (
     <div className="auth-bg-gradient">
-      <img src={logo} alt="Robot institucional" className="robot-bg" />
+      <img 
+        src={logo} 
+        alt="Robot institucional" 
+        className="robot-bg" 
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%2343a047"/><text x="50%" y="50%" font-size="40" text-anchor="middle" dominant-baseline="middle" fill="white">CompuSCan</text></svg>';
+        }}
+      />
       <div className="auth-container">
         <div className="auth-logo-box">
-          <img src={logo} alt="Logo" className="auth-logo" />
+          <img 
+            src={logo} 
+            alt="Logo" 
+            className="auth-logo"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80"><rect width="80" height="80" fill="%2343a047"/><text x="50%" y="50%" font-size="20" text-anchor="middle" dominant-baseline="middle" fill="white">CS</text></svg>';
+            }}
+          />
         </div>
         <h1 className="auth-title">Sistema integral de gestión y seguridad</h1>
         <div className="auth-tabs">

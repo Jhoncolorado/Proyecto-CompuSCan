@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { FaSignOutAlt } from 'react-icons/fa';
-import logo from '../../assets/Imagen .jpg';
+import logo from '../../assets/CompuSCan2025.jfif';
 import './Header.css';
 
 const menuItems = [
@@ -93,16 +93,54 @@ const Header = () => {
         border-radius: 2px;
         align-self: center;
       }
-      .btn-outline-danger {
+      .btn-logout {
         color: #43a047 !important;
         border-color: #43a047 !important;
         background: #fff !important;
         transition: background 0.2s, color 0.2s;
+        font-size: 13px;
+        padding: 5px 12px;
+        min-width: 130px;
+        justify-content: center;
+        font-weight: 600;
+        border-width: 2px;
+        box-shadow: 0 2px 8px 0 rgba(67,160,71,0.08);
+        display: flex;
+        align-items: center;
+        gap: 6px;
       }
-      .btn-outline-danger:hover {
+      .btn-logout:hover {
         background: #43a047 !important;
         color: #fff !important;
         border-color: #388e3c !important;
+      }
+      
+      @media (max-width: 992px) {
+        .header-logo-text {
+          display: none;
+        }
+        .header-date-time {
+          display: none;
+        }
+        .btn-logout span {
+          display: none;
+        }
+        .btn-logout {
+          min-width: auto;
+          padding: 5px 10px;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .header-inner {
+          padding: 0 16px !important;
+        }
+        .header-nav {
+          padding: 0 8px !important;
+        }
+        .header-menu-item {
+          margin: 0 6px !important;
+        }
       }
     `;
     document.head.appendChild(style);
@@ -138,8 +176,8 @@ const Header = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          minHeight: 80,
-          width: '100vw',
+          minHeight: 70,
+          width: '100%',
           margin: 0,
           padding: '0 32px',
           boxSizing: 'border-box',
@@ -149,24 +187,32 @@ const Header = () => {
       >
         {/* IZQUIERDA: Logo y nombre */}
         <div style={{ display: 'flex', alignItems: 'center', minWidth: 0, maxWidth: 220, flexShrink: 0, gap: 10 }}>
-          <img
-            src={logo}
-            alt="Logo CompuScan"
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 10,
-              border: '2px solid #2e7d32',
-              backgroundColor: 'white',
-              padding: '2px',
-              objectFit: 'contain',
-              boxShadow: '0 2px 8px 0 rgba(0,0,0,0.06)'
-            }}
-          />
-          <span className="fw-bold fs-3" style={{ fontWeight: 800, fontSize: 22, letterSpacing: 0.5, whiteSpace: 'nowrap', marginLeft: 6, color: '#fff', textShadow: '0 2px 8px rgba(44, 62, 80, 0.10)' }}>CompuSCan</span>
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: 10 }} className="hover-effect">
+            <img
+              src={logo}
+              alt="Logo CompuScan"
+              style={{
+                width: 44,
+                height: 44,
+                borderRadius: 10,
+                border: '2px solid #2e7d32',
+                backgroundColor: 'white',
+                padding: '2px',
+                objectFit: 'contain',
+                boxShadow: '0 2px 8px 0 rgba(0,0,0,0.06)',
+                transition: 'transform 0.2s ease-in-out'
+              }}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44"><rect width="44" height="44" fill="%2343a047"/><text x="50%" y="50%" font-size="16" text-anchor="middle" dominant-baseline="middle" fill="white">CS</text></svg>';
+              }}
+            />
+            <span className="header-logo-text fw-bold fs-3" style={{ fontWeight: 800, fontSize: 22, letterSpacing: 0.5, whiteSpace: 'nowrap', marginLeft: 6, color: '#fff', textShadow: '0 2px 8px rgba(44, 62, 80, 0.10)' }}>CompuSCan</span>
+          </Link>
         </div>
         {/* CENTRO: Menú de navegación */}
         <nav
+          className="header-nav"
           role="navigation"
           aria-label="Menú principal"
           style={{
@@ -177,7 +223,8 @@ const Header = () => {
             minWidth: 0,
             padding: '0 16px',
             overflow: 'hidden',
-            maxWidth: 950
+            maxWidth: 850,
+            marginRight: '10px'
           }}
         >
           <ul
@@ -196,7 +243,7 @@ const Header = () => {
             }}
           >
             {user && (user.rol === 'administrador' || user.rol === 'validador') ? (
-              menuItems.map((item) => (
+              menuItems.filter(item => item.path !== '/').map((item) => (
                 <li
                   key={item.path}
                   style={{
@@ -209,13 +256,14 @@ const Header = () => {
                     alignItems: 'center',
                     minHeight: 48,
                     height: 48,
-                    padding: 0
+                    padding: 0,
+                    maxWidth: item.label === 'Validación de Dispositivos' ? '180px' : '130px'
                   }}
                 >
                   <NavLink
                     to={item.path}
                     className={({ isActive }) =>
-                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                      `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`
                     }
                     end={item.path === '/'}
                     style={{
@@ -239,11 +287,11 @@ const Header = () => {
               ))
             ) : (
               <>
-                <li style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+                <li className="header-menu-item" style={{ flex: 1, minWidth: 0, textAlign: 'center', maxWidth: '120px', margin: '0 12px' }}>
                   <NavLink
                     to="/"
                     className={({ isActive }) =>
-                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                      `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`
                     }
                     end
                     style={{
@@ -260,11 +308,11 @@ const Header = () => {
                     Inicio
                   </NavLink>
                 </li>
-                <li style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+                <li className="header-menu-item" style={{ flex: 1, minWidth: 0, textAlign: 'center', maxWidth: '120px', margin: '0 12px' }}>
                   <NavLink
                     to="/profile"
                     className={({ isActive }) =>
-                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                      `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`
                     }
                     end
                     style={{
@@ -281,11 +329,11 @@ const Header = () => {
                     Mi Perfil
                   </NavLink>
                 </li>
-                <li style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+                <li className="header-menu-item" style={{ flex: 1, minWidth: 0, textAlign: 'center', maxWidth: '150px', margin: '0 12px' }}>
                   <NavLink
                     to="/my-devices"
                     className={({ isActive }) =>
-                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                      `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`
                     }
                     end
                     style={{
@@ -302,11 +350,11 @@ const Header = () => {
                     Mis Dispositivos
                   </NavLink>
                 </li>
-                <li style={{ flex: 1, minWidth: 0, textAlign: 'center' }}>
+                <li className="header-menu-item" style={{ flex: 1, minWidth: 0, textAlign: 'center', maxWidth: '130px', margin: '0 12px' }}>
                   <NavLink
                     to="/my-history"
                     className={({ isActive }) =>
-                      `main-header-menu-link nav-link fw-semibold px-2 ${isActive ? 'active' : ''}`
+                      `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`
                     }
                     end
                     style={{
@@ -328,8 +376,25 @@ const Header = () => {
           </ul>
         </nav>
         {/* DERECHA: Solo fecha/hora y logout */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', minWidth: 220, flexShrink: 1, gap: 12 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', minWidth: 80, maxWidth: 180, lineHeight: 1.1 }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'space-between', 
+          minWidth: 220, 
+          flexShrink: 1, 
+          gap: 16,
+          marginLeft: 'auto', // Asegura que esté lo más a la derecha posible
+          paddingRight: 0
+        }}>
+          <div className="header-date-time" style={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'flex-end', 
+            minWidth: 80, 
+            maxWidth: 180, 
+            lineHeight: 1.1,
+            marginRight: 5 // Reduce el espacio entre fecha y botón
+          }}>
             <span style={{ fontSize: 13, color: '#fff', fontWeight: 700, letterSpacing: 0.2, textShadow: '0 1px 6px rgba(26,35,126,0.18)' }}>
               {formatDate(currentTime)}
             </span>
@@ -338,16 +403,7 @@ const Header = () => {
             </span>
           </div>
           <button
-            className="btn btn-outline-danger d-flex align-items-center gap-2"
-            style={{
-              fontSize: 13,
-              padding: '5px 12px',
-              minWidth: '90px',
-              justifyContent: 'center',
-              fontWeight: 600,
-              borderWidth: 2,
-              boxShadow: '0 2px 8px 0 rgba(67,160,71,0.08)'
-            }}
+            className="btn btn-logout button-effect"
             onClick={handleLogout}
             aria-label="Cerrar sesión"
           >
