@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import UserDevices from '../../components/UserDevices';
 import '../../styles/profile.css';
+import { FaClock, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 
 const Profile = () => {
   const { user, updateUserInContext } = useAuth();
@@ -16,6 +17,7 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [deviceImage, setDeviceImage] = useState('');
   const [userHistorial, setUserHistorial] = useState([]);
+  const [userDevices, setUserDevices] = useState([]);
 
   // Verificar si el usuario es aprendiz o instructor
   const isNormalUser = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
@@ -25,7 +27,7 @@ const Profile = () => {
       try {
         const response = await axios.get(`http://localhost:3000/api/usuarios/${user.id}`);
         const fullUser = response.data;
-      setFormData({
+        setFormData({
           nombre: fullUser.nombre || '',
           correo: fullUser.correo || '',
           documento: fullUser.documento || '',
@@ -42,14 +44,19 @@ const Profile = () => {
         setAvatarPreview(fullUser.foto || '');
         // Obtener el primer dispositivo y su foto
         const devRes = await axios.get(`http://localhost:3000/api/dispositivos/usuario/${user.id}`);
-        if (Array.isArray(devRes.data) && devRes.data.length > 0 && devRes.data[0].foto) {
-          setDeviceImage(devRes.data[0].foto);
+        if (Array.isArray(devRes.data) && devRes.data.length > 0) {
+          setUserDevices(devRes.data);
+          if (devRes.data[0].foto) {
+            setDeviceImage(devRes.data[0].foto);
+          } else {
+            setDeviceImage('');
+          }
         } else {
           setDeviceImage('');
         }
       } catch (err) {
         setError('Error al cargar datos del perfil');
-        }
+      }
     };
     if (user && user.id) fetchUser();
   }, [user]);
@@ -119,6 +126,15 @@ const Profile = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Función para obtener el nombre del dispositivo
+  const getDeviceName = () => {
+    if (userDevices && userDevices.length > 0) {
+      // Si el usuario tiene dispositivos registrados, mostrar el nombre del primero
+      return userDevices[0].nombre || `${userDevices[0].marca} ${userDevices[0].modelo}` || `PC-${userDevices[0].id_dispositivo}`;
+    }
+    return "PC de Control de Acceso";
   };
 
   return (
@@ -211,7 +227,7 @@ const Profile = () => {
           </div>
           <div className="profile-field">
             <span className="profile-label">Último acceso:</span>
-            <span className="profile-value">{user.ultimo_acceso ? new Date(user.ultimo_acceso).toLocaleString('es-CO') : '-'}</span>
+            <span className="profile-value">{user?.ultimo_acceso ? new Date(user.ultimo_acceso).toLocaleString('es-CO') : '-'}</span>
           </div>
         <div className="profile-actions">
             <button className="btn btn-success" type="button">Cambiar Contraseña</button>
@@ -228,27 +244,84 @@ const Profile = () => {
           </form>
       </div>
       
-      {/* Solo mostrar UserDevices si es un usuario normal */}
-      {/* {isNormalUser && <UserDevices />} */}
-
       {/* Historial de accesos */}
-      {/*
-      <div style={{ marginTop: 32, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px #0001', padding: 24, maxWidth: 500, marginLeft: 'auto', marginRight: 'auto' }}>
-        <h3 style={{ color: '#1976d2', marginBottom: 16 }}>Últimos accesos</h3>
+      <div style={{ 
+        marginTop: 32, 
+        background: '#fff', 
+        borderRadius: 12, 
+        boxShadow: '0 2px 8px rgba(0,0,0,0.05)', 
+        padding: 24, 
+        maxWidth: 800, 
+        marginLeft: 'auto', 
+        marginRight: 'auto' 
+      }}>
+        <h3 style={{ 
+          color: '#388e3c', 
+          marginBottom: 16,
+          fontSize: '1.3rem',
+          fontWeight: '600',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem'
+        }}>
+          <FaClock style={{ fontSize: '1.2rem' }} /> Últimos accesos
+        </h3>
         {userHistorial.length === 0 ? (
-          <div style={{ color: '#888', textAlign: 'center' }}>No hay registros recientes de acceso.</div>
+          <div style={{ 
+            color: '#888', 
+            textAlign: 'center',
+            padding: '2rem',
+            background: '#f9f9f9',
+            borderRadius: '8px'
+          }}>
+            <FaClock style={{ fontSize: '2.5rem', color: '#ccc', marginBottom: '1rem' }} />
+            <p style={{ margin: 0, fontWeight: '500' }}>No hay registros recientes de acceso.</p>
+          </div>
         ) : (
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+          <div style={{ 
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.8rem'
+          }}>
             {userHistorial.map((ev) => (
-              <li key={ev.id_historial} style={{ marginBottom: 12 }}>
-                <span style={{ fontWeight: 'bold', color: '#1976d2' }}>{ev.descripcion}</span>
-                <span style={{ color: '#888', fontSize: 13, marginLeft: 8 }}>{new Date(ev.fecha_hora).toLocaleString()}</span>
-              </li>
+              <div key={ev.id_historial} style={{ 
+                padding: '1rem',
+                borderRadius: '8px',
+                background: '#f9f9f9',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                border: '1px solid #eee'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                  <div style={{
+                    background: ev.descripcion?.includes('entrada') ? '#e8f5e9' : '#fbe9e7',
+                    padding: '0.5rem',
+                    borderRadius: '8px'
+                  }}>
+                    {ev.descripcion?.includes('entrada') ? (
+                      <FaSignInAlt style={{ color: '#43a047', fontSize: '1.2rem' }} />
+                    ) : (
+                      <FaSignOutAlt style={{ color: '#e53935', fontSize: '1.2rem' }} />
+                    )}
+                  </div>
+                  <div>
+                    <span style={{ fontWeight: '500', display: 'block', marginBottom: '0.2rem' }}>{ev.descripcion}</span>
+                    {ev.descripcion?.includes('RFID:') && (
+                      <span style={{ fontSize: '0.85rem', color: '#666' }}>
+                        Dispositivo: {getDeviceName()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <span style={{ color: '#888', fontSize: '0.9rem' }}>
+                  {new Date(ev.fecha_hora).toLocaleString('es-CO')}
+                </span>
+              </div>
             ))}
-          </ul>
+          </div>
         )}
       </div>
-      */}
     </div>
   );
 };

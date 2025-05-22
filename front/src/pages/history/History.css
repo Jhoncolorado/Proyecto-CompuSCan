@@ -1,18 +1,15 @@
 /* Contenedor general */
 .history-bg {
-  background: #f7f9fb;
-  height: calc(100vh - 62px);
+  background: #fff;
+  height: auto;
+  min-height: calc(100vh - 80px);
   width: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  top: 62px;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: relative;
 }
 
 /* Estilos adicionales cuando está dentro del layout */
