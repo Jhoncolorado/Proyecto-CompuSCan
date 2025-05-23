@@ -90,6 +90,7 @@ function App() {
             >
               <Route index element={<IndexRedirect />} />
               <Route path="dashboard" element={<Home />} />
+              <Route path="home" element={<Navigate to="/dashboard" replace />} />
               <Route path="devices" element={<Devices />} />
               <Route 
                 path="users" 

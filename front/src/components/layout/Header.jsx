@@ -6,7 +6,7 @@ import logo from '../../assets/CompuSCan2025.jfif';
 import './Header.css';
 
 const menuItems = [
-  { path: '/', label: 'Inicio' },
+  { path: '/home', label: 'Inicio' },
   { path: '/users', label: 'Usuarios' },
   { path: '/devices', label: 'Dispositivos' },
   { path: '/alerts', label: 'Alertas' },
@@ -243,7 +243,7 @@ const Header = () => {
             }}
           >
             {user && (user.rol === 'administrador' || user.rol === 'validador') ? (
-              menuItems.filter(item => item.path !== '/').map((item) => (
+              menuItems.map((item) => (
                 <li
                   key={item.path}
                   style={{
@@ -265,7 +265,7 @@ const Header = () => {
                     className={({ isActive }) =>
                       `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`
                     }
-                    end={item.path === '/'}
+                    end={item.path === '/home'}
                     style={{
                       fontSize: item.label === 'Validación de Dispositivos' ? 13 : 15,
                       color: '#222',
