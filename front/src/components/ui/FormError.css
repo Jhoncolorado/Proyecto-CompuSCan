@@ -1,0 +1,42 @@
+.form-error {
+  display: flex;
+  align-items: center;
+  background-color: #ffebee;
+  border-left: 4px solid #c62828;
+  padding: 0.5rem 0.75rem;
+  margin: 0.5rem 0;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #c62828;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.form-error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background-color: #c62828;
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  margin-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+.form-error-message {
+  flex: 1;
+  line-height: 1.4;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+} 

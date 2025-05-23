@@ -3,7 +3,6 @@ import { useAuth } from '../../context/AuthContext';
 import axios from 'axios';
 import UserDevices from '../../components/UserDevices';
 import '../../styles/profile.css';
-import { FaClock, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 
 const Profile = () => {
   const { user, updateUserInContext } = useAuth();
@@ -16,7 +15,6 @@ const Profile = () => {
   const [error, setError] = useState('');
   const [editMode, setEditMode] = useState(false);
   const [deviceImage, setDeviceImage] = useState('');
-  const [userHistorial, setUserHistorial] = useState([]);
   const [userDevices, setUserDevices] = useState([]);
 
   // Verificar si el usuario es aprendiz o instructor
@@ -61,23 +59,6 @@ const Profile = () => {
     if (user && user.id) fetchUser();
   }, [user]);
 
-  // Obtener historial de accesos del usuario
-  useEffect(() => {
-    const fetchHistorial = async () => {
-      try {
-        if (user && user.id) {
-          const res = await axios.get(`http://localhost:3000/api/historiales`);
-          // Filtrar solo los eventos de dispositivos del usuario
-          const userEvents = res.data.filter(ev => ev.descripcion && ev.descripcion.includes(user.nombre));
-          setUserHistorial(userEvents.slice(0, 5)); // Solo los últimos 5
-        }
-      } catch (err) {
-        // No mostrar error aquí para no molestar el perfil
-      }
-    };
-    fetchHistorial();
-  }, [user]);
-
   // Permitir editar si es admin o validador (cualquier variante, sin tildes ni mayúsculas)
   const normalizeRol = (rol) =>
     (rol || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -114,27 +95,23 @@ const Profile = () => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    setMessage(''); setError(''); setLoading(true);
+    setLoading(true);
+    setMessage('');
+    setError('');
     try {
-      await axios.put(`http://localhost:3000/api/usuarios/${user.id}`, formData, { headers: { 'Content-Type': 'application/json' } });
+      await axios.put(`http://localhost:3000/api/usuarios/${user.id}`, formData);
+      setMessage('Datos actualizados correctamente');
       setEditMode(false);
-      setMessage('Perfil actualizado');
-      const refreshed = await axios.get(`http://localhost:3000/api/usuarios/${user.id}`);
-      if (typeof updateUserInContext === 'function') updateUserInContext(refreshed.data);
+      // Actualizar usuario en contexto
+      if (typeof updateUserInContext === 'function') {
+        const refreshed = await axios.get(`http://localhost:3000/api/usuarios/${user.id}`);
+        updateUserInContext(refreshed.data);
+      }
     } catch (err) {
-      setError('Error al actualizar perfil');
+      setError('Error al actualizar datos');
     } finally {
       setLoading(false);
     }
-  };
-
-  // Función para obtener el nombre del dispositivo
-  const getDeviceName = () => {
-    if (userDevices && userDevices.length > 0) {
-      // Si el usuario tiene dispositivos registrados, mostrar el nombre del primero
-      return userDevices[0].nombre || `${userDevices[0].marca} ${userDevices[0].modelo}` || `PC-${userDevices[0].id_dispositivo}`;
-    }
-    return "PC de Control de Acceso";
   };
 
   return (
@@ -225,10 +202,6 @@ const Profile = () => {
             <span className="profile-label">Fecha de registro:</span>
             <span className="profile-value">{formData.fecha_registro ? new Date(formData.fecha_registro).toLocaleDateString() : '-'}</span>
           </div>
-          <div className="profile-field">
-            <span className="profile-label">Último acceso:</span>
-            <span className="profile-value">{user?.ultimo_acceso ? new Date(user.ultimo_acceso).toLocaleString('es-CO') : '-'}</span>
-          </div>
         <div className="profile-actions">
             <button className="btn btn-success" type="button">Cambiar Contraseña</button>
             {canEdit && !editMode && (
@@ -244,84 +217,8 @@ const Profile = () => {
           </form>
       </div>
       
-      {/* Historial de accesos */}
-      <div style={{ 
-        marginTop: 32, 
-        background: '#fff', 
-        borderRadius: 12, 
-        boxShadow: '0 2px 8px rgba(0,0,0,0.05)', 
-        padding: 24, 
-        maxWidth: 800, 
-        marginLeft: 'auto', 
-        marginRight: 'auto' 
-      }}>
-        <h3 style={{ 
-          color: '#388e3c', 
-          marginBottom: 16,
-          fontSize: '1.3rem',
-          fontWeight: '600',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem'
-        }}>
-          <FaClock style={{ fontSize: '1.2rem' }} /> Últimos accesos
-        </h3>
-        {userHistorial.length === 0 ? (
-          <div style={{ 
-            color: '#888', 
-            textAlign: 'center',
-            padding: '2rem',
-            background: '#f9f9f9',
-            borderRadius: '8px'
-          }}>
-            <FaClock style={{ fontSize: '2.5rem', color: '#ccc', marginBottom: '1rem' }} />
-            <p style={{ margin: 0, fontWeight: '500' }}>No hay registros recientes de acceso.</p>
-          </div>
-        ) : (
-          <div style={{ 
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '0.8rem'
-          }}>
-            {userHistorial.map((ev) => (
-              <div key={ev.id_historial} style={{ 
-                padding: '1rem',
-                borderRadius: '8px',
-                background: '#f9f9f9',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                border: '1px solid #eee'
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                  <div style={{
-                    background: ev.descripcion?.includes('entrada') ? '#e8f5e9' : '#fbe9e7',
-                    padding: '0.5rem',
-                    borderRadius: '8px'
-                  }}>
-                    {ev.descripcion?.includes('entrada') ? (
-                      <FaSignInAlt style={{ color: '#43a047', fontSize: '1.2rem' }} />
-                    ) : (
-                      <FaSignOutAlt style={{ color: '#e53935', fontSize: '1.2rem' }} />
-                    )}
-                  </div>
-                  <div>
-                    <span style={{ fontWeight: '500', display: 'block', marginBottom: '0.2rem' }}>{ev.descripcion}</span>
-                    {ev.descripcion?.includes('RFID:') && (
-                      <span style={{ fontSize: '0.85rem', color: '#666' }}>
-                        Dispositivo: {getDeviceName()}
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <span style={{ color: '#888', fontSize: '0.9rem' }}>
-                  {new Date(ev.fecha_hora).toLocaleString('es-CO')}
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      {/* Historial de accesos - ELIMINADO PARA EVITAR REDUNDANCIA CON LA PÁGINA DE INICIO */}
+      {/* Esta información ya se muestra en la página de inicio en la sección "Actividad Reciente" */}
     </div>
   );
 };
