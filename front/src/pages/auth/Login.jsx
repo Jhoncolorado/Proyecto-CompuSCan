@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/auth.css';
 import { FaUser, FaEnvelope, FaLock, FaIdCard, FaPhone, FaTint, FaIdBadge, FaEye, FaEyeSlash } from 'react-icons/fa';
@@ -33,12 +33,25 @@ const Login = () => {
   const [showRegisterPassword, setShowRegisterPassword] = useState(false);
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState({ strength: 0, message: '' });
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    setErrors({});
-    setSuccess('');
-    setRegisterStep(1);
+    if (tab === activeTab) return;
+    
+    setIsTransitioning(true);
+    
+    // Dar tiempo para la animación de desvanecimiento
+    setTimeout(() => {
+      setActiveTab(tab);
+      setErrors({});
+      setSuccess('');
+      setRegisterStep(1);
+      
+      // Reiniciar el estado de transición después de un breve retraso
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+    }, 300);
   };
 
   const handleLoginChange = (e) => {
@@ -230,7 +243,7 @@ const Login = () => {
       if (!matchResult.isValid) {
         formErrors.confirmar_contrasena = matchResult.message;
         isValid = false;
-      }
+    }
     }
     
     setErrors(formErrors);
@@ -240,19 +253,43 @@ const Login = () => {
   const handleRegisterNext = (e) => {
     e.preventDefault();
     if (validateStep1()) {
-      setRegisterStep(2);
+      setIsTransitioning(true);
+      
+      // Dar tiempo para la animación de transición
+      setTimeout(() => {
+        setRegisterStep(2);
+        
+        // Reiniciar el estado de transición después de un breve retraso
+        setTimeout(() => {
+          setIsTransitioning(false);
+        }, 300);
+      }, 300);
     }
+  };
+
+  const handleRegisterPrevious = () => {
+    setIsTransitioning(true);
+    
+    // Dar tiempo para la animación de transición
+    setTimeout(() => {
+      setRegisterStep(1);
+      
+      // Reiniciar el estado de transición después de un breve retraso
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 300);
+    }, 300);
   };
 
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Validar que el rol esté seleccionado
     if (!registerData.rol) {
       setErrors(prev => ({ ...prev, rol: 'El rol es requerido' }));
       return;
     }
-    
+
     setLoading(true);
     setErrors({});
     setSuccess('');
@@ -306,6 +343,19 @@ const Login = () => {
     }
   };
 
+  // Función para determinar las clases de los formularios
+  const getFormClasses = (isRegisterForm) => {
+    let classes = "auth-form";
+    
+    if (isTransitioning) {
+      classes += " transitioning";
+    } else if (isRegisterForm) {
+      classes += " with-scroll";
+    }
+    
+    return classes;
+  };
+
   return (
     <div className="auth-bg-gradient">
       <img 
@@ -317,7 +367,7 @@ const Login = () => {
           e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%2343a047"/><text x="50%" y="50%" font-size="40" text-anchor="middle" dominant-baseline="middle" fill="white">CompuSCan</text></svg>';
         }}
       />
-      <div className="auth-container">
+      <div className="auth-container auth-compact">
         <div className="auth-logo-box">
           <img 
             src={logo} 
@@ -329,7 +379,7 @@ const Login = () => {
             }}
           />
         </div>
-        <h1 className="auth-title">Sistema integral de gestión y seguridad</h1>
+        <h1 className="auth-title">Sistema de Gestión y Seguridad</h1>
         <div className="auth-tabs">
           <button
             className={activeTab === 'login' ? 'active' : ''}
@@ -346,7 +396,7 @@ const Login = () => {
         </div>
         <div className="auth-content">
           {activeTab === 'login' && (
-            <form className="auth-form" onSubmit={handleLoginSubmit}>
+            <form className={getFormClasses(false)}>
               <div className="form-group">
                 <label htmlFor="email">
                   <FaEnvelope /> Correo electrónico
@@ -367,252 +417,284 @@ const Login = () => {
                   <FaLock /> Contraseña
                 </label>
                 <div className="password-input-container">
-                  <input
-                    type={showPassword ? 'text' : 'password'}
+                <input
+                  type={showPassword ? 'text' : 'password'}
                     id="password"
-                    name="password"
-                    value={loginData.password}
-                    onChange={handleLoginChange}
+                  name="password"
+                  value={loginData.password}
+                  onChange={handleLoginChange}
                     placeholder="Ingresa tu contraseña"
                     className={errors.password ? 'input-error' : ''}
-                  />
-                  <button
-                    type="button"
+                />
+                <button
+                  type="button"
                     className="password-toggle"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
                 </div>
                 <FormError message={errors.password} visible={!!errors.password} />
               </div>
               {errors.general && <FormError message={errors.general} visible={true} />}
-              <button type="submit" className="auth-button" disabled={loading}>
+              <button type="submit" className="auth-button" disabled={loading} onClick={handleLoginSubmit}>
                 {loading ? 'Cargando...' : 'Iniciar Sesión'}
               </button>
             </form>
           )}
 
           {activeTab === 'register' && registerStep === 1 && (
-            <form className="auth-form" onSubmit={handleRegisterNext}>
+            <form className={getFormClasses(true)}>
               <div className="form-group">
                 <label htmlFor="nombre">
                   <FaUser /> Nombre completo
                 </label>
-                <input
-                  type="text"
+                      <input
+                        type="text"
                   id="nombre"
-                  name="nombre"
-                  value={registerData.nombre}
-                  onChange={handleRegisterChange}
+                        name="nombre"
+                        value={registerData.nombre}
+                        onChange={handleRegisterChange}
                   placeholder="Ingresa tu nombre completo"
                   className={errors.nombre ? 'input-error' : ''}
                 />
                 <FormError message={errors.nombre} visible={!!errors.nombre} />
               </div>
-              <div className="form-group">
-                <label htmlFor="tipo_documento">
-                  <FaIdCard /> Tipo de documento
-                </label>
-                <select
-                  id="tipo_documento"
-                  name="tipo_documento"
-                  value={registerData.tipo_documento}
-                  onChange={handleRegisterChange}
-                  className={errors.tipo_documento ? 'input-error' : ''}
-                >
-                  <option value="">Selecciona tipo de documento</option>
-                  <option value="CC">Cédula de Ciudadanía</option>
-                  <option value="TI">Tarjeta de Identidad</option>
-                  <option value="CE">Cédula de Extranjería</option>
-                  <option value="PAS">Pasaporte</option>
-                </select>
-                <FormError message={errors.tipo_documento} visible={!!errors.tipo_documento} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="documento">
-                  <FaIdCard /> Número de documento
-                </label>
-                <input
-                  type="text"
-                  id="documento"
-                  name="documento"
-                  value={registerData.documento}
-                  onChange={handleRegisterChange}
-                  placeholder="Ingresa tu número de documento"
-                  className={errors.documento ? 'input-error' : ''}
-                />
-                <FormError message={errors.documento} visible={!!errors.documento} />
-              </div>
+              
+              <div className="auth-form-group">
+                <div className="auth-form-group-title">
+                  <FaIdCard /> Información de documento
+                    </div>
+                <div className="form-group">
+                  <label htmlFor="tipo_documento">
+                    Tipo de documento
+                  </label>
+                      <select
+                    id="tipo_documento"
+                        name="tipo_documento"
+                        value={registerData.tipo_documento}
+                        onChange={handleRegisterChange}
+                    className={errors.tipo_documento ? 'input-error' : ''}
+                      >
+                    <option value="">Selecciona tipo</option>
+                        <option value="CC">Cédula de Ciudadanía</option>
+                        <option value="TI">Tarjeta de Identidad</option>
+                        <option value="CE">Cédula de Extranjería</option>
+                        <option value="PAS">Pasaporte</option>
+                      </select>
+                  <FormError message={errors.tipo_documento} visible={!!errors.tipo_documento} />
+                    </div>
+                
+                <div className="form-group">
+                  <label htmlFor="documento">
+                    Número de documento
+                  </label>
+                      <input
+                        type="text"
+                    id="documento"
+                        name="documento"
+                        value={registerData.documento}
+                        onChange={handleRegisterChange}
+                    placeholder="Ingresa tu documento"
+                    className={errors.documento ? 'input-error' : ''}
+                      />
+                  <FormError message={errors.documento} visible={!!errors.documento} />
+                </div>
+                    </div>
+              
               <div className="form-group">
                 <label htmlFor="correo">
                   <FaEnvelope /> Correo electrónico
                 </label>
-                <input
-                  type="email"
+                      <input
+                        type="email"
                   id="correo"
-                  name="correo"
-                  value={registerData.correo}
-                  onChange={handleRegisterChange}
+                        name="correo"
+                        value={registerData.correo}
+                        onChange={handleRegisterChange}
                   placeholder="Ingresa tu correo electrónico"
                   className={errors.correo ? 'input-error' : ''}
                 />
                 <FormError message={errors.correo} visible={!!errors.correo} />
               </div>
-              <div className="form-group">
-                <label htmlFor="contrasena">
-                  <FaLock /> Contraseña
-                </label>
-                <div className="password-input-container">
-                  <input
-                    type={showRegisterPassword ? 'text' : 'password'}
-                    id="contrasena"
-                    name="contrasena"
-                    value={registerData.contrasena}
-                    onChange={handleRegisterChange}
-                    placeholder="Crea tu contraseña"
-                    className={errors.contrasena ? 'input-error' : ''}
+              
+              <div className="auth-form-group">
+                <div className="auth-form-group-title">
+                  <FaLock /> Configuración de contraseña
+                    </div>
+                <div className="form-group">
+                  <label htmlFor="contrasena">
+                    Contraseña
+                  </label>
+                  <div className="password-input-container">
+                      <input
+                        type={showRegisterPassword ? 'text' : 'password'}
+                      id="contrasena"
+                        name="contrasena"
+                        value={registerData.contrasena}
+                        onChange={handleRegisterChange}
+                      placeholder="Crea tu contraseña"
+                      className={errors.contrasena ? 'input-error' : ''}
+                      />
+                      <button
+                        type="button"
+                      className="password-toggle"
+                        onClick={() => setShowRegisterPassword(!showRegisterPassword)}
+                      >
+                        {showRegisterPassword ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
+                  <PasswordStrength 
+                    strength={passwordStrength.strength} 
+                    message={passwordStrength.message} 
                   />
-                  <button
-                    type="button"
-                    className="password-toggle"
-                    onClick={() => setShowRegisterPassword(!showRegisterPassword)}
-                  >
-                    {showRegisterPassword ? <FaEyeSlash /> : <FaEye />}
-                  </button>
+                  <FormError message={errors.contrasena} visible={!!errors.contrasena} />
                 </div>
-                <PasswordStrength 
-                  strength={passwordStrength.strength} 
-                  message={passwordStrength.message} 
-                />
-                <FormError message={errors.contrasena} visible={!!errors.contrasena} />
-              </div>
-              <div className="form-group">
-                <label htmlFor="confirmar_contrasena">
-                  <FaLock /> Confirmar contraseña
-                </label>
-                <div className="password-input-container">
-                  <input
-                    type={showRegisterConfirm ? 'text' : 'password'}
-                    id="confirmar_contrasena"
-                    name="confirmar_contrasena"
-                    value={registerData.confirmar_contrasena}
-                    onChange={handleRegisterChange}
-                    placeholder="Confirma tu contraseña"
-                    className={errors.confirmar_contrasena ? 'input-error' : ''}
-                  />
-                  <button
-                    type="button"
-                    className="password-toggle"
-                    onClick={() => setShowRegisterConfirm(!showRegisterConfirm)}
-                  >
-                    {showRegisterConfirm ? <FaEyeSlash /> : <FaEye />}
-                  </button>
+                
+                <div className="form-group">
+                  <label htmlFor="confirmar_contrasena">
+                    Confirmar contraseña
+                  </label>
+                  <div className="password-input-container">
+                      <input
+                        type={showRegisterConfirm ? 'text' : 'password'}
+                      id="confirmar_contrasena"
+                        name="confirmar_contrasena"
+                        value={registerData.confirmar_contrasena}
+                        onChange={handleRegisterChange}
+                      placeholder="Confirma tu contraseña"
+                      className={errors.confirmar_contrasena ? 'input-error' : ''}
+                      />
+                      <button
+                        type="button"
+                      className="password-toggle"
+                        onClick={() => setShowRegisterConfirm(!showRegisterConfirm)}
+                      >
+                        {showRegisterConfirm ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
+                  <FormError message={errors.confirmar_contrasena} visible={!!errors.confirmar_contrasena} />
                 </div>
-                <FormError message={errors.confirmar_contrasena} visible={!!errors.confirmar_contrasena} />
               </div>
+              
               {errors.general && <FormError message={errors.general} visible={true} />}
-              <button type="submit" className="auth-button" disabled={loading}>
+              <button type="button" className="auth-button" disabled={loading} onClick={handleRegisterNext}>
                 Siguiente
               </button>
             </form>
           )}
 
           {activeTab === 'register' && registerStep === 2 && (
-            // El resto del código permanece igual...
-            <form className="auth-form" onSubmit={handleRegisterSubmit}>
+            <form className={getFormClasses(true)}>
               <div className="form-group">
                 <label htmlFor="rol">
                   <FaUser /> Rol
                 </label>
-                <select
+                      <select
                   id="rol"
-                  name="rol"
-                  value={registerData.rol}
-                  onChange={handleRegisterChange}
+                        name="rol"
+                        value={registerData.rol}
+                        onChange={handleRegisterChange}
                   className={errors.rol ? 'input-error' : ''}
-                >
+                      >
                   <option value="">Selecciona tu rol</option>
-                  <option value="aprendiz">Aprendiz</option>
-                  <option value="instructor">Instructor</option>
-                  <option value="administrador">Administrador</option>
-                </select>
+                        <option value="aprendiz">Aprendiz</option>
+                        <option value="instructor">Instructor</option>
+                        <option value="administrador">Administrador</option>
+                      </select>
                 <FormError message={errors.rol} visible={!!errors.rol} />
               </div>
-              <div className="form-group">
-                <label htmlFor="telefono1">
-                  <FaPhone /> Teléfono principal
-                </label>
-                <input
-                  type="tel"
-                  id="telefono1"
-                  name="telefono1"
-                  value={registerData.telefono1}
-                  onChange={handleRegisterChange}
-                  placeholder="Teléfono principal"
-                />
+              
+              <div className="auth-form-group">
+                <div className="auth-form-group-title">
+                  <FaPhone /> Información de contacto
+                    </div>
+                <div className="form-group">
+                  <label htmlFor="telefono1">
+                    Teléfono principal
+                  </label>
+                      <input
+                        type="tel"
+                    id="telefono1"
+                        name="telefono1"
+                        value={registerData.telefono1}
+                        onChange={handleRegisterChange}
+                    placeholder="Teléfono principal"
+                      />
+                    </div>
+                
+                <div className="form-group">
+                  <label htmlFor="telefono2">
+                    Teléfono secundario
+                  </label>
+                      <input
+                        type="tel"
+                    id="telefono2"
+                        name="telefono2"
+                        value={registerData.telefono2}
+                        onChange={handleRegisterChange}
+                    placeholder="Opcional"
+                      />
+                    </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="telefono2">
-                  <FaPhone /> Teléfono secundario
-                </label>
-                <input
-                  type="tel"
-                  id="telefono2"
-                  name="telefono2"
-                  value={registerData.telefono2}
-                  onChange={handleRegisterChange}
-                  placeholder="Teléfono secundario (opcional)"
-                />
+              
+              <div className="auth-form-group">
+                <div className="auth-form-group-title">
+                  <FaIdBadge /> Datos adicionales
+                </div>
+                <div className="form-group">
+                  <label htmlFor="rh">
+                    <FaTint /> Grupo sanguíneo (RH)
+                  </label>
+                      <input
+                        type="text"
+                    id="rh"
+                        name="rh"
+                        value={registerData.rh}
+                        onChange={handleRegisterChange}
+                    placeholder="Ej: O+, A-, AB+"
+                      />
+                    </div>
+                
+                <div className="form-group">
+                  <label htmlFor="ficha">
+                    Número de ficha
+                  </label>
+                      <input
+                        type="text"
+                    id="ficha"
+                        name="ficha"
+                        value={registerData.ficha}
+                        onChange={handleRegisterChange}
+                    placeholder="Para aprendices"
+                      />
+                    </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="rh">
-                  <FaTint /> Grupo sanguíneo (RH)
-                </label>
-                <input
-                  type="text"
-                  id="rh"
-                  name="rh"
-                  value={registerData.rh}
-                  onChange={handleRegisterChange}
-                  placeholder="Ej: O+, A-, AB+"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="ficha">
-                  <FaIdBadge /> Número de ficha (para aprendices)
-                </label>
-                <input
-                  type="text"
-                  id="ficha"
-                  name="ficha"
-                  value={registerData.ficha}
-                  onChange={handleRegisterChange}
-                  placeholder="Número de ficha (si aplica)"
-                />
-              </div>
+              
               <div className="form-group">
                 <label htmlFor="observacion">Observaciones</label>
-                <textarea
+                      <textarea
                   id="observacion"
-                  name="observacion"
-                  value={registerData.observacion}
-                  onChange={handleRegisterChange}
+                        name="observacion"
+                        value={registerData.observacion}
+                        onChange={handleRegisterChange}
                   placeholder="Observaciones adicionales (opcional)"
                   rows="3"
                 ></textarea>
               </div>
+              
               {success && <div className="auth-success">{success}</div>}
               {errors.general && <FormError message={errors.general} visible={true} />}
+              
               <div className="auth-buttons">
                 <button
                   type="button"
                   className="auth-button secondary"
-                  onClick={() => setRegisterStep(1)}
+                  onClick={handleRegisterPrevious}
                 >
                   Anterior
                 </button>
-                <button type="submit" className="auth-button" disabled={loading}>
+                <button type="button" className="auth-button" disabled={loading} onClick={handleRegisterSubmit}>
                   {loading ? 'Registrando...' : 'Registrarse'}
                 </button>
               </div>
@@ -624,4 +706,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Login; 

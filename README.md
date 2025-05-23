@@ -14,8 +14,9 @@ CompuSCan es una plataforma web desarrollada específicamente para el **SENA - C
 3. [Instalación y Despliegue](#instalación-y-despliegue)
 4. [Documentación Oficial](#documentación-oficial)
 5. [Tecnologías Utilizadas](#tecnologías-utilizadas)
-6. [Contribuciones](#contribuciones)
-7. [Licencia](#licencia)
+6. [Mejoras Recientes](#mejoras-recientes)
+7. [Contribuciones](#contribuciones)
+8. [Licencia](#licencia)
 
 ---
 
@@ -25,15 +26,31 @@ CompuSCan es una plataforma web desarrollada específicamente para el **SENA - C
   - Alta, edición, consulta y eliminación de dispositivos.
   - Búsqueda y filtrado por nombre, serial o RFID.
   - Visualización de detalles de cada equipo.
+  - Validación de dispositivos con sistema de aprobación.
 
 - **Panel de control**:  
   - Dashboard con resumen de dispositivos registrados y actividad reciente.
+  - Interfaces diferenciadas según el rol del usuario.
+  - Visualización de estadísticas y accesos recientes.
+
+- **Gestión de usuarios**:
+  - Administración de perfiles de usuarios (aprendices, instructores, administradores).
+  - Control de acceso basado en roles.
+  - Perfiles personalizados con foto e información detallada.
 
 - **Seguridad**:  
-  - Autenticación de usuarios para acceso a la plataforma.
+  - Autenticación robusta de usuarios.
+  - Validación avanzada de formularios.
+  - Protección contra ataques comunes.
 
 - **Integración RFID**:  
   - Registro y consulta de dispositivos mediante etiquetas RFID.
+  - Control de entrada/salida de equipos.
+  - Historial completo de movimientos.
+
+- **Diseño responsivo**:
+  - Interfaz adaptable a dispositivos móviles y escritorio.
+  - Experiencia de usuario optimizada para diferentes tamaños de pantalla.
 
 ---
 
@@ -76,6 +93,9 @@ Proyecto-CompuSCan/
     │   │   ├── devices/        # Página de dispositivos
     │   │   │   ├── Devices.jsx # Lógica y renderizado de la tabla de dispositivos
     │   │   │   └── Devices.css # Estilos de la tabla de dispositivos
+    │   │   └── ...
+    │   ├── utils/              # Utilidades
+    │   │   ├── validators.js   # Validadores de formularios
     │   │   └── ...
     │   └── styles/             # CSS global y variables
     └── ...
@@ -134,6 +154,7 @@ Documentación completa sobre la arquitectura, API RESTful, modelos de datos, au
 - **React Router**: Navegación y enrutamiento
 - **Axios**: Cliente HTTP para comunicación con el backend
 - **CSS Modules**: Estilos encapsulados por componente
+- **React Icons**: Iconografía consistente en toda la aplicación
 
 ### Backend
 - **Node.js**: Entorno de ejecución para JavaScript del lado del servidor
@@ -141,11 +162,39 @@ Documentación completa sobre la arquitectura, API RESTful, modelos de datos, au
 - **PostgreSQL**: Sistema de gestión de base de datos relacional
 - **JWT**: Autenticación basada en tokens
 - **Bcrypt**: Encriptación de contraseñas
+- **Multer**: Manejo de carga de archivos
 
 ### Herramientas de Desarrollo
 - **Vite**: Herramienta de construcción rápida para el frontend
 - **ESLint**: Linting de código
 - **Nodemon**: Reinicio automático del servidor durante desarrollo
+
+---
+
+## Mejoras Recientes
+
+### Sistema de Validación de Formularios
+- Implementación de un sistema robusto de validación con feedback en tiempo real
+- Validadores específicos para correos, contraseñas, documentos y otros campos
+- Componente `FormError` para mostrar errores de manera consistente
+- Indicador visual de fortaleza de contraseñas (`PasswordStrength`)
+
+### Interfaz de Usuario Mejorada
+- Diseño completamente responsivo para todas las páginas
+- Tablas con diseño optimizado para mejor visualización de datos
+- Sistema de navegación mejorado con indicadores visuales claros
+- Componentes modales para acciones importantes
+
+### Optimización de Rendimiento
+- Carga diferida de componentes para mejorar tiempos de carga
+- Optimización de consultas a la base de datos
+- Implementación de caché para datos frecuentemente utilizados
+
+### Experiencia de Usuario
+- Flujos de trabajo simplificados para tareas comunes
+- Mensajes de retroalimentación claros para todas las acciones
+- Interfaces diferenciadas según el rol del usuario
+- Diseño visual coherente en toda la aplicación
 
 ---
 
