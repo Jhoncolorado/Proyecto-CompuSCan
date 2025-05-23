@@ -8,10 +8,11 @@
 5. [Gestión de Estado](#gestión-de-estado)
 6. [Rutas y Navegación](#rutas-y-navegación)
 7. [Estilos y Diseño](#estilos-y-diseño)
-8. [Integración con Backend](#integración-con-backend)
-9. [Seguridad](#seguridad)
-10. [Optimización y Rendimiento](#optimización-y-rendimiento)
-11. [Guía de Mantenimiento](#guía-de-mantenimiento)
+8. [Validación de Formularios](#validación-de-formularios)
+9. [Integración con Backend](#integración-con-backend)
+10. [Seguridad](#seguridad)
+11. [Optimización y Rendimiento](#optimización-y-rendimiento)
+12. [Guía de Mantenimiento](#guía-de-mantenimiento)
 
 ---
 
@@ -42,7 +43,9 @@ front/
 ├── src/                # Código fuente principal
 │   ├── components/     # Componentes reutilizables
 │   │   ├── layout/     # Componentes de estructura (Header, Sidebar)
-│   │   └── ui/         # Componentes de interfaz (botones, tablas, etc.)
+│   │   ├── ui/         # Componentes de interfaz (botones, tablas, etc.)
+│   │   ├── FormError.jsx # Componente para mostrar errores en formularios
+│   │   └── PasswordStrength.jsx # Componente para indicador de fortaleza de contraseña
 │   ├── context/        # Contextos de React (AuthContext)
 │   ├── pages/          # Componentes de página completa
 │   │   ├── home/       # Página de inicio
@@ -52,6 +55,7 @@ front/
 │   │   └── ...
 │   ├── styles/         # Estilos globales y variables CSS
 │   ├── utils/          # Utilidades y helpers
+│   │   └── validators.js # Funciones de validación para formularios
 │   ├── App.jsx         # Componente principal y rutas
 │   ├── main.jsx        # Punto de entrada
 │   └── ...
@@ -96,6 +100,99 @@ Permite a los usuarios:
 - Tabla de usuarios con filtros y búsqueda
 - Formularios para crear y editar usuarios
 - Asignación de roles y permisos
+
+### Componentes de UI Reutilizables
+
+#### FormError
+
+Componente para mostrar mensajes de error en formularios de manera consistente:
+
+```jsx
+// FormError.jsx
+import React from 'react';
+import { FaExclamationCircle } from 'react-icons/fa';
+
+const FormError = ({ message }) => {
+  if (!message) return null;
+  
+  return (
+    <div className="form-error">
+      <FaExclamationCircle className="form-error-icon" />
+      <span className="form-error-message">{message}</span>
+    </div>
+  );
+};
+
+export default FormError;
+```
+
+Ejemplo de uso:
+```jsx
+<div className="form-group">
+  <label htmlFor="email">Correo electrónico</label>
+  <input 
+    type="email" 
+    id="email"
+    value={email}
+    onChange={handleEmailChange}
+    className={emailError ? 'input-error' : ''}
+  />
+  <FormError message={emailError} />
+</div>
+```
+
+#### PasswordStrength
+
+Componente que visualiza la fortaleza de una contraseña mientras el usuario la escribe:
+
+```jsx
+// PasswordStrength.jsx
+import React from 'react';
+
+const PasswordStrength = ({ password }) => {
+  const calculateStrength = (pwd) => {
+    // Lógica para calcular la fortaleza
+    let strength = 0;
+    
+    if (pwd.length >= 8) strength += 1;
+    if (/[A-Z]/.test(pwd)) strength += 1;
+    if (/[a-z]/.test(pwd)) strength += 1;
+    if (/[0-9]/.test(pwd)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) strength += 1;
+    
+    return strength;
+  };
+  
+  const strength = calculateStrength(password);
+  
+  const getLabel = () => {
+    if (strength === 0) return 'Muy débil';
+    if (strength === 1) return 'Débil';
+    if (strength === 2) return 'Moderada';
+    if (strength === 3) return 'Buena';
+    if (strength === 4) return 'Fuerte';
+    return 'Muy fuerte';
+  };
+  
+  return (
+    <div className="password-strength">
+      <div className="strength-bars">
+        {[...Array(5)].map((_, index) => (
+          <div 
+            key={index}
+            className={`strength-bar ${index < strength ? `level-${strength}` : ''}`}
+          />
+        ))}
+      </div>
+      <span className={`strength-label level-${strength}`}>
+        {getLabel()}
+      </span>
+    </div>
+  );
+};
+
+export default PasswordStrength;
+```
 
 ---
 
@@ -245,6 +342,197 @@ El diseño de la interfaz sigue los principios de Material Design con una paleta
 - Botones con estados hover y active claramente definidos
 - Tablas responsivas con opciones de ordenamiento y filtrado
 - Formularios con validación visual y feedback inmediato
+
+### Diseño Responsivo
+
+La aplicación está completamente optimizada para diferentes tamaños de pantalla:
+
+- **Mobile First**: Diseño base optimizado para dispositivos móviles
+- **Media Queries**: Ajustes específicos para tablets y escritorio
+- **Layouts Flexibles**: Uso de Flexbox y Grid para estructuras adaptables
+- **Componentes Adaptables**: Elementos de UI que se ajustan al espacio disponible
+
+Ejemplos de implementación responsiva:
+
+```css
+/* Ejemplo de CSS responsivo para tablas */
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  min-width: 600px; /* Asegura que la tabla tenga un ancho mínimo */
+}
+
+@media (max-width: 768px) {
+  .table th, .table td {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1200px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1201px) {
+  .card-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+```
+
+---
+
+## Validación de Formularios
+
+La aplicación implementa un sistema robusto de validación de formularios para garantizar la integridad de los datos:
+
+### Utilidad de Validadores
+
+El archivo `utils/validators.js` contiene funciones reutilizables para validar diferentes tipos de datos:
+
+```javascript
+// Ejemplo de validators.js
+export const validateEmail = (email) => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email) return 'El correo electrónico es obligatorio';
+  if (!regex.test(email)) return 'El formato del correo electrónico no es válido';
+  return '';
+};
+
+export const validatePassword = (password) => {
+  if (!password) return 'La contraseña es obligatoria';
+  if (password.length < 8) return 'La contraseña debe tener al menos 8 caracteres';
+  return '';
+};
+
+export const validateDocument = (document) => {
+  if (!document) return 'El documento es obligatorio';
+  if (!/^\d{7,12}$/.test(document)) return 'El documento debe tener entre 7 y 12 dígitos';
+  return '';
+};
+
+export const validateName = (name) => {
+  if (!name) return 'El nombre es obligatorio';
+  if (name.length < 3) return 'El nombre debe tener al menos 3 caracteres';
+  return '';
+};
+```
+
+### Implementación en Formularios
+
+La validación se implementa en tiempo real mientras el usuario escribe:
+
+```jsx
+// Ejemplo de uso en un formulario de registro
+const [formData, setFormData] = useState({
+  nombre: '',
+  correo: '',
+  contrasena: '',
+  documento: ''
+});
+
+const [errors, setErrors] = useState({
+  nombre: '',
+  correo: '',
+  contrasena: '',
+  documento: ''
+});
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormData({ ...formData, [name]: value });
+  
+  // Validación en tiempo real
+  switch (name) {
+    case 'nombre':
+      setErrors({ ...errors, nombre: validateName(value) });
+      break;
+    case 'correo':
+      setErrors({ ...errors, correo: validateEmail(value) });
+      break;
+    case 'contrasena':
+      setErrors({ ...errors, contrasena: validatePassword(value) });
+      break;
+    case 'documento':
+      setErrors({ ...errors, documento: validateDocument(value) });
+      break;
+    default:
+      break;
+  }
+};
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  
+  // Validación completa antes de enviar
+  const nombreError = validateName(formData.nombre);
+  const correoError = validateEmail(formData.correo);
+  const contrasenaError = validatePassword(formData.contrasena);
+  const documentoError = validateDocument(formData.documento);
+  
+  setErrors({
+    nombre: nombreError,
+    correo: correoError,
+    contrasena: contrasenaError,
+    documento: documentoError
+  });
+  
+  // Solo enviar si no hay errores
+  if (!nombreError && !correoError && !contrasenaError && !documentoError) {
+    // Enviar datos al servidor
+  }
+};
+```
+
+### Componentes de Validación Visual
+
+Los componentes `FormError` y `PasswordStrength` proporcionan feedback visual al usuario:
+
+```jsx
+// Ejemplo de formulario con validación visual
+<form onSubmit={handleSubmit}>
+  <div className="form-group">
+    <label htmlFor="nombre">Nombre completo</label>
+    <input
+      type="text"
+      id="nombre"
+      name="nombre"
+      value={formData.nombre}
+      onChange={handleChange}
+      className={errors.nombre ? 'input-error' : ''}
+    />
+    <FormError message={errors.nombre} />
+  </div>
+  
+  <div className="form-group">
+    <label htmlFor="contrasena">Contraseña</label>
+    <input
+      type="password"
+      id="contrasena"
+      name="contrasena"
+      value={formData.contrasena}
+      onChange={handleChange}
+      className={errors.contrasena ? 'input-error' : ''}
+    />
+    <PasswordStrength password={formData.contrasena} />
+    <FormError message={errors.contrasena} />
+  </div>
+  
+  <button type="submit" disabled={isSubmitting}>
+    {isSubmitting ? 'Enviando...' : 'Registrarse'}
+  </button>
+</form>
+```
 
 ---
 
