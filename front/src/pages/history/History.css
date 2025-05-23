@@ -76,11 +76,10 @@
   margin-bottom: 0;
   flex-grow: 1;
   position: relative;
-  border-radius: 6px 6px 0 0;
+  border-radius: 6px;
   overflow: auto;
   height: calc(100% - 44px - 1rem);
   border: 1px solid #e0e0e0;
-  border-bottom: none;
   margin-left: 10px;
   margin-right: 10px;
   padding: 0;
@@ -199,59 +198,61 @@
   border: 1px solid #ffcdd2;
 }
 
-/* Estado vacío */
 .history-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 4rem 2rem;
-  flex-grow: 1;
-  color: #455a64;
-  height: calc(100vh - 250px);
+  padding: 3rem 1rem;
+  height: calc(100% - 44px - 1rem);
+  margin: 0 auto;
+  max-width: 500px;
 }
 
 .history-empty-icon {
-  color: #b0bec5;
-  margin-bottom: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
+  background: #f5f8f5;
   border-radius: 50%;
-  background-color: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: #2e7d32;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .history-empty-icon svg {
-  width: 60px;
-  height: 60px;
-  opacity: 0.7;
+  width: 40px;
+  height: 40px;
+  opacity: 0.8;
 }
 
 .history-empty h3 {
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 600;
+  color: #2e7d32;
   margin: 0 0 1rem 0;
-  color: #37474f;
+  letter-spacing: 0.3px;
 }
 
 .history-empty p {
   font-size: 1.1rem;
-  margin: 0;
-  max-width: 500px;
-  color: #78909c;
+  color: #666;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.5;
 }
 
-/* Animación para el spinner */
 .spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(0, 0, 0, 0.1);
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 3px solid #e0e0e0;
   border-top: 3px solid #2e7d32;
   border-radius: 50%;
   animation: spin 1s linear infinite;
+  display: inline-block;
 }
 
 @keyframes spin {
@@ -259,11 +260,10 @@
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .history-bg {
-    padding: 1rem;
-    height: calc(100vh - 58px);
+    padding: 0;
+    min-height: calc(100vh - 60px);
   }
   
   .history-header-row h1 {
@@ -271,12 +271,11 @@
   }
   
   .history-table-container {
-    height: calc(100vh - 180px);
+    margin: 0.5rem 0;
   }
   
   .history-empty {
     padding: 2rem 1rem;
-    height: calc(100vh - 180px);
   }
   
   .history-empty h3 {

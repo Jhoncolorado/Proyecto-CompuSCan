@@ -30,8 +30,9 @@ body, html {
     gap: 0.7rem 0;
   }
   .profile-container {
-    padding: 1rem 0.5rem;
-    width: 99vw;
+    padding: 1.5rem 1rem;
+    width: 95vw;
+    margin: 1rem auto;
   }
 }
 
@@ -77,18 +78,33 @@ body, html {
 
 @media (max-width: 600px) {
   .profile-container {
-    padding: 0.4rem 0.1rem;
-    max-width: 99vw;
+    padding: 1rem 0.75rem;
+    width: 98vw;
+    margin: 0.5rem auto;
+    border-radius: 10px;
   }
   .profile-avatar, .profile-avatar-placeholder {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
   }
-  .profile-label, .profile-value, .profile-role-badge {
-    font-size: 0.93rem;
+  .profile-label, .profile-value {
+    font-size: 0.95rem;
+  }
+  .profile-role-badge {
+    font-size: 0.9rem;
+    padding: 0.2em 0.8em;
   }
   .profile-info {
-    gap: 0.5rem;
+    gap: 0.8rem;
+  }
+  .profile-field {
+    flex-direction: column;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 0.5rem;
+  }
+  .profile-label {
+    margin-bottom: 0.3rem;
   }
 }
 
@@ -116,6 +132,19 @@ body, html {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
+  .profile-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .profile-container h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+  }
 }
 
 .profile-avatar-container {
@@ -128,6 +157,13 @@ body, html {
   border-radius: 18px;
   padding: 2rem 1.5rem 1.5rem 1.5rem;
   box-shadow: 0 2px 12px #388e3c11;
+}
+
+@media (max-width: 600px) {
+  .profile-avatar-container {
+    padding: 1.5rem 1rem;
+    border-radius: 12px;
+  }
 }
 
 .profile-avatar {
@@ -166,6 +202,14 @@ body, html {
   font-size: 1.1rem;
   padding: 0.7rem 1.5rem;
   transition: background 0.2s;
+}
+
+@media (max-width: 600px) {
+  .btn-avatar-upload {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+    margin-top: 1rem;
+  }
 }
 
 .btn-avatar-upload:hover {
@@ -216,6 +260,16 @@ body, html {
   flex-wrap: wrap;
   justify-content: center;
   margin-top: 1rem;
+}
+
+@media (max-width: 600px) {
+  .profile-actions {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .profile-actions .btn {
+    width: 100%;
+  }
 }
 
 .profile-actions .btn {

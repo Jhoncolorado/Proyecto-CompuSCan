@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login, logout, getCurrentUser } from '../services/auth';
+import axios from 'axios';
 
 const AuthContext = createContext(null);
 
@@ -26,8 +27,24 @@ export const AuthProvider = ({ children }) => {
 
   const loginUser = async (credentials) => {
     try {
+      // Realizar el login inicial
       const response = await login(credentials);
-      setUser(response.usuario);
+      
+      // Obtener datos completos del usuario después del login
+      if (response.usuario && response.usuario.id) {
+        try {
+          const fullUserResponse = await axios.get(`http://localhost:3000/api/usuarios/${response.usuario.id}`);
+          // Actualizar el usuario con los datos completos
+          setUser(fullUserResponse.data);
+        } catch (error) {
+          console.error('Error al obtener datos completos del usuario:', error);
+          // Si falla, usar los datos básicos del login
+          setUser(response.usuario);
+        }
+      } else {
+        setUser(response.usuario);
+      }
+      
       navigate('/');
       return response;
     } catch (error) {

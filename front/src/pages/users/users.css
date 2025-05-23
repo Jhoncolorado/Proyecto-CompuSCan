@@ -24,19 +24,15 @@ html, body {
 
 .users-bg {
   background: #f7f9fb;
-  height: calc(100vh - 62px);
+  height: auto;
   width: 100%;
   margin: 0;
   padding: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  position: fixed;
-  top: 62px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  min-height: calc(100vh - 62px);
+  position: relative;
+  min-height: calc(100vh - 80px);
 }
 
 .users-panel {
@@ -48,7 +44,6 @@ html, body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: calc(100vh - 62px);
 }
 
 /* --- Cabecera --- */
@@ -64,6 +59,8 @@ html, body {
   position: relative;
   padding-right: 0;
   height: 44px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .users-header-row h1 {
@@ -106,11 +103,13 @@ html, body {
   margin-bottom: 0;
   flex-grow: 1;
   position: relative;
-  border-radius: 6px 6px 0 0;
+  border-radius: 6px;
   overflow: auto;
   height: calc(100% - 44px - 1rem);
   border: 1px solid var(--border);
-  border-bottom: none;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 0;
 }
 
 .users-table {
