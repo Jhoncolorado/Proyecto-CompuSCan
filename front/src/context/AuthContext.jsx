@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       // Obtener datos completos del usuario después del login
       if (response.usuario && response.usuario.id) {
         try {
-          const fullUserResponse = await axios.get(`http://localhost:3000/api/usuarios/${response.usuario.id}`);
+          const fullUserResponse = await axios.get(`https://compuscan-backend.vercel.app/api/usuarios/${response.usuario.id}`);
           // Actualizar el usuario con los datos completos
           setUser(fullUserResponse.data);
         } catch (error) {
