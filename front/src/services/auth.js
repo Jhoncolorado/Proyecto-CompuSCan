@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // Siempre usamos la URL completa para evitar problemas con el proxy
-const API_URL = 'http://localhost:3000/api';
+// En producción debe apuntar a tu API desplegada
+const API_URL = 'https://compuscan-backend.vercel.app/api';
 
 // Configurar axios para incluir credentials en todas las peticiones
 axios.defaults.withCredentials = true;
