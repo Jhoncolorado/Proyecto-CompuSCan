@@ -2,10 +2,11 @@ import axios from 'axios';
 
 // Siempre usamos la URL completa para evitar problemas con el proxy
 // En producción debe apuntar a tu API desplegada
-const API_URL = 'https://compuscan-backend.vercel.app/api';
+export const API_URL = 'https://compuscan-backend.vercel.app/api';
 
-// Configurar axios para incluir credentials en todas las peticiones
-axios.defaults.withCredentials = true;
+// Configurar axios para NO incluir credentials en todas las peticiones
+// Esto es necesario cuando trabajamos con CORS entre diferentes dominios
+axios.defaults.withCredentials = false;
 
 // Función para probar la conexión CORS
 export const testCORS = async () => {

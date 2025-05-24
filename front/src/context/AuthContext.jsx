@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { login, logout, getCurrentUser } from '../services/auth';
 import axios from 'axios';
 
+// Importar la URL de la API desde auth.js para mantener consistencia
+import { API_URL } from '../services/auth';
+
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
@@ -33,7 +36,7 @@ export const AuthProvider = ({ children }) => {
       // Obtener datos completos del usuario después del login
       if (response.usuario && response.usuario.id) {
         try {
-          const fullUserResponse = await axios.get(`https://compuscan-backend.vercel.app/api/usuarios/${response.usuario.id}`);
+          const fullUserResponse = await axios.get(`${API_URL}/usuarios/${response.usuario.id}`);
           // Actualizar el usuario con los datos completos
           setUser(fullUserResponse.data);
         } catch (error) {
