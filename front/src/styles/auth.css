@@ -382,3 +382,686 @@
   margin-top: 0.3rem;
   animation: fadeIn 0.3s ease;
 }
+
+/* === Carnet SENA (Control de Acceso) === */
+.carnet-sena {
+  max-width: 600px;
+  margin: 32px auto 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.13);
+  padding: 0 0 18px 0;
+  border: 3px solid #43a047;
+  position: relative;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+.carnet-header {
+  display: flex;
+  align-items: center;
+  background: #43a047;
+  border-radius: 15px 15px 0 0;
+  padding: 10px 24px;
+  color: #fff;
+  gap: 18px;
+  border-bottom: 2px solid #388e3c;
+}
+.carnet-logo {
+  width: 54px;
+  height: 54px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 4px;
+  border: 2px solid #fff;
+}
+.carnet-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  flex: 1;
+  text-align: left;
+}
+.carnet-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 24px 0 24px;
+}
+.carnet-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.carnet-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #43a047;
+  margin-bottom: 6px;
+}
+.carnet-user-data {
+  font-size: 1.05rem;
+  color: #222;
+  text-align: left;
+  width: 100%;
+  background: #f1f8e9;
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 1px 4px #0001;
+}
+.carnet-device-img {
+  width: 110px;
+  height: 80px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 2px solid #2196f3;
+  margin-bottom: 6px;
+}
+.carnet-device-data {
+  font-size: 1.05rem;
+  color: #222;
+  text-align: left;
+  width: 100%;
+  background: #e3f2fd;
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 1px 4px #0001;
+}
+.carnet-evento {
+  margin: 18px auto 0 auto;
+  width: 90%;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px 0;
+  letter-spacing: 1px;
+}
+.carnet-evento-entrada {
+  background: #c8e6c9;
+  color: #256029;
+  border: 2px solid #43a047;
+}
+.carnet-evento-salida {
+  background: #ffcdd2;
+  color: #b71c1c;
+  border: 2px solid #e53935;
+}
+@media (max-width: 700px) {
+  .carnet-body {
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px 8px 0 8px;
+  }
+  .carnet-header {
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+  .carnet-title {
+    text-align: center;
+    font-size: 1.1rem;
+  }
+}
+
+/* Mejor organización y balance para el carnet */
+.carnet-body-balance {
+  align-items: stretch;
+}
+.carnet-col {
+  justify-content: flex-start;
+  min-width: 0;
+}
+.carnet-img-block {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 120px;
+  margin-bottom: 8px;
+}
+.carnet-data-block {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 140px;
+  box-sizing: border-box;
+}
+.carnet-user-data, .carnet-device-data {
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.08rem;
+}
+.carnet-user-data div, .carnet-device-data div {
+  margin-bottom: 2px;
+}
+@media (max-width: 700px) {
+  .carnet-body-balance {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .carnet-col {
+    min-width: 0;
+  }
+  .carnet-img-block {
+    min-height: 90px;
+  }
+  .carnet-data-block {
+    min-height: 90px;
+  }
+}
+
+/* Fondo y centrado general para la pantalla de acceso (mejorado) */
+.access-bg, .access-bg-full {
+  min-height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+  padding: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.access-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1.2rem;
+  color: #222;
+  letter-spacing: 1px;
+}
+
+.access-form {
+  margin-bottom: 1.5rem;
+}
+
+.access-input {
+  font-size: 1.2rem;
+  padding: 0.8rem 1.2rem;
+  width: 340px;
+  max-width: 90vw;
+  border-radius: 8px;
+  border: 1.5px solid #43a047;
+  margin-bottom: 0.5rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.access-input:focus {
+  border: 2px solid #388e3c;
+}
+
+.carnet-logo-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.carnet-logo {
+  width: 38px;
+  height: 38px;
+  background: #fff;
+  border-radius: 50%;
+  padding: 2px;
+  border: 1.5px solid #fff;
+  box-shadow: 0 1px 4px #0001;
+}
+
+.carnet-header {
+  gap: 10px;
+}
+
+.carnet-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  flex: 1;
+  text-align: left;
+  color: #fff;
+}
+
+.carnet-data-group {
+  background: #f1f8e9;
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 1px 4px #0001;
+  margin-bottom: 0.5rem;
+}
+
+.carnet-device-data .carnet-data-group {
+  background: #e3f2fd;
+}
+
+.carnet-user-data, .carnet-device-data {
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+@media (max-width: 700px) {
+  .access-input {
+    width: 98vw;
+    font-size: 1rem;
+  }
+  .carnet-logo {
+    width: 32px;
+    height: 32px;
+  }
+  .carnet-title {
+    font-size: 1.05rem;
+  }
+}
+
+/* Carnet ocupa casi toda la pantalla y columnas alineadas */
+.access-bg-full {
+  min-height: 100vh;
+  padding: 0;
+  justify-content: flex-start;
+}
+
+.carnet-sena-full {
+  width: 90vw;
+  max-width: 1100px;
+  min-height: 60vh;
+  margin: 32px auto 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+}
+
+.carnet-header-full {
+  padding: 18px 32px 12px 32px;
+  border-radius: 18px 18px 0 0;
+  gap: 18px;
+}
+
+.carnet-logo {
+  width: 32px;
+  height: 32px;
+  padding: 1px;
+}
+
+.carnet-title {
+  font-size: 1.5rem;
+}
+
+.carnet-body-full {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 32px;
+  padding: 32px 32px 0 32px;
+  min-height: 320px;
+}
+
+.carnet-col-full {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.carnet-img-block-full {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 120px;
+  margin-bottom: 18px;
+}
+
+.carnet-avatar-full {
+  width: 120px;
+  height: 120px;
+  border: 3px solid #43a047;
+}
+
+.carnet-device-img-full {
+  width: 120px;
+  height: 90px;
+  border: 2px solid #2196f3;
+}
+
+.carnet-data-block-full {
+  width: 100%;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.carnet-data-group-full {
+  width: 100%;
+  background: #f1f8e9;
+  border-radius: 10px;
+  padding: 18px 18px 12px 18px;
+  box-shadow: 0 2px 8px #0001;
+  font-size: 1.13rem;
+  margin-bottom: 0;
+}
+
+.carnet-device-data .carnet-data-group-full {
+  background: #e3f2fd;
+}
+
+.carnet-evento-full {
+  margin: 28px auto 0 auto;
+  width: 96%;
+  font-size: 1.3rem;
+  padding: 16px 0;
+  border-radius: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 900px) {
+  .carnet-sena-full {
+    max-width: 98vw;
+  }
+  .carnet-body-full {
+    flex-direction: column;
+    gap: 18px;
+    padding: 18px 8px 0 8px;
+    min-height: 0;
+  }
+  .carnet-data-block-full {
+    min-height: 120px;
+  }
+}
+
+/* === Carnet Real Institucional === */
+.carnet-real {
+  width: 100%;
+  max-width: 900px;
+  min-width: 320px;
+  min-height: 340px;
+  background: #fff;
+  border-radius: 22px;
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  border: 3px solid #43a047;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
+  margin: 0 auto;
+  overflow: hidden;
+  justify-content: center;
+  padding-bottom: 80px;
+}
+
+.carnet-real-logo {
+  background: #43a047;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  max-width: 140px;
+  padding: 0 18px;
+  border-right: 3px solid #388e3c;
+}
+
+.carnet-real-logo img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: 50%;
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 8px #0002;
+}
+
+.carnet-real-content {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 0 16px 0;
+  min-height: 240px;
+  position: relative;
+}
+
+.carnet-divider {
+  width: 2px;
+  background: #e0e0e0;
+  margin: 0 18px;
+  border-radius: 2px;
+  align-self: stretch;
+  min-height: 180px;
+}
+
+.carnet-photo-shadow img {
+  box-shadow: 0 4px 16px #0002, 0 1.5px 4px #43a04733;
+  background: #fff;
+}
+
+.carnet-data-compact {
+  padding: 8px 12px 4px 12px !important;
+  margin-bottom: 0 !important;
+  font-size: 0.97rem !important;
+}
+
+.carnet-real {
+  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.22), 0 2px 8px #43a04722;
+}
+
+.carnet-fecha-emision {
+  position: absolute;
+  right: 18px;
+  bottom: 8px;
+  font-size: 0.85rem;
+  color: #888;
+  font-style: italic;
+  z-index: 3;
+}
+
+.carnet-real-main {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 18px 12px 18px;
+  min-width: 0;
+}
+
+.carnet-real-device {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 18px 12px 18px;
+  min-width: 0;
+  border-left: 2px solid #e0e0e0;
+}
+
+.carnet-real-user-photo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.carnet-real-user-photo img {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 3px solid #43a047;
+  object-fit: cover;
+  box-shadow: 0 2px 8px #0001;
+  max-width: 110px;
+  max-height: 110px;
+}
+
+.carnet-real-device-photo img {
+  width: 110px;
+  height: 80px;
+  border-radius: 12px;
+  border: 2px solid #2196f3;
+  object-fit: cover;
+  box-shadow: 0 2px 8px #0001;
+  max-width: 110px;
+  max-height: 80px;
+}
+
+.carnet-real-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #43a047;
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+.carnet-real-user-name {
+  font-size: 1.18rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #222;
+  text-align: center;
+}
+
+.carnet-real-user-info {
+  background: #f1f8e9;
+  border-radius: 10px;
+  padding: 12px 18px 8px 18px;
+  font-size: 1.08rem;
+  color: #222;
+  margin-bottom: 0;
+  box-shadow: 0 1px 4px #0001;
+  text-align: left;
+}
+
+.carnet-real-event {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  width: 100%;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px 0 10px 0;
+  border-radius: 0 0 18px 18px;
+  letter-spacing: 1px;
+  border-top: 2px solid #43a047;
+  z-index: 2;
+  margin: 0;
+}
+
+.carnet-real-event-entrada {
+  background: #c8e6c9;
+  color: #256029;
+  border-bottom: 3px solid #43a047;
+}
+
+.carnet-real-event-salida {
+  background: #ffcdd2;
+  color: #b71c1c;
+  border-bottom: 3px solid #e53935;
+}
+
+@media (max-width: 1000px) {
+  .carnet-real {
+    flex-direction: column;
+    width: 99vw;
+    min-width: 0;
+    max-width: 99vw;
+    min-height: 0;
+    margin: 0 auto;
+  }
+  .carnet-real-content {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .carnet-real {
+    max-width: 99vw;
+    min-width: 0;
+    border-radius: 10px;
+    padding-bottom: 56px;
+  }
+  .carnet-real-content {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+  }
+}
+
+.access-title-carnet {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.carnet-real-user-name-big {
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: #222;
+  margin-bottom: 0.2rem;
+  text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.1;
+}
+.carnet-real-title-big {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #43a047;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.carnet-real-user-info-small {
+  font-size: 0.98rem;
+  color: #444;
+  background: #f1f8e9;
+  border-radius: 10px;
+  padding: 10px 16px 6px 16px;
+  box-shadow: 0 1px 4px #0001;
+  margin-bottom: 0;
+  text-align: left;
+}
+.carnet-real-user-info-small b {
+  font-weight: 600;
+}
+
+.carnet-main-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #43a047;
+  text-align: center;
+  margin: 1.2rem 0 0.7rem 0;
+  letter-spacing: 2px;
+  text-shadow: 0 2px 8px #0001;
+}
+
+@media (max-width: 900px) {
+  .carnet-divider {
+    display: none;
+  }
+  .carnet-real-content {
+    flex-direction: column;
+    align-items: stretch;
+    min-height: 0;
+    padding: 0 0 16px 0;
+  }
+}

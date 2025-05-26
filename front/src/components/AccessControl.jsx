@@ -35,60 +35,56 @@ const AccessControl = () => {
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', padding: 30, textAlign: 'center' }}>
-      <h2>Control de Acceso</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="access-bg access-bg-full">
+      <h2 className="access-title">Control de Acceso</h2>
+      <form className="access-form" onSubmit={handleSubmit}>
         <input
           ref={inputRef}
           type="text"
           value={rfid}
           onChange={handleChange}
           placeholder="Pase la tarjeta RFID..."
-          style={{ fontSize: 24, padding: 10, width: '80%', marginBottom: 20 }}
+          className="access-input"
           autoFocus
         />
         <button type="submit" style={{ display: 'none' }}>Buscar</button>
       </form>
+      <h2 className="carnet-main-title">CARNET DE ACCESO</h2>
       {error && <div style={{ color: 'red', margin: 10 }}>{error}</div>}
       {data && data.usuario && data.dispositivo && (
-        <div style={{ marginTop: 30, textAlign: 'center', background: '#f8f8f8', borderRadius: 10, padding: 20, boxShadow: '0 2px 8px #0001' }}>
-          <div style={{ 
-            padding: '10px 20px', 
-            borderRadius: 5, 
-            marginBottom: 20,
-            backgroundColor: data.tipoEvento === 'ENTRADA' ? '#4caf50' : '#f44336',
-            color: 'white',
-            fontSize: '1.2em',
-            fontWeight: 'bold'
-          }}>
-            {data.tipoEvento}
+        <div className="carnet-real">
+          <div className="carnet-real-logo">
+            <img src="/descarga.png" alt="Logo SENA" />
           </div>
-          <h3 style={{ marginBottom: 20 }}>Datos del Aprendiz</h3>
-          <img
-            src={data.usuario.foto || '/images/default-avatar.png'}
-            alt="Foto del usuario"
-            style={{ width: 120, height: 120, borderRadius: '50%', objectFit: 'cover', border: '3px solid #4caf50', marginBottom: 10 }}
-          />
-          <div style={{ marginBottom: 20 }}>
-            <p><b>Nombre:</b> {data.usuario.nombre}</p>
-            <p><b>Correo:</b> {data.usuario.correo}</p>
-            <p><b>Documento:</b> {data.usuario.documento}</p>
-            <p><b>Ficha:</b> {data.usuario.ficha}</p>
-            <p><b>Rol:</b> {data.usuario.rol}</p>
+          <div className="carnet-real-content">
+            <div className="carnet-real-main">
+              <div className="carnet-real-user-photo carnet-photo-shadow">
+                <img src={data.usuario.foto || '/images/default-avatar.png'} alt="Foto usuario" />
+              </div>
+              <div className="carnet-real-user-name carnet-real-user-name-big">{data.usuario.nombre}</div>
+              <div className="carnet-real-user-info carnet-real-user-info-small carnet-data-compact">
+                <div><b>Documento:</b> {data.usuario.documento}</div>
+                <div><b>Ficha:</b> {data.usuario.ficha}</div>
+                <div><b>Correo:</b> {data.usuario.correo}</div>
+                <div><b>Rol:</b> {data.usuario.rol}</div>
+              </div>
+            </div>
+            <div className="carnet-divider"></div>
+            <div className="carnet-real-device">
+              <div className="carnet-real-device-photo carnet-photo-shadow">
+                <img src={data.dispositivo.foto || '/images/default-device.png'} alt="Foto equipo" />
+              </div>
+              <div className="carnet-real-device-info carnet-data-compact">
+                <div><b>Equipo:</b> {data.dispositivo.nombre}</div>
+                <div><b>Tipo:</b> {data.dispositivo.tipo}</div>
+                <div><b>Serial:</b> {data.dispositivo.serial}</div>
+                <div><b>Estado:</b> {data.dispositivo.estado_validacion || 'Pendiente'}</div>
+                <div><b>RFID:</b> {data.dispositivo.rfid}</div>
+              </div>
+            </div>
           </div>
-          <h3 style={{ marginBottom: 20 }}>Equipo Asociado</h3>
-          <img
-            src={data.dispositivo.foto || '/images/default-device.png'}
-            alt="Foto del equipo"
-            style={{ width: 120, height: 90, borderRadius: 10, objectFit: 'cover', border: '2px solid #2196f3', marginBottom: 10 }}
-          />
-          <div>
-            <p><b>Nombre:</b> {data.dispositivo.nombre}</p>
-            <p><b>Tipo:</b> {data.dispositivo.tipo}</p>
-            <p><b>Serial:</b> {data.dispositivo.serial}</p>
-            <p><b>Estado:</b> {data.dispositivo.estado_validacion || 'Pendiente'}</p>
-            <p><b>RFID:</b> {data.dispositivo.rfid}</p>
-          </div>
+          <div className={`carnet-real-event carnet-real-event-${data.tipoEvento === 'ENTRADA' ? 'entrada' : 'salida'}`}>{data.tipoEvento}</div>
+          <div className="carnet-fecha-emision">Emitido: {new Date().toLocaleDateString()}</div>
         </div>
       )}
     </div>
