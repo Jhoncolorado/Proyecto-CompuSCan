@@ -96,8 +96,7 @@
   position: relative;
   flex: 1;
   transition: all 0.3s ease-in-out;
-  height: 480px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .auth-form {
@@ -105,18 +104,14 @@
   flex-direction: column;
   gap: 1.2rem;
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeIn 0.3s ease-in-out forwards;
-  height: 100%;
-  overflow-y: hidden; /* Por defecto, sin scroll */
+  opacity: 1;
+  transform: none;
+  animation: none;
+  overflow-y: auto;
   padding-right: 10px;
-  padding-bottom: 40px;
+  padding-bottom: 10px;
 }
 
 /* Clase específica para formularios con scroll */
@@ -241,7 +236,7 @@
   position: relative;
   display: block;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.25rem;
 }
 
 .auth-button:hover {

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
 const AccessControl = () => {
   const [rfid, setRfid] = useState('');
@@ -21,7 +21,7 @@ const AccessControl = () => {
     e.preventDefault();
     if (!rfid) return;
     try {
-      const res = await axios.post('http://localhost:3000/api/dispositivos/acceso-rfid', { rfid });
+      const res = await api.post('/api/dispositivos/acceso-rfid', { rfid });
       setData(res.data);
       console.log('Respuesta del backend:', res.data);
       setError('');

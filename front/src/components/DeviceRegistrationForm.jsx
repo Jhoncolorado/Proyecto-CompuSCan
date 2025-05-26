@@ -2,7 +2,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
   console.log('[DEBUG] Enviando petición PUT a /api/dispositivos/' + id);
   try {
-    const response = await fetch(`http://localhost:3000/api/dispositivos/${id}`, {
+    const response = await fetch(`/api/dispositivos/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

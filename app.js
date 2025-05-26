@@ -36,15 +36,31 @@ console.log('Ruta a index.html:', indexPath);
 const indexExists = fs.existsSync(indexPath);
 console.log('¿Existe el archivo index.html?', indexExists);
 
-// Middleware
-app.use(cors({ 
-  origin: true, // Permitir cualquier origen (modo desarrollo)
-  credentials: true, // Permitir credenciales
+// Configurar CORS - permitir todos los orígenes
+app.use(cors({
+  origin: true, // Permitir cualquier origen
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
 }));
+
+// Middleware para procesar JSON y formularios
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+// Middleware para añadir encabezados CORS a todas las respuestas
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, Origin, X-Requested-With');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).send();
+  }
+  
+  next();
+});
 
 // Configuración de Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {

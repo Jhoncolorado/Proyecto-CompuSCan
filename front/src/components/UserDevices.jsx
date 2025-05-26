@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
+import api from '../services/api';
 import '../styles/UserDevices.css';
 
 const UserDevices = ({ userId: propUserId, isAdminView }) => {
@@ -39,7 +39,7 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
   useEffect(() => {
     const fetchUserDevices = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/dispositivos/usuario/${userId}`);
+        const response = await api.get(`/api/dispositivos/usuario/${userId}`);
         setDevices(Array.isArray(response.data) ? response.data : []);
       } catch (err) {
         console.error('Error al cargar dispositivos:', err);
@@ -98,7 +98,7 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
       }
       if (editId) {
         // Edición
-        await axios.put(`http://localhost:3000/api/dispositivos/${editId}`, {
+        await api.put(`/api/dispositivos/${editId}`, {
           nombre: form.nombre,
           tipo: form.tipo,
           serial: form.serial,
@@ -113,7 +113,7 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
         }, 1500);
       } else {
         // Registro de nuevo dispositivo
-        await axios.post('http://localhost:3000/api/dispositivos', {
+        await api.post('/api/dispositivos', {
           nombre: form.nombre,
           tipo: form.tipo,
           serial: form.serial,
@@ -131,7 +131,7 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
       setFormError('');
       setFormLoading(false);
       // Recargar dispositivos
-      const response = await axios.get(`http://localhost:3000/api/dispositivos/usuario/${userId}`);
+      const response = await api.get(`/api/dispositivos/usuario/${userId}`);
       setDevices(Array.isArray(response.data) ? response.data : []);
     } catch (err) {
       setFormError('Error al guardar los cambios');

@@ -13,6 +13,7 @@ router.post('/login', validateLogin, async (req, res) => {
     
     console.log('Buscando usuario con correo:', correo);
     const usuario = await usuarioModel.getUsuarioByEmail(correo);
+    console.log('Usuario encontrado:', usuario);
     
     if (!usuario) {
       console.log('Usuario no encontrado:', correo);
@@ -20,8 +21,9 @@ router.post('/login', validateLogin, async (req, res) => {
       return res.status(401).json({ error: 'Credenciales inválidas' });
     }
 
-    console.log('Usuario encontrado, verificando contraseña');
+    console.log('Hash en BD:', usuario.contrasena);
     const isMatch = await bcrypt.compare(contrasena, usuario.contrasena);
+    console.log('¿Contraseña coincide?', isMatch);
     
     if (!isMatch) {
       console.log('Contraseña incorrecta para usuario:', usuario.id);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaExclamationTriangle, FaUserCircle, FaLaptop } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
-import axios from 'axios';
+import api from '../../services/api';
 import './users.css';
 import UserDevices from '../../components/UserDevices';
 
@@ -64,7 +64,7 @@ const Users = () => {
 
   useEffect(() => {
     if (showModal && editingUser && editingUser.id) {
-      axios.get(`http://localhost:3000/api/dispositivos/usuario/${editingUser.id}`)
+      api.get(`/api/dispositivos/usuario/${editingUser.id}`)
         .then(devRes => {
           if (Array.isArray(devRes.data) && devRes.data.length > 0 && devRes.data[0].foto) {
             setDeviceImage(devRes.data[0].foto);
@@ -80,7 +80,7 @@ const Users = () => {
     setError('');
     
     try {
-      const response = await axios.get('http://localhost:3000/api/usuarios');
+      const response = await api.get('/api/usuarios');
       
       if (Array.isArray(response.data)) {
         setUsers(response.data);
@@ -143,7 +143,7 @@ const Users = () => {
     setSuccess('');
     setSubmitting(true);
     try {
-      const response = await axios.delete(`http://localhost:3000/api/usuarios/${userToDelete}`);
+      const response = await api.delete(`/api/usuarios/${userToDelete}`);
       setSuccess('Usuario eliminado correctamente');
       fetchUsers();
     } catch (err) {
@@ -175,9 +175,7 @@ const Users = () => {
 
     try {
       const isUpdate = !!editingUser;
-      const url = isUpdate 
-        ? `${import.meta.env.DEV ? '' : 'http://localhost:3000'}/api/usuarios/${editingUser.id}`
-        : `${import.meta.env.DEV ? '' : 'http://localhost:3000'}/api/usuarios`;
+      const url = editingUser.id ? `/api/usuarios/${editingUser.id}` : '/api/usuarios';
       
       const method = isUpdate ? 'put' : 'post';
       
@@ -198,7 +196,7 @@ const Users = () => {
       
       console.log(`${isUpdate ? 'Actualizando' : 'Creando'} usuario con datos:`, userData);
       
-      const response = await axios[method](url, userData);
+      const response = await api[method](url, userData);
       
       console.log('Respuesta del servidor:', response.data);
       

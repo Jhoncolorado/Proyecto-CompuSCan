@@ -11,7 +11,7 @@ const History = () => {
   useEffect(() => {
     const fetchHistorial = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/historiales');
+        const response = await fetch('/api/historiales');
         if (!response.ok) {
           throw new Error('Error al cargar el historial');
         }
@@ -122,7 +122,7 @@ export const UserHistory = () => {
   useEffect(() => {
     const fetchHistorial = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/historiales');
+        const response = await fetch('/api/historiales');
         if (!response.ok) {
           throw new Error('Error al cargar el historial');
         }

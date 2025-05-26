@@ -21,6 +21,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserHistory } from './pages/history/History';
 import './styles/PageTransition.css';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
 
 // Componente de carga para Suspense
 const LoadingFallback = () => (
@@ -79,6 +81,8 @@ function App() {
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/acceso" element={<AccessControl />} />
             <Route
               path="/"

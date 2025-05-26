@@ -38,6 +38,69 @@ router.post('/login', usuarioController.login);
 
 /**
  * @swagger
+ * /api/usuarios/forgot-password:
+ *   post:
+ *     summary: Solicitar recuperación de contraseña
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - correo
+ *             properties:
+ *               correo:
+ *                 type: string
+ *                 format: email
+ *                 description: Correo electrónico del usuario
+ *     responses:
+ *       200:
+ *         description: Solicitud de recuperación enviada exitosamente
+ *       400:
+ *         description: Datos inválidos
+ */
+router.post('/forgot-password', usuarioController.forgotPassword);
+
+/**
+ * @swagger
+ * /api/usuarios/reset-password:
+ *   post:
+ *     summary: Restablecer contraseña
+ *     tags: [Usuarios]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - correo
+ *               - nueva_contrasena
+ *               - token
+ *             properties:
+ *               correo:
+ *                 type: string
+ *                 format: email
+ *                 description: Correo electrónico del usuario
+ *               nueva_contrasena:
+ *                 type: string
+ *                 format: password
+ *                 description: Nueva contraseña del usuario
+ *               token:
+ *                 type: string
+ *                 description: Token de recuperación
+ *     responses:
+ *       200:
+ *         description: Contraseña restablecida exitosamente
+ *       400:
+ *         description: Datos inválidos
+ */
+router.post('/reset-password', usuarioController.resetPassword);
+
+/**
+ * @swagger
  * /api/usuarios:
  *   post:
  *     summary: Crear un nuevo usuario
@@ -181,6 +244,44 @@ router.get('/', usuarioController.getAllUsuarios);
  *         description: No autorizado
  */
 router.get('/:id', usuarioController.getUsuarioById);
+
+/**
+ * @swagger
+ * /api/usuarios/{id}/password:
+ *   put:
+ *     summary: Cambiar la contraseña de un usuario
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nueva_contrasena:
+ *                 type: string
+ *                 format: password
+ *                 description: Nueva contraseña del usuario
+ *     responses:
+ *       200:
+ *         description: Contraseña actualizada exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       400:
+ *         description: Datos inválidos
+ *       401:
+ *         description: No autorizado
+ */
+router.put('/:id/password', usuarioController.changePassword);
 
 /**
  * @swagger

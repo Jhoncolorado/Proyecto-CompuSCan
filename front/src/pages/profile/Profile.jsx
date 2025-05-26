@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import axios from 'axios';
+import api from '../../services/api';
 import UserDevices from '../../components/UserDevices';
 import '../../styles/profile.css';
+import { changePassword } from '../../services/auth';
 
 const Profile = () => {
   const { user, updateUserInContext } = useAuth();
@@ -16,6 +17,10 @@ const Profile = () => {
   const [editMode, setEditMode] = useState(false);
   const [deviceImage, setDeviceImage] = useState('');
   const [userDevices, setUserDevices] = useState([]);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [passwordForm, setPasswordForm] = useState({ actual: '', nueva: '', confirmar: '' });
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
 
   // Verificar si el usuario es aprendiz o instructor
   const isNormalUser = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
@@ -23,7 +28,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/usuarios/${user.id}`);
+        const response = await api.get(`/api/usuarios/${user.id}`);
         const fullUser = response.data;
         setFormData({
           nombre: fullUser.nombre || '',
@@ -41,7 +46,7 @@ const Profile = () => {
         });
         setAvatarPreview(fullUser.foto || '');
         // Obtener el primer dispositivo y su foto
-        const devRes = await axios.get(`http://localhost:3000/api/dispositivos/usuario/${user.id}`);
+        const devRes = await api.get(`/api/dispositivos/usuario/${user.id}`);
         if (Array.isArray(devRes.data) && devRes.data.length > 0) {
           setUserDevices(devRes.data);
           if (devRes.data[0].foto) {
@@ -75,8 +80,8 @@ const Profile = () => {
         setAvatarPreview(base64);
         setLoading(true);
         try {
-          await axios.put(`http://localhost:3000/api/usuarios/${user.id}`, { ...formData, foto: base64 }, { headers: { 'Content-Type': 'application/json' } });
-          const refreshed = await axios.get(`http://localhost:3000/api/usuarios/${user.id}`);
+          await api.put(`/api/usuarios/${user.id}`, { ...formData, foto: base64 }, { headers: { 'Content-Type': 'application/json' } });
+          const refreshed = await api.get(`/api/usuarios/${user.id}`);
           if (typeof updateUserInContext === 'function') updateUserInContext(refreshed.data);
           setMessage('Avatar actualizado');
         } catch (err) {
@@ -99,18 +104,50 @@ const Profile = () => {
     setMessage('');
     setError('');
     try {
-      await axios.put(`http://localhost:3000/api/usuarios/${user.id}`, formData);
+      await api.put(`/api/usuarios/${user.id}`, formData);
       setMessage('Datos actualizados correctamente');
       setEditMode(false);
       // Actualizar usuario en contexto
       if (typeof updateUserInContext === 'function') {
-        const refreshed = await axios.get(`http://localhost:3000/api/usuarios/${user.id}`);
+        const refreshed = await api.get(`/api/usuarios/${user.id}`);
         updateUserInContext(refreshed.data);
       }
     } catch (err) {
       setError('Error al actualizar datos');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handlePasswordChange = (e) => {
+    setPasswordForm({ ...passwordForm, [e.target.name]: e.target.value });
+    setPasswordError('');
+    setPasswordSuccess('');
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+    if (!passwordForm.actual || !passwordForm.nueva || !passwordForm.confirmar) {
+      setPasswordError('Todos los campos son obligatorios.');
+      return;
+    }
+    if (passwordForm.nueva.length < 6) {
+      setPasswordError('La nueva contraseña debe tener al menos 6 caracteres.');
+      return;
+    }
+    if (passwordForm.nueva !== passwordForm.confirmar) {
+      setPasswordError('Las contraseñas nuevas no coinciden.');
+      return;
+    }
+    try {
+      await changePassword(user.id, { actual: passwordForm.actual, nueva: passwordForm.nueva });
+      setPasswordSuccess('Contraseña actualizada exitosamente.');
+      setPasswordForm({ actual: '', nueva: '', confirmar: '' });
+      setTimeout(() => setShowPasswordModal(false), 1500);
+    } catch (err) {
+      setPasswordError(err.message || 'Error al cambiar la contraseña.');
     }
   };
 
@@ -203,7 +240,7 @@ const Profile = () => {
             <span className="profile-value">{formData.fecha_registro ? new Date(formData.fecha_registro).toLocaleDateString() : '-'}</span>
           </div>
         <div className="profile-actions">
-            <button className="btn btn-success" type="button">Cambiar Contraseña</button>
+            <button className="btn btn-success" type="button" onClick={() => setShowPasswordModal(true)}>Cambiar Contraseña</button>
             {canEdit && !editMode && (
               <button className="btn btn-primary" type="button" onClick={handleEdit}>Editar</button>
             )}
@@ -219,6 +256,36 @@ const Profile = () => {
       
       {/* Historial de accesos - ELIMINADO PARA EVITAR REDUNDANCIA CON LA PÁGINA DE INICIO */}
       {/* Esta información ya se muestra en la página de inicio en la sección "Actividad Reciente" */}
+
+      {/* Modal para cambiar contraseña */}
+      {showPasswordModal && (
+        <div className="modal-overlay">
+          <div className="modal modal-narrow">
+            <button className="close-modal" onClick={() => setShowPasswordModal(false)} title="Cerrar">✖</button>
+            <h2 className="modal-title">Cambiar Contraseña</h2>
+            <form onSubmit={handlePasswordSubmit} className="form-user-profile-singlecol">
+              <div className="form-control">
+                <label className="label">Contraseña actual</label>
+                <input type="password" name="actual" value={passwordForm.actual} onChange={handlePasswordChange} required className="input input-bordered" />
+              </div>
+              <div className="form-control">
+                <label className="label">Nueva contraseña</label>
+                <input type="password" name="nueva" value={passwordForm.nueva} onChange={handlePasswordChange} required className="input input-bordered" />
+              </div>
+              <div className="form-control">
+                <label className="label">Confirmar nueva contraseña</label>
+                <input type="password" name="confirmar" value={passwordForm.confirmar} onChange={handlePasswordChange} required className="input input-bordered" />
+              </div>
+              {passwordError && <div className="alert alert-error shadow-lg form-control-full">{passwordError}</div>}
+              {passwordSuccess && <div className="alert alert-success shadow-lg form-control-full">{passwordSuccess}</div>}
+              <div className="modal-actions form-control-full inline-buttons">
+                <button type="submit" className="btn btn-primary">Cambiar Contraseña</button>
+                <button type="button" className="btn btn-secondary" onClick={() => setShowPasswordModal(false)}>Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
