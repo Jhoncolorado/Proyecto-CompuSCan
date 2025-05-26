@@ -219,6 +219,16 @@ router.post('/acceso-rfid', async (req, res) => {
     const usuarioRes = await pool.query('SELECT * FROM usuario WHERE id = $1', [dispositivo.id_usuario]);
     const usuario = usuarioRes.rows[0];
 
+    // --- Asegurar que las fotos estén en base64 (data:image/...) ---
+    if (usuario && usuario.foto) {
+      usuario.foto = 'data:image/jpeg;base64,' + Buffer.from(usuario.foto).toString('base64');
+    }
+    if (dispositivo && dispositivo.foto) {
+      const mime = dispositivo.mime_type || dispositivo.mimeType || 'image/jpeg';
+      dispositivo.foto = `data:${mime};base64,` + Buffer.from(dispositivo.foto).toString('base64');
+    }
+    // -------------------------------------------------------------
+
     // Alternancia ENTRADA/SALIDA
     const ultimoEventoRes = await pool.query(
       'SELECT descripcion FROM historial_dispositivo WHERE id_dispositivo = $1 ORDER BY fecha_hora DESC LIMIT 1',
