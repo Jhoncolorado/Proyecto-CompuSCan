@@ -313,7 +313,7 @@ const Login = () => {
 
       console.log('Enviando datos de registro:', userData); // Para debugging
 
-      const response = await fetch('http://localhost:3000/api/usuarios', {
+      const response = await fetch('/api/usuarios', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -440,6 +440,11 @@ const Login = () => {
               <button type="submit" className="auth-button" disabled={loading} onClick={handleLoginSubmit}>
                 {loading ? 'Cargando...' : 'Iniciar Sesión'}
               </button>
+              <div style={{ textAlign: 'center', marginTop: '0.5rem', marginBottom: 0 }}>
+                <a href="/forgot-password" style={{ color: '#388e3c', textDecoration: 'underline', fontWeight: 500 }}>
+                  ¿Olvidaste tu contraseña?
+                </a>
+              </div>
             </form>
           )}
 

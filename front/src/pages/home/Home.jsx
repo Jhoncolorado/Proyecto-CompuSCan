@@ -70,7 +70,7 @@ const Home = () => {
       try {
         setLoading(true);
         setError('');
-        const res = await fetch('http://localhost:3000/api/dashboard/stats');
+        const res = await fetch('/api/dashboard/stats');
         if (!res.ok) throw new Error('Error al cargar estadísticas');
         
         // Usamos los datos reales del backend sin simular nada
@@ -509,7 +509,7 @@ export const HomeUser = () => {
         setLoading(true);
         // Obtener dispositivos del usuario
         if (user?.id) {
-          const devRes = await fetch(`http://localhost:3000/api/dispositivos/usuario/${user.id}`);
+          const devRes = await fetch(`/api/dispositivos/usuario/${user.id}`);
           if (devRes.ok) {
             const devices = await devRes.json();
             setDeviceCount(devices.length);
@@ -517,7 +517,7 @@ export const HomeUser = () => {
           }
           
           // Obtener historial reciente
-          const historyRes = await fetch(`http://localhost:3000/api/historiales`);
+          const historyRes = await fetch(`/api/historiales`);
           if (historyRes.ok) {
             const history = await historyRes.json();
             // Filtrar solo los eventos relacionados con este usuario

@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require('../config/database');
 
 const usuarioModel = {
     getAllUsuarios: async () => {
@@ -82,7 +82,7 @@ const usuarioModel = {
 
     updateUsuario: async (id, { 
         nombre, correo, telefono1, telefono2, 
-        rh, ficha, observacion, foto, rol, estado
+        rh, ficha, observacion, foto, rol, estado, contrasena
     }) => {
         // Procesar foto base64
         let fotoBase64 = null;
@@ -91,13 +91,51 @@ const usuarioModel = {
         } else if (foto) {
             fotoBase64 = foto;
         }
-        // Log para depuración
-        console.log('Foto recibida:', foto && foto.substring(0, 30), '...');
-        console.log('Foto base64:', fotoBase64 && fotoBase64.substring(0, 30), '...');
         try {
             let query;
             let values;
-            if (fotoBase64 && fotoBase64.length > 10) {
+            if (fotoBase64 && contrasena) {
+                query = `
+                    UPDATE usuario
+                    SET 
+                        nombre = COALESCE($1, nombre),
+                        correo = COALESCE($2, correo),
+                        telefono1 = COALESCE($3, telefono1),
+                        telefono2 = COALESCE($4, telefono2),
+                        rh = COALESCE($5, rh),
+                        ficha = COALESCE($6, ficha),
+                        observacion = COALESCE($7, observacion),
+                        foto = decode($8, 'base64'),
+                        rol = COALESCE($9, rol),
+                        estado = COALESCE($10, estado),
+                        contrasena = COALESCE($11, contrasena)
+                    WHERE id = $12
+                    RETURNING *`;
+                values = [
+                    nombre, correo, telefono1, telefono2,
+                    rh, ficha, observacion, fotoBase64, rol, estado, contrasena, id
+                ];
+            } else if (contrasena) {
+                query = `
+                    UPDATE usuario
+                    SET 
+                        nombre = COALESCE($1, nombre),
+                        correo = COALESCE($2, correo),
+                        telefono1 = COALESCE($3, telefono1),
+                        telefono2 = COALESCE($4, telefono2),
+                        rh = COALESCE($5, rh),
+                        ficha = COALESCE($6, ficha),
+                        observacion = COALESCE($7, observacion),
+                        rol = COALESCE($8, rol),
+                        estado = COALESCE($9, estado),
+                        contrasena = COALESCE($10, contrasena)
+                    WHERE id = $11
+                    RETURNING *`;
+                values = [
+                    nombre, correo, telefono1, telefono2,
+                    rh, ficha, observacion, rol, estado, contrasena, id
+                ];
+            } else if (fotoBase64 && fotoBase64.length > 10) {
                 query = `
                     UPDATE usuario
                     SET 
@@ -112,7 +150,7 @@ const usuarioModel = {
                         rol = COALESCE($9, rol),
                         estado = COALESCE($10, estado)
                     WHERE id = $11
-                    RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, estado`;
+                    RETURNING *`;
                 values = [
                     nombre, correo, telefono1, telefono2,
                     rh, ficha, observacion, fotoBase64, rol, estado, id
@@ -131,7 +169,7 @@ const usuarioModel = {
                         rol = COALESCE($8, rol),
                         estado = COALESCE($9, estado)
                     WHERE id = $10
-                    RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, estado`;
+                    RETURNING *`;
                 values = [
                     nombre, correo, telefono1, telefono2,
                     rh, ficha, observacion, rol, estado, id

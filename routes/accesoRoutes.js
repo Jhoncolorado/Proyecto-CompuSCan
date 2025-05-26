@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const historialDispositivoModel = require('../models/historialDispositivoModel');
-const pool = require('../config/db');
+const pool = require('../config/database');
 
 // Endpoint para acceso por RFID
 router.get('/rfid/:rfid', async (req, res) => {

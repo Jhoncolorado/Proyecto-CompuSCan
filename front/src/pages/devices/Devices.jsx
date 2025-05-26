@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FaCheckCircle, FaTimesCircle, FaHourglassHalf, FaExclamationCircle } from 'react-icons/fa';
 import './Devices.css';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 
 const estadoBadge = (estado) => {
   if (estado === 'aprobado') return <span className="badge badge-success device-badge"><FaCheckCircle style={{marginRight:4}}/>Aprobado</span>;
@@ -21,14 +22,12 @@ const Devices = () => {
       try {
         setLoading(true);
         setError('');
-        let url = 'http://localhost:3000/api/dispositivos';
+        let url = '/api/dispositivos';
         if (user && (user.rol === 'aprendiz' || user.rol === 'instructor')) {
-          url = `http://localhost:3000/api/dispositivos/usuario/${user.id}`;
+          url = `/api/dispositivos/usuario/${user.id}`;
         }
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('Error al cargar dispositivos');
-        const data = await res.json();
-        setDevices(Array.isArray(data) ? data : []);
+        const res = await api.get(url);
+        setDevices(Array.isArray(res.data) ? res.data : []);
       } catch (err) {
         setError('No se pudieron cargar los dispositivos.');
       } finally {

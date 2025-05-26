@@ -1,5 +1,7 @@
 const usuarioModel = require('../models/usuarioModel');
 const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 // Función auxiliar para convertir base64 a formato adecuado para BYTEA
 const prepareImageForDB = (base64String) => {
@@ -22,6 +24,19 @@ const prepareImageForDB = (base64String) => {
         return null;
     }
 };
+
+// Almacenamiento temporal de tokens de recuperación (en memoria para demo)
+const passwordResetTokens = {};
+
+// Configuración de nodemailer usando variables de entorno
+const transporter = nodemailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    auth: {
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS
+    }
+});
 
 const usuarioController = {
     getAllUsuarios: async (req, res) => {
@@ -333,6 +348,77 @@ const usuarioController = {
                 error: 'Error en el segundo paso de registro',
                 details: error.message 
             });
+        }
+    },
+
+    changePassword: async (req, res) => {
+        try {
+            const { actual, nueva } = req.body;
+            const id = req.params.id;
+            if (!actual || !nueva) {
+                return res.status(400).json({ error: 'Debes enviar la contraseña actual y la nueva.' });
+            }
+            const usuario = await usuarioModel.getUsuarioById(id);
+            if (!usuario) {
+                return res.status(404).json({ error: 'Usuario no encontrado.' });
+            }
+            const contrasenaValida = await bcrypt.compare(actual, usuario.contrasena);
+            if (!contrasenaValida) {
+                return res.status(401).json({ error: 'La contraseña actual es incorrecta.' });
+            }
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(nueva, salt);
+            await usuarioModel.updateUsuario(id, { contrasena: hashedPassword });
+            res.json({ message: 'Contraseña actualizada exitosamente.' });
+        } catch (error) {
+            res.status(500).json({ error: 'Error al cambiar la contraseña', details: error.message });
+        }
+    },
+
+    forgotPassword: async (req, res) => {
+        try {
+            const { correo } = req.body;
+            if (!correo) return res.status(400).json({ error: 'Correo requerido' });
+            const usuario = await usuarioModel.getUsuarioByEmail(correo);
+            if (!usuario) return res.status(404).json({ error: 'No existe un usuario con ese correo' });
+            // Generar token seguro y temporal
+            const token = crypto.randomBytes(32).toString('hex');
+            // Guardar token en memoria (en producción usar DB o Redis) con expiración
+            passwordResetTokens[token] = { id: usuario.id, expires: Date.now() + 1000 * 60 * 30 };
+            // Enlace de recuperación
+            const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${token}`;
+            // Enviar correo
+            await transporter.sendMail({
+                from: process.env.MAIL_FROM || 'no-reply@compuscan.com',
+                to: correo,
+                subject: 'Recuperación de contraseña - CompuSCan',
+                html: `<p>Hola ${usuario.nombre},</p>
+<p>Recibimos una solicitud para restablecer tu contraseña. Haz clic en el siguiente enlace para crear una nueva contraseña:</p>
+<p><a href="${resetUrl}">${resetUrl}</a></p>
+<p>Si no solicitaste este cambio, ignora este correo.</p>
+<p>CompuSCan</p>`
+            });
+            res.json({ message: 'Correo de recuperación enviado. Revisa tu bandeja de entrada.' });
+        } catch (error) {
+            res.status(500).json({ error: 'Error enviando el correo de recuperación', details: error.message });
+        }
+    },
+
+    resetPassword: async (req, res) => {
+        try {
+            const { token, nueva } = req.body;
+            if (!token || !nueva) return res.status(400).json({ error: 'Token y nueva contraseña requeridos' });
+            const data = passwordResetTokens[token];
+            if (!data || data.expires < Date.now()) return res.status(400).json({ error: 'Token inválido o expirado' });
+            const usuario = await usuarioModel.getUsuarioById(data.id);
+            if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(nueva, salt);
+            await usuarioModel.updateUsuario(data.id, { contrasena: hashedPassword });
+            delete passwordResetTokens[token];
+            res.json({ message: 'Contraseña restablecida exitosamente.' });
+        } catch (error) {
+            res.status(500).json({ error: 'Error al restablecer la contraseña', details: error.message });
         }
     }
 };
