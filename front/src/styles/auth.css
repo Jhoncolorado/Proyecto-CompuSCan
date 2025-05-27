@@ -792,7 +792,7 @@
   min-height: 340px;
   background: #fff;
   border-radius: 22px;
-  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.18);
+  box-shadow: 0 12px 36px rgba(44, 62, 80, 0.22), 0 2px 8px #43a04722;
   border: 3px solid #43a047;
   display: flex;
   flex-direction: row;
@@ -802,8 +802,8 @@
   overflow: hidden;
   justify-content: center;
   padding-bottom: 80px;
+  font-family: 'Montserrat', 'Open Sans', Arial, sans-serif;
 }
-
 .carnet-real-logo {
   background: #43a047;
   display: flex;
@@ -814,7 +814,6 @@
   padding: 0 18px;
   border-right: 3px solid #388e3c;
 }
-
 .carnet-real-logo img {
   width: 80px;
   height: 80px;
@@ -824,7 +823,6 @@
   border: 2.5px solid #fff;
   box-shadow: 0 2px 8px #0002;
 }
-
 .carnet-real-content {
   flex: 1;
   display: flex;
@@ -835,8 +833,8 @@
   padding: 0 0 16px 0;
   min-height: 240px;
   position: relative;
+  gap: 0;
 }
-
 .carnet-divider {
   width: 2px;
   background: #e0e0e0;
@@ -845,61 +843,15 @@
   align-self: stretch;
   min-height: 180px;
 }
-
-.carnet-photo-shadow img {
-  box-shadow: 0 4px 16px #0002, 0 1.5px 4px #43a04733;
-  background: #fff;
-}
-
-.carnet-data-compact {
-  padding: 8px 12px 4px 12px !important;
-  margin-bottom: 0 !important;
-  font-size: 0.97rem !important;
-}
-
-.carnet-real {
-  box-shadow: 0 8px 32px rgba(44, 62, 80, 0.22), 0 2px 8px #43a04722;
-}
-
-.carnet-fecha-emision {
-  position: absolute;
-  right: 18px;
-  bottom: 8px;
-  font-size: 0.85rem;
-  color: #888;
-  font-style: italic;
-  z-index: 3;
-}
-
-.carnet-real-main {
-  flex: 2;
+.carnet-real-main, .carnet-real-device {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 24px 18px 12px 18px;
   min-width: 0;
 }
-
-.carnet-real-device {
-  flex: 1.2;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 24px 18px 12px 18px;
-  min-width: 0;
-  border-left: 2px solid #e0e0e0;
-}
-
-.carnet-real-user-photo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.carnet-real-user-photo img {
+.carnet-real-user-photo img, .carnet-real-device-photo img {
   width: 110px;
   height: 110px;
   border-radius: 50%;
@@ -908,47 +860,77 @@
   box-shadow: 0 2px 8px #0001;
   max-width: 110px;
   max-height: 110px;
+  margin-bottom: 10px;
+  background: #fff;
 }
-
 .carnet-real-device-photo img {
-  width: 110px;
-  height: 80px;
-  border-radius: 12px;
-  border: 2px solid #2196f3;
-  object-fit: cover;
-  box-shadow: 0 2px 8px #0001;
-  max-width: 110px;
-  max-height: 80px;
+  border: 3px solid #2196f3;
 }
-
-.carnet-real-title {
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #43a047;
-  letter-spacing: 2px;
-  margin-bottom: 6px;
-  text-align: center;
-}
-
-.carnet-real-user-name {
-  font-size: 1.18rem;
-  font-weight: 600;
-  margin-bottom: 4px;
+.carnet-real-user-name, .carnet-real-user-name-big {
+  font-size: 1.45rem;
+  font-weight: 800;
   color: #222;
+  margin-bottom: 8px;
   text-align: center;
+  letter-spacing: 1px;
+  line-height: 1.1;
 }
-
-.carnet-real-user-info {
-  background: #f1f8e9;
-  border-radius: 10px;
-  padding: 12px 18px 8px 18px;
+.carnet-real-user-info, .carnet-real-user-info-small, .carnet-real-device-info {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 18px 10px 18px;
   font-size: 1.08rem;
   color: #222;
   margin-bottom: 0;
-  box-shadow: 0 1px 4px #0001;
+  box-shadow: 0 2px 8px #0001;
   text-align: left;
+  border: 1.5px solid #e0e0e0;
+  min-width: 220px;
+  max-width: 320px;
+  width: 100%;
 }
-
+.carnet-real-user-info b, .carnet-real-user-info-small b, .carnet-real-device-info b {
+  color: #256029;
+  font-weight: 700;
+}
+.badge-estado {
+  display: inline-block;
+  background: linear-gradient(90deg, #43a047 80%, #388e3c 100%);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.98rem;
+  padding: 3px 14px;
+  border-radius: 16px;
+  margin-left: 6px;
+  margin-bottom: 2px;
+  box-shadow: 0 1px 4px #43a04722;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+}
+.badge-estado.aprobado {
+  background: linear-gradient(90deg, #43a047 80%, #388e3c 100%);
+}
+.badge-estado.pendiente {
+  background: linear-gradient(90deg, #ffc107 80%, #ffb300 100%);
+  color: #333;
+}
+.badge-estado.rechazado {
+  background: linear-gradient(90deg, #e53935 80%, #b71c1c 100%);
+}
+.badge-rol {
+  display: inline-block;
+  background: #2196f3;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.93rem;
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-left: 6px;
+  margin-bottom: 2px;
+  box-shadow: 0 1px 4px #2196f322;
+  letter-spacing: 0.5px;
+  vertical-align: middle;
+}
 .carnet-real-event {
   position: absolute;
   left: 0; right: 0; bottom: 0;
@@ -956,26 +938,39 @@
   font-size: 1.25rem;
   font-weight: bold;
   text-align: center;
-  padding: 12px 0 10px 0;
+  padding: 16px 0 14px 0;
   border-radius: 0 0 18px 18px;
   letter-spacing: 1px;
   border-top: 2px solid #43a047;
   z-index: 2;
   margin: 0;
+  background: #f8fafc;
+  box-shadow: 0 -2px 8px #43a04711;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-
 .carnet-real-event-entrada {
-  background: #c8e6c9;
+  background: linear-gradient(90deg, #c8e6c9 80%, #a5d6a7 100%);
   color: #256029;
   border-bottom: 3px solid #43a047;
 }
-
 .carnet-real-event-salida {
-  background: #ffcdd2;
+  background: linear-gradient(90deg, #ffcdd2 80%, #ef9a9a 100%);
   color: #b71c1c;
   border-bottom: 3px solid #e53935;
 }
-
+.carnet-fecha-emision {
+  font-size: 1.05rem;
+  color: #888;
+  font-style: italic;
+  margin-right: 32px;
+  margin-left: auto;
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
 @media (max-width: 1000px) {
   .carnet-real {
     flex-direction: column;
@@ -989,20 +984,15 @@
     flex-direction: column;
     align-items: stretch;
     min-height: 0;
+    padding: 0 0 16px 0;
   }
-}
-
-@media (max-width: 600px) {
-  .carnet-real {
-    max-width: 99vw;
+  .carnet-real-main, .carnet-real-device {
+    align-items: center;
+    padding: 18px 8px 8px 8px;
+  }
+  .carnet-real-user-info, .carnet-real-user-info-small, .carnet-real-device-info {
     min-width: 0;
-    border-radius: 10px;
-    padding-bottom: 56px;
-  }
-  .carnet-real-content {
-    flex-direction: column;
-    align-items: stretch;
-    min-height: 0;
+    max-width: 99vw;
   }
 }
 
