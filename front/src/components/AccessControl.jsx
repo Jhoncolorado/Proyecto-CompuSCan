@@ -66,7 +66,7 @@ const AccessControl = () => {
                 <div><b>Documento:</b> {data.usuario.documento}</div>
                 <div><b>Ficha:</b> {data.usuario.ficha}</div>
                 <div><b>Correo:</b> {data.usuario.correo}</div>
-                <div><b>Rol:</b> {data.usuario.rol}</div>
+                <div><b>Rol:</b> <span className="badge-rol">{data.usuario.rol}</span></div>
               </div>
             </div>
             <div className="carnet-divider"></div>
@@ -78,12 +78,18 @@ const AccessControl = () => {
                 <div><b>Equipo:</b> {data.dispositivo.nombre}</div>
                 <div><b>Tipo:</b> {data.dispositivo.tipo}</div>
                 <div><b>Serial:</b> {data.dispositivo.serial}</div>
-                <div><b>Estado:</b> {data.dispositivo.estado_validacion || 'Pendiente'}</div>
+                <div><b>Estado:</b> <span className={`badge-estado ${data.dispositivo.estado_validacion?.toLowerCase()}`}>{data.dispositivo.estado_validacion || 'Pendiente'}</span></div>
                 <div><b>RFID:</b> {data.dispositivo.rfid}</div>
               </div>
             </div>
           </div>
-          <div className={`carnet-real-event carnet-real-event-${data.tipoEvento === 'ENTRADA' ? 'entrada' : 'salida'}`}>{data.tipoEvento}</div>
+          <div className={`carnet-real-event carnet-real-event-${data.tipoEvento === 'ENTRADA' ? 'entrada' : 'salida'}`}
+            style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 32px'}}>
+            <span>{data.tipoEvento}</span>
+            <span className="carnet-fecha-emision">
+              Registro: {data.fechaHoraRegistro ? new Date(data.fechaHoraRegistro).toLocaleString() : new Date().toLocaleString()}
+            </span>
+          </div>
           <div className="carnet-fecha-emision">Emitido: {new Date().toLocaleDateString()}</div>
         </div>
       )}
