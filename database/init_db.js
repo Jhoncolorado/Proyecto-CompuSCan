@@ -5,11 +5,11 @@ const path = require('path');
 async function initializeDatabase() {
   // Configuración de la conexión a la base de datos
   const pool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'compuscansecurity',
-    password: '1234',
-    port: 5432
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
+    database: process.env.DB_NAME,
   });
 
   try {

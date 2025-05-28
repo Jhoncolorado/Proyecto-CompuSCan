@@ -10,15 +10,15 @@ try {
 async function createDatabaseIfNotExists() {
   // Conexión a PostgreSQL sin especificar una base de datos
   const client = new Client({
-    user: process.env.DB_USER || 'postgres',
-    host: process.env.DB_HOST || 'localhost',
-    password: process.env.DB_PASSWORD || '1234',
-    port: process.env.DB_PORT || 5432,
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
     database: 'postgres' // Base de datos por defecto de PostgreSQL
   });
 
   // El nombre de la base de datos a crear
-  const dbName = process.env.DB_NAME || 'compuscansecurity';
+  const dbName = process.env.DB_NAME;
 
   try {
     await client.connect();

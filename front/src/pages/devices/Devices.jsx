@@ -106,7 +106,22 @@ const Devices = () => {
                 <tbody>
                   {devices.map(device => (
                     <tr key={device.id}>
-                      <td>{device.foto ? <img src={device.foto} alt="foto" className="device-img" /> : <span className="device-noimg">(Sin imagen)</span>}</td>
+                      <td>
+                        {device.foto ? (
+                          <img 
+                            src={device.foto} 
+                            alt="foto" 
+                            className="device-img" 
+                            onError={(e) => {
+                              console.error("Error al cargar imagen:", e);
+                              e.target.onerror = null;
+                              e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                            }}
+                          />
+                        ) : (
+                          <span className="device-noimg">(Sin imagen)</span>
+                        )}
+                      </td>
                       <td>{device.nombre}</td>
                       <td>{device.tipo}</td>
                       <td>{device.serial}</td>

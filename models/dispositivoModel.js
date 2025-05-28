@@ -54,15 +54,19 @@ const dispositivoModel = {
     },
 
     createDispositivo: async ({ 
-        nombre, tipo, serial, rfid, foto, id_usuario
+        nombre, tipo, serial, rfid, foto, mimeType, id_usuario
     }) => {
         const query = `
             INSERT INTO dispositivo (
-                nombre, tipo, serial, rfid, foto, id_usuario
-            ) VALUES ($1, $2, $3, $4, $5, $6)
+                nombre, tipo, serial, rfid, foto, mime_type, id_usuario
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING *`;
-        const values = [nombre, tipo, serial, rfid, foto, id_usuario];
-        console.log('Insertando dispositivo con valores:', values);
+        const values = [nombre, tipo, serial, rfid, foto, mimeType, id_usuario];
+        console.log('Insertando dispositivo con valores:', { 
+            nombre, tipo, serial, rfid, 
+            foto: foto ? 'Foto presente (base64)' : 'Sin foto',
+            mimeType, id_usuario 
+        });
         const result = await pool.query(query, values);
         console.log('Dispositivo insertado:', result.rows[0]);
         return result.rows[0];
