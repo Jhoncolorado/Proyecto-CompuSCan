@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import '../styles/UserDevices.css';
 
-const UserDevices = ({ userId: propUserId, isAdminView }) => {
+const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
   const { user } = useAuth();
   const userId = propUserId || (user && user.id);
   const [devices, setDevices] = useState([]);
@@ -28,9 +28,13 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
     setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
   };
   const handleHideForm = () => {
-    setShowForm(false);
-    setEditId(null);
-    setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
+    if (onClose) {
+      onClose();
+    } else {
+      setShowForm(false);
+      setEditId(null);
+      setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
+    }
   };
 
   const canRegisterDevice = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
@@ -107,8 +111,12 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
         });
         setSuccessMessage('¡Dispositivo actualizado exitosamente!');
         setTimeout(() => {
-          setShowForm(false);
-          setEditId(null);
+          if (onClose) {
+            onClose();
+          } else {
+            setShowForm(false);
+            setEditId(null);
+          }
           setSuccessMessage('');
         }, 1500);
       } else {
@@ -123,7 +131,11 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
         });
         setSuccessMessage('¡Dispositivo registrado exitosamente!');
         setTimeout(() => {
-          setShowForm(false);
+          if (onClose) {
+            onClose();
+          } else {
+            setShowForm(false);
+          }
           setSuccessMessage('');
         }, 1500);
       }
@@ -139,8 +151,51 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
     }
   };
 
-  if (loading) return <div className="loading">Cargando dispositivos...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (loading && !onClose) return <div className="loading">Cargando dispositivos...</div>;
+  if (error && !onClose) return <div className="error">{error}</div>;
+
+  // Si se llama desde la página de dispositivos, solo mostrar el formulario
+  if (onClose) {
+    return (
+      <div className="add-device-form-modal">
+        <form className="add-device-form" onSubmit={handleFormSubmit}>
+          <h3>Registrar Dispositivo</h3>
+          {formError && <div className="error">{formError}</div>}
+          {successMessage && <div className="success">{successMessage}</div>}
+          <div className="form-group">
+            <label>Nombre del dispositivo:</label>
+            <input type="text" name="nombre" value={form.nombre} onChange={handleFormChange} required />
+          </div>
+          <div className="form-group">
+            <label>Tipo:</label>
+            <select name="tipo" value={form.tipo} onChange={handleFormChange} required>
+              <option value="">Seleccione tipo</option>
+              <option value="laptop">Laptop</option>
+              <option value="tablet">Tablet</option>
+              <option value="camera">Cámara</option>
+              <option value="monitor">Monitor</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Serial:</label>
+            <input type="text" name="serial" value={form.serial} onChange={handleFormChange} required />
+          </div>
+          <div className="form-group">
+            <label>Foto (opcional):</label>
+            <input type="file" name="foto" accept="image/*" onChange={handleFormChange} />
+          </div>
+          <div className="form-actions inline-buttons">
+            <button type="submit" className="add-device-button" disabled={formLoading}>
+              {formLoading ? 'Guardando...' : 'Guardar'}
+            </button>
+            <button type="button" className="add-device-button" onClick={handleHideForm} disabled={formLoading}>
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <div className="user-devices">
