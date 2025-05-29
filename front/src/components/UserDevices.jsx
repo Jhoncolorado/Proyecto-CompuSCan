@@ -31,9 +31,9 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
     if (onClose) {
       onClose();
     } else {
-      setShowForm(false);
-      setEditId(null);
-      setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
+    setShowForm(false);
+    setEditId(null);
+    setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
     }
   };
 
@@ -117,8 +117,8 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
           if (onClose) {
             onClose();
           } else {
-            setShowForm(false);
-            setEditId(null);
+          setShowForm(false);
+          setEditId(null);
           }
           setSuccessMessage('');
         }, 1500);
@@ -137,7 +137,7 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
           if (onClose) {
             onClose();
           } else {
-            setShowForm(false);
+          setShowForm(false);
           }
           setSuccessMessage('');
         }, 1500);
