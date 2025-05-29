@@ -92,6 +92,7 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
         return;
       }
       let fotoBase64 = null;
+      let mimeType = form.mimeType;
       if (form.foto) {
         fotoBase64 = await new Promise((resolve, reject) => {
           const reader = new FileReader();
@@ -99,6 +100,8 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
           reader.onerror = reject;
           reader.readAsDataURL(form.foto);
         });
+        // Extraer el mimeType del dataURL
+        mimeType = fotoBase64.split(';')[0].split(':')[1];
       }
       if (editId) {
         // Edición
@@ -107,7 +110,7 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
           tipo: form.tipo,
           serial: form.serial,
           foto: fotoBase64,
-          mimeType: form.mimeType
+          mimeType: mimeType
         });
         setSuccessMessage('¡Dispositivo actualizado exitosamente!');
         setTimeout(() => {
@@ -126,7 +129,7 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
           tipo: form.tipo,
           serial: form.serial,
           foto: fotoBase64,
-          mimeType: form.mimeType,
+          mimeType: mimeType,
           id_usuario: userId
         });
         setSuccessMessage('¡Dispositivo registrado exitosamente!');
@@ -235,6 +238,11 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
                     src={devices.find(d => d.id === editId).foto}
                     alt="Foto actual del equipo"
                     style={{ width: 120, height: 90, borderRadius: 10, objectFit: 'cover', border: '2px solid #2196f3', marginBottom: 10 }}
+                    onError={(e) => {
+                      console.error("Error al cargar imagen:", e);
+                      e.target.onerror = null;
+                      e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                    }}
                   />
                 ) : (
                   <span style={{ color: '#888' }}>(Sin imagen)</span>
@@ -262,6 +270,20 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
           {devices.map(device => (
             <div key={device.id} className="device-card">
               <h3>{device.nombre}</h3>
+              {device.foto && (
+                <div className="device-image-container">
+                  <img 
+                    src={device.foto} 
+                    alt={device.nombre} 
+                    className="device-card-img"
+                    onError={(e) => {
+                      console.error("Error al cargar imagen:", e);
+                      e.target.onerror = null;
+                      e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                    }}
+                  />
+                </div>
+              )}
               <div className="device-info-row">
                 <span className="device-info-label">Tipo:</span>
                 <span className="device-info-value">{device.tipo}</span>
