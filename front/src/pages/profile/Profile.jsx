@@ -158,7 +158,7 @@ const Profile = () => {
       {message && <div className="profile-success">{message}</div>}
       <div className="profile-card">
         <div className="profile-avatar-container">
-          <img className="profile-avatar" src={avatarPreview || '/default-avatar.png'} alt="avatar" />
+          <img className="profile-avatar-rect" src={avatarPreview || '/default-avatar.png'} alt="avatar" />
           {canChangeAvatar && (
             <label className="btn-avatar-upload" style={{ marginTop: '1rem', cursor: 'pointer' }}>
                 <span>Subir imagen</span>

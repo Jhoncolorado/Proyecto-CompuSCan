@@ -284,7 +284,7 @@ La navegación se implementa usando React Router v6 con las siguientes rutas pri
     <Route path="dashboard" element={<Home />} />
     <Route path="devices" element={<Devices />} />
     <Route path="users" element={<PrivateRoute requiredRole="administrador"><Users /></PrivateRoute>} />
-    <Route path="alerts" element={<Alerts />} />
+    <Route path="reports" element={<Reports />} />
     <Route path="history" element={<History />} />
     <Route path="profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
     <Route path="device-validation" element={<DeviceValidation />} />
@@ -672,3 +672,5 @@ const dispositivosService = {
 - Nombres de funciones y variables en camelCase
 - Archivos de componentes con extensión `.jsx`
 - Archivos de estilos con extensión `.css` o `.module.css` 
+
+En la sección de reportes, el tab 'Usuarios' ya muestra datos reales de la API /api/usuarios. Los demás tabs están listos para integración de datos reales (historial, casos, dispositivos, actividad). 

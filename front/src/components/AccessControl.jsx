@@ -10,6 +10,12 @@ const AccessControl = () => {
   // Mantener el input enfocado siempre
   React.useEffect(() => {
     if (inputRef.current) inputRef.current.focus();
+    // Asegura el foco en cualquier click
+    const focusInput = () => {
+      if (inputRef.current) inputRef.current.focus();
+    };
+    window.addEventListener('click', focusInput);
+    return () => window.removeEventListener('click', focusInput);
   }, [data, error]);
 
   const handleChange = (e) => {
@@ -36,7 +42,6 @@ const AccessControl = () => {
 
   return (
     <div className="access-bg access-bg-full">
-      <h2 className="access-title">Control de Acceso</h2>
       <form className="access-form" onSubmit={handleSubmit}>
         <input
           ref={inputRef}
@@ -44,7 +49,7 @@ const AccessControl = () => {
           value={rfid}
           onChange={handleChange}
           placeholder="Pase la tarjeta RFID..."
-          className="access-input"
+          className="rfid-invisible-input"
           autoFocus
         />
         <button type="submit" style={{ display: 'none' }}>Buscar</button>
@@ -52,45 +57,46 @@ const AccessControl = () => {
       <h2 className="carnet-main-title">CARNET DE ACCESO</h2>
       {error && <div style={{ color: 'red', margin: 10 }}>{error}</div>}
       {data && data.usuario && data.dispositivo && (
-        <div className="carnet-real">
-          <div className="carnet-real-logo">
-            <img src="/descarga.png" alt="Logo SENA" />
-          </div>
-          <div className="carnet-real-content">
-            <div className="carnet-real-main">
-              <div className="carnet-real-user-photo carnet-photo-shadow">
+        <div className="carnet-separado-wrapper">
+          {/* Tarjeta de Usuario estilo carnet SENA */}
+          <div className="carnet-tarjeta-sena">
+            <div className="carnet-sena-header">
+              <img src="/descarga.png" alt="Logo SENA" className="carnet-sena-logo" />
+              <div className="carnet-sena-rol">APRENDIZ</div>
+            </div>
+            <div className="carnet-sena-divider"></div>
+            <div className="carnet-sena-body">
+              <div className="carnet-sena-info">
+                <div className="carnet-sena-nombre">{data.usuario.nombre}</div>
+                <div className="carnet-sena-dato"><b>C.C:</b> {data.usuario.documento}</div>
+                <div className="carnet-sena-dato"><b>Ficha:</b> {data.usuario.ficha}</div>
+                <div className="carnet-sena-dato"><b>Correo:</b> {data.usuario.correo}</div>
+                <div className="carnet-sena-dato"><b>RH:</b> {data.usuario.rh || '-'}</div>
+              </div>
+              <div className="carnet-sena-foto">
                 <img src={data.usuario.foto || '/images/default-avatar.png'} alt="Foto usuario" />
               </div>
-              <div className="carnet-real-user-name carnet-real-user-name-big">{data.usuario.nombre}</div>
-              <div className="carnet-real-user-info carnet-real-user-info-small carnet-data-compact">
-                <div><b>Documento:</b> {data.usuario.documento}</div>
-                <div><b>Ficha:</b> {data.usuario.ficha}</div>
-                <div><b>Correo:</b> {data.usuario.correo}</div>
-                <div><b>Rol:</b> <span className="badge-rol">{data.usuario.rol}</span></div>
-              </div>
             </div>
-            <div className="carnet-divider"></div>
-            <div className="carnet-real-device">
-              <div className="carnet-real-device-photo carnet-photo-shadow">
-                <img src={data.dispositivo.foto || '/images/default-device.png'} alt="Foto equipo" />
-              </div>
-              <div className="carnet-real-device-info carnet-data-compact">
-                <div><b>Equipo:</b> {data.dispositivo.nombre}</div>
-                <div><b>Tipo:</b> {data.dispositivo.tipo}</div>
-                <div><b>Serial:</b> {data.dispositivo.serial}</div>
-                <div><b>Estado:</b> <span className={`badge-estado ${data.dispositivo.estado_validacion?.toLowerCase()}`}>{data.dispositivo.estado_validacion || 'Pendiente'}</span></div>
-                <div><b>RFID:</b> {data.dispositivo.rfid}</div>
-              </div>
+            <div className="carnet-sena-footer">
+              <div>Regional Quindío</div>
+              <div className="carnet-sena-centro">Centro de Comercio y Turismo</div>
+              <div>Tecnólogo Análisis y Desarrollo de Software</div>
+              <div>Grupo No. {data.usuario.ficha}</div>
             </div>
           </div>
-          <div className={`carnet-real-event carnet-real-event-${data.tipoEvento === 'ENTRADA' ? 'entrada' : 'salida'}`}
-            style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 32px'}}>
-            <span>{data.tipoEvento}</span>
-            <span className="carnet-fecha-emision">
-              Registro: {data.fechaHoraRegistro ? new Date(data.fechaHoraRegistro).toLocaleString() : new Date().toLocaleString()}
-            </span>
+          {/* Tarjeta de Equipo (sencilla) */}
+          <div className="carnet-tarjeta carnet-tarjeta-equipo">
+            <div className="carnet-tarjeta-foto">
+              <img src={data.dispositivo.foto || '/images/default-device.png'} alt="Foto equipo" />
+            </div>
+            <div className="carnet-tarjeta-info">
+              <div><b>Equipo:</b> {data.dispositivo.nombre}</div>
+              <div><b>Tipo:</b> {data.dispositivo.tipo}</div>
+              <div><b>Serial:</b> {data.dispositivo.serial}</div>
+              <div><b>Estado:</b> <span className={`badge-estado ${data.dispositivo.estado_validacion?.toLowerCase()}`}>{data.dispositivo.estado_validacion || 'Pendiente'}</span></div>
+              <div><b>RFID:</b> {data.dispositivo.rfid}</div>
+            </div>
           </div>
-          <div className="carnet-fecha-emision">Emitido: {new Date().toLocaleDateString()}</div>
         </div>
       )}
     </div>

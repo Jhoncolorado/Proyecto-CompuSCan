@@ -21,17 +21,21 @@ const FormError = ({ message, visible = true, className = '' }) => {
         alignItems: 'center',
         gap: '0.5rem',
         color: '#d32f2f',
-        fontSize: '0.875rem',
+        fontSize: '0.95rem',
         marginTop: '0.25rem',
         marginBottom: '0.5rem',
-        padding: '0.5rem',
-        backgroundColor: 'rgba(211, 47, 47, 0.08)',
-        borderRadius: '4px',
+        padding: '0.65rem 1rem',
+        background: 'linear-gradient(90deg, #ffebee 0%, #fff 100%)',
+        borderLeft: '4px solid #d32f2f',
+        borderRadius: '6px',
+        boxShadow: '0 2px 8px rgba(211,47,47,0.07)',
+        animation: 'fadeInError 0.35s cubic-bezier(0.4,0,0.2,1)',
         transition: 'all 0.2s ease'
       }}
     >
-      <FaExclamationTriangle style={{ flexShrink: 0 }} />
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{flexShrink:0}}><circle cx="12" cy="12" r="12" fill="#d32f2f"/><path d="M12 7V13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="16" r="1" fill="white"/></svg>
       <span>{message}</span>
+      <style>{`@keyframes fadeInError { from { opacity: 0; transform: translateY(-8px);} to { opacity: 1; transform: translateY(0);} }`}</style>
     </div>
   );
 };

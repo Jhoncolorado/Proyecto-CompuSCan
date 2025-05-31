@@ -367,6 +367,8 @@ const Users = () => {
                     <div className="form-control"><label className="label">Documento</label><input type="text" name="documento" value={formData.documento} onChange={handleChange} disabled={submitting} className="input input-bordered" /></div>
                     <div className="form-control"><label className="label">Tipo de Documento</label><input type="text" name="tipo_documento" value={formData.tipo_documento} onChange={handleChange} disabled={submitting} className="input input-bordered" /></div>
                     <div className="form-control"><label className="label">RH</label><input type="text" name="rh" value={formData.rh} onChange={handleChange} disabled={submitting} maxLength="3" placeholder="Ej: O+, A-, B+, AB+" className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">Foto</label>
+                    </div>
                     <div className="form-control"><label className="label">Estado</label><select name="estado" value={formData.estado} onChange={handleChange} required disabled={submitting} className="select select-bordered"><option value="activo">Activo</option><option value="inactivo">Inactivo</option><option value="pendiente">Pendiente</option></select></div>
                     <div className="form-control form-control-full"><label className="label">Observación</label><textarea name="observacion" value={formData.observacion} onChange={handleChange} disabled={submitting} placeholder="Observaciones adicionales" className="textarea textarea-bordered"></textarea></div>
                     {formError && (<div className="alert alert-error shadow-lg form-control-full">{formError}</div>)}

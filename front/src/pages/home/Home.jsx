@@ -14,7 +14,9 @@ import {
   FaIdCard,
   FaCrown,
   FaRegClock,
-  FaBriefcase
+  FaBriefcase,
+  FaHistory,
+  FaClipboardList
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import './home.css';
@@ -387,7 +389,7 @@ const Home = () => {
       </div>
       
       {/* Secondary Content */}
-      <div className="dashboard-panels">
+      <div className="dashboard-panels" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '1.8rem' }}>
         {/* Device Status */}
         <div className="dashboard-panel device-status">
           <h3 className="panel-title">Estado de Dispositivos</h3>
@@ -421,70 +423,48 @@ const Home = () => {
           <h3 className="panel-title">Actividad Reciente</h3>
           <div className="activity-list">
             {stats?.actividadReciente?.length > 0 ? (
-              stats.actividadReciente.map(activity => (
-                <div key={activity.id} className="activity-item-card">
-                  <div className={`activity-type ${activity.tipo.toLowerCase()}`}>
-                    {activity.tipo === "ENTRADA" ? <FaSignInAlt /> : <FaSignOutAlt />}
+              stats.actividadReciente.map(activity => {
+                const tipo = activity.descripcion?.toLowerCase().includes('entrada') ? 'entrada' : 'salida';
+                return (
+                  <div key={activity.id_historial} className={`activity-item-card`}>
+                    <div className={`activity-type ${tipo}`}>
+                      {tipo === "entrada" ? <FaSignInAlt /> : <FaSignOutAlt />}
+                    </div>
+                    <div className="activity-details">
+                      <div className="activity-user">{activity.descripcion}</div>
+                      <div className="activity-device">{activity.dispositivo_nombre}</div>
+                    </div>
+                    <div className="activity-time">{activity.fecha_hora}</div>
                   </div>
-                  <div className="activity-details">
-                    <div className="activity-user">{activity.usuario}</div>
-                    <div className="activity-device">{activity.dispositivo}</div>
-                  </div>
-                  <div className="activity-time">{activity.fecha}</div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <p className="no-data">No hay actividad reciente</p>
             )}
           </div>
           <Link to="/history" className="view-all-link">Ver todo el historial</Link>
         </div>
-        
-        {/* Alerts */}
-        <div className="dashboard-panel alerts">
-          <h3 className="panel-title">Alertas Recientes</h3>
-          <div className="alerts-list">
-            {stats?.alertas?.length > 0 ? (
-              stats.alertas.map(alerta => (
-                <div key={alerta.id} className={`alert-item ${alerta.nivel}`}>
-                  <div className="alert-icon">
-                    <FaBell />
-                  </div>
-                  <div className="alert-details">
-                    <div className="alert-message">{alerta.mensaje}</div>
-                    <div className="alert-time">{alerta.fecha}</div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="no-alerts">
-                <FaCheckCircle />
-                <p>No hay alertas activas</p>
-        </div>
-      )}
-          </div>
-        </div>
       </div>
       
       {/* Quick Access */}
-      <div className="quick-access">
-        <h3 className="section-title">Acceso Rápido</h3>
-        <div className="quick-links">
-          <Link to="/users" className="quick-link">
-            <FaUsers />
-            <span>Usuarios</span>
+      <div className="quick-access" style={{ marginTop: '2rem' }}>
+        <h3 className="section-title" style={{ fontSize: '1.3rem', color: '#2e7d32', fontWeight: 700, marginBottom: '1.2rem' }}>Acceso Rápido</h3>
+        <div className="quick-links" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.2rem' }}>
+          <Link to="/users" className="quick-link" style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(44,62,80,0.07)', padding: '2.2rem 1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#2e7d32', fontWeight: 600, fontSize: '1.1rem', transition: 'box-shadow 0.2s', border: '1.5px solid #e0e0e0' }}>
+            <FaUsers style={{ fontSize: '2.2rem', marginBottom: '0.7rem' }} />
+            Usuarios
           </Link>
-          <Link to="/devices" className="quick-link">
-            <FaDesktop />
-            <span>Dispositivos</span>
+          <Link to="/devices" className="quick-link" style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(44,62,80,0.07)', padding: '2.2rem 1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#2e7d32', fontWeight: 600, fontSize: '1.1rem', transition: 'box-shadow 0.2s', border: '1.5px solid #e0e0e0' }}>
+            <FaDesktop style={{ fontSize: '2.2rem', marginBottom: '0.7rem' }} />
+            Dispositivos
           </Link>
-          <Link to="/history" className="quick-link">
-            <FaChartLine />
-            <span>Historial</span>
+          <Link to="/history" className="quick-link" style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(44,62,80,0.07)', padding: '2.2rem 1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#2e7d32', fontWeight: 600, fontSize: '1.1rem', transition: 'box-shadow 0.2s', border: '1.5px solid #e0e0e0' }}>
+            <FaChartLine style={{ fontSize: '2.2rem', marginBottom: '0.7rem' }} />
+            Historial
           </Link>
-          <Link to="/alerts" className="quick-link">
-            <FaBell />
-            <span>Alertas</span>
+          <Link to="/reports" className="quick-link" style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(44,62,80,0.07)', padding: '2.2rem 1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#2e7d32', fontWeight: 600, fontSize: '1.1rem', transition: 'box-shadow 0.2s', border: '1.5px solid #e0e0e0' }}>
+            <FaClipboardList style={{ fontSize: '2.2rem', marginBottom: '0.7rem' }} />
+            Reportes
           </Link>
         </div>
       </div>

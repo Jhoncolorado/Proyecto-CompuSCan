@@ -6,7 +6,7 @@ import Login from './pages/auth/Login';
 import Home from './pages/home/Home';
 import Devices from './pages/devices/Devices';
 import Users from './pages/users/Users';
-import Alerts from './pages/alerts/Alerts';
+import Reports from './pages/alerts/Alerts';
 import History from './pages/history/History';
 import Programs from './pages/programs/Programs';
 import Cards from './pages/cards/Cards';
@@ -104,7 +104,7 @@ function App() {
                   </PrivateRoute>
                 } 
               />
-              <Route path="alerts" element={<Alerts />} />
+              <Route path="reports" element={<Reports />} />
               <Route path="history" element={<History />} />
               <Route path="programs" element={<Programs />} />
               <Route path="cards" element={<Cards />} />

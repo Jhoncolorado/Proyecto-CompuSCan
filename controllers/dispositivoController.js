@@ -36,6 +36,7 @@ const validarFotos = (fotos) => {
     return { valido: true };
 };
 
+
 const dispositivoController = {
     getAllDispositivos: async (req, res) => {
         try {
@@ -77,7 +78,7 @@ const dispositivoController = {
             if (foto && typeof foto === 'string' && foto.startsWith('data:')) {
                 fotoProcesada = foto.split(',')[1];
             }
-            // Crear el dispositivo
+            // Quitar validación Google Vision: solo guardar
             const newDevice = await dispositivoModel.createDispositivo({
                 nombre,
                 tipo: tipo.toLowerCase(),

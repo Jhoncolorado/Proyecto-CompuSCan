@@ -30,7 +30,7 @@ const Sidebar = () => {
           <NavLink to="/home" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaHome /> <span>Inicio</span></NavLink>
           <NavLink to="/users" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaUsers /> <span>Usuarios</span></NavLink>
           <NavLink to="/devices" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaDesktop /> <span>Dispositivos</span></NavLink>
-          <NavLink to="/alerts" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaBell /> <span>Alertas</span></NavLink>
+          <NavLink to="/reports" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaClipboardList /> <span>Reportes</span></NavLink>
           <NavLink to="/history" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaHistory /> <span>Historial</span></NavLink>
           <NavLink to="/programs" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaClipboardList /> <span>Programas</span></NavLink>
           <NavLink to="/profile" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaUserCog /> <span>Mi Perfil</span></NavLink>

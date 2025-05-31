@@ -34,6 +34,7 @@ const Login = () => {
   const [showRegisterConfirm, setShowRegisterConfirm] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState({ strength: 0, message: '' });
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [registerPhotoPreview, setRegisterPhotoPreview] = useState('');
 
   const handleTabChange = (tab) => {
     if (tab === activeTab) return;
@@ -183,7 +184,7 @@ const Login = () => {
     try {
       await login(loginData);
     } catch (err) {
-      setErrors({ general: err.message || 'Error al iniciar sesión' });
+      setErrors({ general: 'Correo o contraseña incorrectos. Por favor, verifica tus datos e inténtalo de nuevo.' });
     } finally {
       setLoading(false);
     }
@@ -308,7 +309,8 @@ const Login = () => {
         rh: registerData.rh || null,
         ficha: registerData.ficha || null,
         observacion: registerData.observacion || null,
-        estado: 'activo'
+        estado: 'activo',
+        foto: registerData.foto || null
       };
 
       console.log('Enviando datos de registro:', userData); // Para debugging
@@ -661,19 +663,19 @@ const Login = () => {
                       />
                     </div>
                 
-                <div className="form-group">
-                  <label htmlFor="ficha">
-                    Número de ficha
-                  </label>
-                      <input
-                        type="text"
-                    id="ficha"
-                        name="ficha"
-                        value={registerData.ficha}
-                        onChange={handleRegisterChange}
-                    placeholder="Para aprendices"
-                      />
-                    </div>
+                {registerData.rol === 'aprendiz' && (
+                  <div className="form-group">
+                    <label htmlFor="ficha">Número de ficha</label>
+                    <input
+                      type="text"
+                      id="ficha"
+                      name="ficha"
+                      value={registerData.ficha}
+                      onChange={handleRegisterChange}
+                      placeholder="Para aprendices"
+                    />
+                  </div>
+                )}
               </div>
               
               <div className="form-group">
@@ -686,6 +688,32 @@ const Login = () => {
                   placeholder="Observaciones adicionales (opcional)"
                   rows="3"
                 ></textarea>
+              </div>
+              
+              <div className="form-group">
+                <label htmlFor="foto">Foto de perfil (opcional)</label>
+                <input
+                  type="file"
+                  id="foto"
+                  name="foto"
+                  accept="image/*"
+                  onChange={e => {
+                    const file = e.target.files[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setRegisterPhotoPreview(reader.result);
+                        setRegisterData({ ...registerData, foto: reader.result });
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+                {registerPhotoPreview && (
+                  <div style={{ marginTop: 8 }}>
+                    <img src={registerPhotoPreview} alt="Preview" style={{ maxHeight: 80, borderRadius: '50%' }} />
+                  </div>
+                )}
               </div>
               
               {success && <div className="auth-success">{success}</div>}

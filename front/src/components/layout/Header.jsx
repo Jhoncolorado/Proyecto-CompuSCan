@@ -9,7 +9,7 @@ const menuItems = [
   { path: '/home', label: 'Inicio' },
   { path: '/users', label: 'Usuarios' },
   { path: '/devices', label: 'Dispositivos' },
-  { path: '/alerts', label: 'Alertas' },
+  { path: '/reports', label: 'Reportes' },
   { path: '/history', label: 'Historial' },
   { path: '/device-validation', label: 'Validación de Dispositivos' }
 ];
