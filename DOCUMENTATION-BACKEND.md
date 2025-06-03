@@ -515,72 +515,85 @@ module.exports = {
 
 ---
 
-## Integración RFID
+## Integración RFID (Ampliada)
 
-El sistema integra tecnología RFID para el control de acceso de dispositivos:
+### Flujo de Asignación y Validación de RFID
 
-### Endpoint de Acceso RFID
+**1. Asignación de RFID a un dispositivo:**
 
-```javascript
-// routes/dispositivoRoutes.js
-router.post('/acceso-rfid', async (req, res) => {
-  try {
-    const { rfid } = req.body;
-    
-    // Buscar el dispositivo por RFID
-    const dispositivo = await dispositivoModel.getByRFID(rfid);
-    if (!dispositivo) {
-      return res.status(404).json({ 
-        success: false, 
-        message: 'No se encontró un dispositivo con ese RFID' 
-      });
-    }
+- El admin/validador accede a la pantalla de validación de dispositivos.
+- Selecciona un dispositivo pendiente y da clic en "Validar/Asignar RFID".
+- Pasa la tarjeta RFID por el lector.
+- El frontend envía una petición PUT a `/api/dispositivos/:id` con el campo `rfid` y `estado_validacion: 'aprobado'`.
+- El backend:
+    - Verifica que el RFID no esté asignado a otro dispositivo.
+    - Actualiza el dispositivo con el nuevo RFID y cambia el estado a "aprobado".
+    - Registra el evento en la tabla `historial_dispositivo`.
+- El frontend muestra confirmación y el dispositivo queda validado.
 
-    // Buscar el usuario asociado
-    const usuario = await usuarioModel.getById(dispositivo.id_usuario);
+**Diagrama de flujo:**
 
-    // Determinar si es entrada o salida
-    const ultimoEvento = await historialModel.getLastByDispositivo(dispositivo.id_dispositivo);
-    
-    let tipoEvento = 'ENTRADA';
-    if (ultimoEvento && ultimoEvento.descripcion.includes('ENTRADA')) {
-      tipoEvento = 'SALIDA';
-    }
-    
-    // Registrar evento en historial
-    const descripcion = `Acceso autorizado: ${tipoEvento} - RFID: ${rfid} - Usuario: ${usuario.nombre}`;
-    await historialModel.create({
-      descripcion,
-      id_dispositivo: dispositivo.id_dispositivo
-    });
-
-    // Respuesta exitosa
-    res.json({
-      success: true,
-      data: {
-        usuario,
-        dispositivo,
-        tipoEvento
-      },
-      message: `Acceso autorizado: ${tipoEvento}`
-    });
-  } catch (error) {
-    console.error('Error en acceso RFID:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: { message: 'Error al procesar acceso RFID' } 
-    });
-  }
-});
+```
+[Admin/Validador] -> [Pantalla de Validación] -> [PUT /api/dispositivos/:id]
+    -> [Verifica RFID único]
+    -> [Actualiza dispositivo]
+    -> [Registra en historial]
+    -> [Respuesta OK]
 ```
 
-### Lector RFID
+**Ejemplo de payload:**
+```json
+{
+  "rfid": "1234567890ABCDEF",
+  "estado_validacion": "aprobado"
+}
+```
 
-El sistema está diseñado para integrarse con lectores RFID físicos mediante:
+**Respuesta exitosa:**
+```json
+{
+  "message": "Dispositivo actualizado exitosamente",
+  "dispositivo": { ... }
+}
+```
 
-1. **API REST**: Los lectores envían solicitudes HTTP al endpoint `/api/dispositivos/acceso-rfid`
-2. **WebSockets**: Para actualizaciones en tiempo real de accesos (opcional)
-3. **Aplicación de escritorio**: Interfaz para operadores de control de acceso
+**2. Control de acceso con RFID:**
+
+- El usuario pasa la tarjeta RFID por el lector.
+- El frontend envía el RFID al endpoint POST `/api/dispositivos/acceso-rfid`.
+- El backend busca el dispositivo y el usuario asociado, valida el acceso y registra la entrada/salida en el historial.
+- El backend responde con los datos del usuario, dispositivo, nombre del programa y tipo de evento (entrada/salida).
+
+**Ejemplo de payload:**
+```json
+{
+  "rfid": "1234567890ABCDEF"
+}
+```
+
+**Respuesta exitosa:**
+```json
+{
+  "usuario": { ... },
+  "dispositivo": { ... },
+  "nombrePrograma": "Tecnología en Análisis y Desarrollo de Sistemas de Información",
+  "tipoEvento": "ENTRADA",
+  "mensaje": "Acceso autorizado: ENTRADA"
+}
+```
+
+### Relación Usuario-Dispositivo-RFID
+
+- Cada dispositivo tiene un campo `rfid` único y un `id_usuario` que lo asocia a un usuario.
+- El historial de movimientos se registra en la tabla `historial_dispositivo`.
+- El acceso por RFID siempre valida la relación y registra el evento.
+
+### Buenas Prácticas y Recomendaciones
+- Validar siempre la unicidad del RFID antes de asignar.
+- Registrar todos los eventos de acceso en el historial.
+- Proteger los endpoints con autenticación JWT.
+- En producción, usar HTTPS y variables de entorno seguras.
+- Realizar backups periódicos de la base de datos.
 
 ---
 

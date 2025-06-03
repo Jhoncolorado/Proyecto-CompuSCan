@@ -189,23 +189,9 @@ router.delete('/:id', dispositivoController.deleteDispositivo);
  */
 router.get('/usuario/:usuarioId', dispositivoController.getDispositivosByUsuario);
 
-router.get('/acceso/rfid/:rfid', async (req, res) => {
-  try {
-    const { rfid } = req.params;
-    const dispositivo = await require('../models/dispositivoModel').getDispositivoByRFID(rfid);
-    if (!dispositivo) {
-      return res.status(404).json({ message: 'No se encontró un dispositivo con ese RFID' });
-    }
-    // Trae los datos del usuario asociado
-    const usuario = await require('../models/usuarioModel').getUsuarioById(dispositivo.id_usuario);
-    res.json({ usuario, dispositivo });
-  } catch (error) {
-    res.status(500).json({ message: 'Error al buscar por RFID', error: error.message });
-  }
-});
-
 // Acceso por RFID (nuevo endpoint POST)
 router.post('/acceso-rfid', async (req, res) => {
+  console.log('DEBUG: Entró al endpoint POST /acceso-rfid');
   try {
     const { rfid } = req.body;
     // Buscar el dispositivo por RFID
@@ -219,12 +205,23 @@ router.post('/acceso-rfid', async (req, res) => {
     const usuarioRes = await pool.query('SELECT * FROM usuario WHERE id = $1', [dispositivo.id_usuario]);
     const usuario = usuarioRes.rows[0];
 
+    // Buscar el nombre del programa usando usuario.id_programa
+    let nombrePrograma = null;
+    if (usuario && usuario.id_programa) {
+      const programaRes = await pool.query('SELECT nombre_programa FROM programas WHERE id = $1', [usuario.id_programa]);
+      if (programaRes.rows.length > 0) {
+        nombrePrograma = programaRes.rows[0].nombre_programa;
+      }
+    }
+
     // --- Asegurar que las fotos estén en base64 (data:image/...) ---
     if (usuario && usuario.foto) {
+      // IMPORTANTE: Esta conversión es necesaria para que el frontend muestre la foto correctamente
       usuario.foto = 'data:image/jpeg;base64,' + Buffer.from(usuario.foto).toString('base64');
     }
     if (dispositivo && dispositivo.foto) {
       const mime = dispositivo.mime_type || dispositivo.mimeType || 'image/jpeg';
+      // IMPORTANTE: Esta conversión es necesaria para que el frontend muestre la foto del dispositivo correctamente
       dispositivo.foto = `data:${mime};base64,` + Buffer.from(dispositivo.foto).toString('base64');
     }
     // -------------------------------------------------------------
@@ -247,15 +244,56 @@ router.post('/acceso-rfid', async (req, res) => {
     );
 
     console.log(`[ACCESO] ${descripcion} - Dispositivo: ${dispositivo.nombre}`);
+    // Debug: mostrar el nombre del programa antes de responder
+    console.log('DEBUG nombrePrograma:', nombrePrograma);
 
     res.json({
       usuario,
       dispositivo,
+      nombrePrograma,
       tipoEvento,
       mensaje: `Acceso autorizado: ${tipoEvento}`
     });
   } catch (error) {
     console.error('[ERROR] Error en acceso RFID:', error);
+    res.status(500).json({ message: 'Error al buscar por RFID', error: error.message });
+  }
+});
+
+// Acceso por RFID (GET, para compatibilidad)
+router.get('/acceso/rfid/:rfid', async (req, res) => {
+  console.log('DEBUG: Entró al endpoint GET /acceso/rfid/:rfid');
+  try {
+    const { rfid } = req.params;
+    const dispositivo = await require('../models/dispositivoModel').getDispositivoByRFID(rfid);
+    if (!dispositivo) {
+      return res.status(404).json({ message: 'No se encontró un dispositivo con ese RFID' });
+    }
+    // Trae los datos del usuario asociado
+    const usuario = await require('../models/usuarioModel').getUsuarioById(dispositivo.id_usuario);
+
+    // Buscar el nombre del programa usando usuario.id_programa
+    let nombrePrograma = null;
+    if (usuario && usuario.id_programa) {
+      // NOTA: Aquí usamos pool directamente para obtener el nombre del programa
+      const programaRes = await pool.query('SELECT nombre_programa FROM programas WHERE id = $1', [usuario.id_programa]);
+      if (programaRes.rows.length > 0) {
+        nombrePrograma = programaRes.rows[0].nombre_programa;
+      }
+    }
+    // --- Asegurar que las fotos estén en base64 (data:image/...) ---
+    if (usuario && usuario.foto) {
+      usuario.foto = 'data:image/jpeg;base64,' + Buffer.from(usuario.foto).toString('base64');
+    }
+    if (dispositivo && dispositivo.foto) {
+      const mime = dispositivo.mime_type || dispositivo.mimeType || 'image/jpeg';
+      dispositivo.foto = `data:${mime};base64,` + Buffer.from(dispositivo.foto).toString('base64');
+    }
+    // -------------------------------------------------------------
+    // Debug: mostrar el nombre del programa antes de responder
+    console.log('DEBUG nombrePrograma (GET):', nombrePrograma);
+    res.json({ usuario, dispositivo, nombrePrograma });
+  } catch (error) {
     res.status(500).json({ message: 'Error al buscar por RFID', error: error.message });
   }
 });

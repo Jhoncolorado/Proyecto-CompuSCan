@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import api from '../services/api';
+import QRCode from 'react-qr-code';
 
 const AccessControl = () => {
   const [rfid, setRfid] = useState('');
@@ -58,30 +59,38 @@ const AccessControl = () => {
       {error && <div style={{ color: 'red', margin: 10 }}>{error}</div>}
       {data && data.usuario && data.dispositivo && (
         <div className="carnet-separado-wrapper">
-          {/* Tarjeta de Usuario estilo carnet SENA */}
-          <div className="carnet-tarjeta-sena">
-            <div className="carnet-sena-header">
-              <img src="/descarga.png" alt="Logo SENA" className="carnet-sena-logo" />
-              <div className="carnet-sena-rol">APRENDIZ</div>
-            </div>
-            <div className="carnet-sena-divider"></div>
-            <div className="carnet-sena-body">
-              <div className="carnet-sena-info">
-                <div className="carnet-sena-nombre">{data.usuario.nombre}</div>
-                <div className="carnet-sena-dato"><b>C.C:</b> {data.usuario.documento}</div>
-                <div className="carnet-sena-dato"><b>Ficha:</b> {data.usuario.ficha}</div>
-                <div className="carnet-sena-dato"><b>Correo:</b> {data.usuario.correo}</div>
-                <div className="carnet-sena-dato"><b>RH:</b> {data.usuario.rh || '-'}</div>
+          {/* Tarjeta de Usuario estilo carnet SENA FÍSICO */}
+          <div className="carnet-tarjeta-sena carnet-fisico">
+            <div className="carnet-fisico-header">
+              <div className="carnet-fisico-logo-aprendiz">
+                <img src="/images.png" alt="Logo SENA" className="carnet-fisico-logo" />
+                <div className="carnet-fisico-aprendiz" style={{ color: '#2e7d32' }}>APRENDIZ</div>
               </div>
-              <div className="carnet-sena-foto">
-                <img src={data.usuario.foto || '/images/default-avatar.png'} alt="Foto usuario" />
+              <div className="carnet-fisico-foto">
+                <img
+                  src={data.usuario.foto || '/images/default-avatar.png'}
+                  alt="Foto usuario"
+                  className="carnet-fisico-foto-img"
+                />
               </div>
             </div>
-            <div className="carnet-sena-footer">
-              <div>Regional Quindío</div>
-              <div className="carnet-sena-centro">Centro de Comercio y Turismo</div>
-              <div>Tecnólogo Análisis y Desarrollo de Software</div>
-              <div>Grupo No. {data.usuario.ficha}</div>
+            <div className="carnet-fisico-divider" style={{ background: '#2e7d32' }}></div>
+            <div className="carnet-fisico-info">
+              <div className="carnet-fisico-nombre" style={{ color: '#2e7d32' }}>{data.usuario.nombre}</div>
+              <div className="carnet-fisico-dato"><b>C.C:</b> {data.usuario.documento} &nbsp; <b>RH:</b> {data.usuario.rh || '-'}</div>
+              <div className="carnet-fisico-dato">Regional Quindío</div>
+              <div className="carnet-fisico-dato" style={{ color: '#2e7d32', fontWeight: 'bold' }}>{data.nombrePrograma || 'Programa de formación no registrado'}</div>
+              <div className="carnet-fisico-dato">Grupo No. {data.usuario.ficha}</div>
+              <div style={{ marginTop: '1.2rem', display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <QRCode
+                  value={`http://localhost:5173/usuario/${data.usuario.documento}`}
+                  size={140}
+                  bgColor="#fff"
+                  fgColor="#2e7d32"
+                  level="H"
+                  style={{ background: '#fff', padding: 8, borderRadius: 8 }}
+                />
+              </div>
             </div>
           </div>
           {/* Tarjeta de Equipo (sencilla) */}

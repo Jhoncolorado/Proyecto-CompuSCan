@@ -23,6 +23,8 @@ import { UserHistory } from './pages/history/History';
 import './styles/PageTransition.css';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
+import UserProfile from './pages/users/UserProfile';
+import LandingPage from './pages/LandingPage';
 
 // Componente de carga para Suspense
 const LoadingFallback = () => (
@@ -57,33 +59,18 @@ const router = {
   }
 };
 
-function IndexRedirect() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (user) {
-      if (user.rol === 'aprendiz' || user.rol === 'instructor') {
-        navigate('/home-user', { replace: true });
-      } else {
-        navigate('/dashboard', { replace: true });
-      }
-    }
-  }, [user, navigate]);
-
-  return null;
-}
-
 function App() {
   return (
     <BrowserRouter {...router}>
       <AuthProvider>
         <Suspense fallback={<LoadingFallback />}>
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<LandingOrRedirect />} />
+            <Route path="/login" element={<LoginRedirectIfAuth />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/acceso" element={<AccessControl />} />
+            <Route path="/usuario/:documento" element={<UserProfile />} />
             <Route
               path="/"
               element={
@@ -92,7 +79,6 @@ function App() {
                 </PrivateRoute>
               }
             >
-              <Route index element={<IndexRedirect />} />
               <Route path="dashboard" element={<Home />} />
               <Route path="home" element={<Navigate to="/dashboard" replace />} />
               <Route path="devices" element={<Devices />} />
@@ -128,6 +114,38 @@ function App() {
       </AuthProvider>
     </BrowserRouter>
   );
+}
+
+// Componente para redirigir a dashboard si ya está autenticado
+function LoginRedirectIfAuth() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (user) {
+      if (user.rol === 'aprendiz' || user.rol === 'instructor') {
+        navigate('/home-user', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
+    }
+  }, [user, navigate]);
+  return <Login />;
+}
+
+// Componente para mostrar landing solo si NO está autenticado
+function LandingOrRedirect() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    if (user) {
+      if (user.rol === 'aprendiz' || user.rol === 'instructor') {
+        navigate('/home-user', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
+    }
+  }, [user, navigate]);
+  return <LandingPage />;
 }
 
 export default App;

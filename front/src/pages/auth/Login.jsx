@@ -381,7 +381,7 @@ const Login = () => {
             }}
           />
         </div>
-        <h1 className="auth-title">Sistema de Gestión y Seguridad</h1>
+        <h1 className="auth-title">Sistema de Gestión de Dispositivos</h1>
         <div className="auth-tabs">
           <button
             className={activeTab === 'login' ? 'active' : ''}

@@ -166,7 +166,9 @@ const Home = () => {
             alignItems: 'center',
             justifyContent: 'center',
             overflow: 'hidden',
-            boxShadow: '0 2px 8px 0 rgba(44,62,80,0.10)'
+            boxShadow: '0 2px 8px 0 rgba(44,62,80,0.10)',
+            position: 'relative',
+            flexDirection: 'column'
           }}>
             {user?.foto ? (
               <img src={user.foto} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -174,16 +176,26 @@ const Home = () => {
               <FaUserCircle style={{ color: '#71c585', fontSize: '2rem' }} />
             )}
           </div>
-          <h2 style={{
-            fontSize: '1.5rem',
-            fontWeight: '600',
-            margin: '0'
-          }}>
-            ¡Bienvenido, <span style={{
-              color: 'white',
-              fontWeight: '700'
-            }}>{user?.nombre || 'Administrador'}</span>!
-          </h2>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
+            <h2 style={{
+              fontSize: '1.5rem',
+              fontWeight: '600',
+              margin: '0'
+            }}>
+              ¡Bienvenido, <span style={{
+                color: 'white',
+                fontWeight: '700'
+              }}>{user?.nombre || 'Administrador'}</span>!
+            </h2>
+            {/* Enlace a perfil */}
+            <a href="/profile" style={{
+              color: '#fff',
+              fontSize: '0.95rem',
+              textDecoration: 'underline',
+              marginLeft: '0.5rem',
+              fontWeight: 400
+            }}>Ir a mi perfil</a>
+          </div>
         </div>
         
         {/* Grid de información */}

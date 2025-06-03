@@ -160,10 +160,10 @@ const Profile = () => {
         <div className="profile-avatar-container">
           <img className="profile-avatar-rect" src={avatarPreview || '/default-avatar.png'} alt="avatar" />
           {canChangeAvatar && (
-            <label className="btn-avatar-upload" style={{ marginTop: '1rem', cursor: 'pointer' }}>
-                <span>Subir imagen</span>
+            <label className="btn-avatar-upload" style={{ marginTop: '1rem', cursor: 'pointer', display: 'block', textAlign: 'center' }}>
+              <span style={{ color: '#388e3c', fontWeight: 500, fontSize: '1rem', background: '#e8f5e9', borderRadius: '6px', padding: '4px 12px', border: '1px solid #c8e6c9', display: 'inline-block' }}>Cambiar foto</span>
               <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleAvatarChange} disabled={loading} />
-              </label>
+            </label>
           )}
         </div>
         <form onSubmit={handleSave} className="profile-info">
