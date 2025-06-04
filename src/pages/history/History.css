@@ -1,0 +1,339 @@
+/* Contenedor general */
+.history-bg {
+  background: #fff;
+  height: auto;
+  min-height: calc(100vh - 80px);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Estilos adicionales cuando está dentro del layout */
+.history-content {
+  padding: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+.history-panel {
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 2rem 1.5rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header y contenedor de tabla */
+.history-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  background: #fff;
+  border-bottom: none;
+  position: relative;
+  padding-right: 0;
+  height: 44px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.history-header-row h1 {
+  color: #1b5e20;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+  flex: 1;
+  min-width: 200px;
+}
+
+/* --- Contenedor de controles --- */
+.history-controls-wrapper {
+  display: flex;
+  align-items: flex-end;
+  gap: 15px;
+  flex-shrink: 0;
+  width: auto;
+  height: 44px;
+  margin-right: 1.0rem;
+}
+
+/* Tabla de historial */
+.history-table-container {
+  margin-top: 1rem;
+  overflow: auto;
+  margin-bottom: 0;
+  flex-grow: 1;
+  position: relative;
+  border-radius: 6px;
+  overflow: auto;
+  height: calc(100% - 44px - 1rem);
+  border: 1px solid #e0e0e0;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 0;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.95rem;
+  background: #fff;
+  min-width: 900px;
+  margin: 0;
+  table-layout: fixed;
+}
+
+.history-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.history-table th {
+  background: #2e7d32;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.8rem 1rem;
+  text-align: left;
+  white-space: nowrap;
+  z-index: 5;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.15);
+  height: 44px;
+}
+
+.history-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 0.95rem;
+}
+
+.history-table tr:nth-child(even) {
+  background-color: #f5f8f5;
+}
+
+.history-table tr:last-child td {
+  border-bottom: none;
+}
+
+.history-table tr:hover {
+  background: rgba(46, 125, 50, 0.08);
+}
+
+/* Asegurar que la columna de acciones tenga suficiente espacio */
+.history-table th:last-child,
+.history-table td:last-child {
+  min-width: 180px;
+  text-align: right;
+  padding-right: 1.5rem;
+}
+
+/* Badges para estados */
+.history-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-right: 0.8rem;
+  text-align: center;
+  min-width: 90px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.badge-success {
+  background-color: #4caf50;
+  color: white;
+  border: 1px solid #388e3c;
+}
+
+.badge-danger {
+  background-color: #f44336;
+  color: white;
+  border: 1px solid #d32f2f;
+}
+
+.badge-default {
+  background-color: #78909c;
+  color: white;
+  border: 1px solid #546e7a;
+}
+
+/* Mensajes de estado */
+.history-loading,
+.history-error {
+  margin: 2rem auto;
+  text-align: center;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  padding: 2rem;
+  flex-grow: 1;
+  height: calc(100vh - 250px);
+}
+
+.history-error {
+  color: #d32f2f;
+  background: #ffebee;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #ffcdd2;
+}
+
+.history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3rem 1rem;
+  height: calc(100% - 44px - 1rem);
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+.history-empty-icon {
+  width: 80px;
+  height: 80px;
+  background: #f5f8f5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: #2e7d32;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.history-empty-icon svg {
+  width: 40px;
+  height: 40px;
+  opacity: 0.8;
+}
+
+.history-empty h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2e7d32;
+  margin: 0 0 1rem 0;
+  letter-spacing: 0.3px;
+}
+
+.history-empty p {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.spinner {
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 3px solid #e0e0e0;
+  border-top: 3px solid #2e7d32;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .history-bg {
+    padding: 0;
+    min-height: calc(100vh - 60px);
+  }
+  
+  .history-header-row h1 {
+    font-size: 1.5rem;
+  }
+  
+  .history-table-container {
+    margin: 0.5rem 0;
+  }
+  
+  .history-empty {
+    padding: 2rem 1rem;
+  }
+  
+  .history-empty h3 {
+    font-size: 1.3rem;
+  }
+  
+  .history-empty p {
+    font-size: 1rem;
+  }
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 18px;
+  justify-content: flex-end;
+  font-size: 1rem;
+}
+.pagination button {
+  border: none;
+  background: #e8f5e9;
+  color: #1b5e20;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  outline: none;
+  border: 2px solid transparent;
+}
+.pagination button.active,
+.pagination button:focus {
+  background: #1b5e20;
+  color: #fff;
+  border: 2px solid #388e3c;
+  box-shadow: 0 2px 8px #1b5e2022;
+}
+.pagination button:hover:not(:disabled):not(.active) {
+  background: #c8e6c9;
+  color: #1b5e20;
+}
+.pagination button:disabled {
+  background: #f1f1f1;
+  color: #bdbdbd;
+  cursor: not-allowed;
+}
+.pagination select {
+  border-radius: 6px;
+  border: 1px solid #c8e6c9;
+  padding: 4px 10px;
+  font-size: 1rem;
+  background: #fff;
+  color: #1b5e20;
+  margin-left: 4px;
+}
+.pagination span {
+  font-size: 0.98rem;
+  color: #333;
+  margin-left: 2px;
+} 

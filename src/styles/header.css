@@ -1,0 +1,189 @@
+@import './variables.css';
+
+.header {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  padding: var(--spacing-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 250px;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.header-logo h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-light);
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.header-user img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+}
+
+.header-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.header-user-info span {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.header-user-info small {
+  color: var(--primary-lighter);
+  font-size: 0.75rem;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: 0.875rem;
+  transition: color var(--transition-fast);
+}
+
+.logout-button:hover {
+  color: var(--primary-lighter);
+}
+
+.logout-button i {
+  font-size: 1rem;
+}
+
+.header-institutional {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+  height: 72px;
+  padding: 0 2.5rem 0 0.5rem;
+  position: fixed;
+  top: 0;
+  left: 250px;
+  right: 0;
+  z-index: 100;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding-left: 0;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+}
+
+.header-center h1 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  margin-left: auto;
+}
+
+.header-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 0.5rem;
+}
+
+.header-user-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+.header-user-role {
+  color: var(--primary-light);
+  font-size: 0.95rem;
+}
+
+.header-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: var(--primary-dark);
+  cursor: pointer;
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.logout-button:hover {
+  background: var(--primary-lighter);
+  color: var(--primary-dark);
+}
+
+.logo {
+  height: 48px;
+  width: 48px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+  margin-left: 0;
+}
+
+@media (max-width: 900px) {
+  .header-institutional {
+    padding: 0 1rem;
+  }
+  .header-center h1 {
+    font-size: 1.1rem;
+  }
+  .logo {
+    height: 36px;
+    width: 36px;
+  }
+} 

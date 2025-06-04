@@ -1,0 +1,33 @@
+.header-fixed {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #388e3c; /* Color verde de CompuSCan */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* Añadir espacio para el contenido debajo del header fijo */
+.main-content {
+  padding-top: 80px !important; /* Altura del header */
+  margin-top: 0 !important;
+}
+
+/* Efecto de scroll para el header */
+.header-fixed.scrolled {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Asegurar que el header esté por encima de otros elementos */
+.header-fixed * {
+  z-index: 1001;
+}
+
+/* Asegurar que el contenido principal tenga el espacio correcto */
+body {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+} 
