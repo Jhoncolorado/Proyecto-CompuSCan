@@ -3,8 +3,22 @@ const historialDispositivoModel = require('../models/historialDispositivoModel')
 const historialDispositivoController = {
     getAllHistoriales: async (req, res) => {
         try {
-            const historiales = await historialDispositivoModel.getAllHistoriales();
-            res.json(historiales);
+            // Soporte de paginación
+            const page = parseInt(req.query.page, 10) || 1;
+            const limit = parseInt(req.query.limit, 10) || 10;
+            const offset = (page - 1) * limit;
+
+            const total = await historialDispositivoModel.countHistoriales();
+            const historiales = await historialDispositivoModel.getHistorialesPaginados(limit, offset);
+            const totalPages = Math.ceil(total / limit);
+
+            res.json({
+                data: historiales,
+                total,
+                page,
+                totalPages,
+                limit
+            });
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al obtener historiales',

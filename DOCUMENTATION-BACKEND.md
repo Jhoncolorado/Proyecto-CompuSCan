@@ -13,6 +13,7 @@
 10. [Seguridad](#seguridad)
 11. [Despliegue](#despliegue)
 12. [Guía de Mantenimiento](#guía-de-mantenimiento)
+13. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
 
 ---
 
@@ -939,3 +940,20 @@ app.use('/api/nuevo', require('./routes/nuevoRoutes'));
 
 Se implementó en el frontend la desactivación del autocompletado en campos sensibles de los formularios de usuario, para evitar exposición de datos previos y reforzar la privacidad.
 No requiere cambios en la API, pero es importante para la seguridad integral del sistema. 
+
+## Remoción de Secretos del Historial de Git (Caso Real)
+
+Durante el desarrollo, detecté que un archivo de credenciales sensibles fue subido accidentalmente al repositorio. GitHub bloqueó el push hasta que el secreto fuera eliminado de TODO el historial de commits.
+
+**Solución aplicada:**
+- Eliminé el archivo y realicé un commit.
+- Utilicé BFG Repo-Cleaner para limpiar el historial:
+  ```bash
+  java -jar bfg-1.14.0.jar --delete-files nombre-del-archivo-secreto.json
+  ```
+- Limpié los objetos huérfanos y forcé el push.
+
+**Recomendaciones:**
+- Nunca subir archivos de credenciales o secretos al repositorio.
+- Agregar archivos sensibles a `.gitignore` antes de hacer commit.
+- Si ocurre un error similar, limpiar el historial y avisar a los colaboradores para que vuelvan a clonar el repo. 

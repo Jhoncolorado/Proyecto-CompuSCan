@@ -41,8 +41,22 @@ const transporter = nodemailer.createTransport({
 const usuarioController = {
     getAllUsuarios: async (req, res) => {
         try {
-            const usuarios = await usuarioModel.getAllUsuarios();
-            res.json(usuarios);
+            // Soporte de paginación
+            const page = parseInt(req.query.page, 10) || 1;
+            const limit = parseInt(req.query.limit, 10) || 10;
+            const offset = (page - 1) * limit;
+
+            const total = await usuarioModel.countUsuarios();
+            const usuarios = await usuarioModel.getUsuariosPaginados(limit, offset);
+            const totalPages = Math.ceil(total / limit);
+
+            res.json({
+                data: usuarios,
+                total,
+                page,
+                totalPages,
+                limit
+            });
         } catch (error) {
             res.status(500).json({ 
                 error: 'Error al obtener usuarios',

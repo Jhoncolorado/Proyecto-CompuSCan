@@ -6,36 +6,39 @@ const historialDispositivoController = require('../controllers/historialDisposit
  * @swagger
  * /api/historiales:
  *   get:
- *     summary: Obtener todos los historiales de dispositivos
+ *     summary: Obtener todos los historiales de dispositivos (paginado)
  *     tags: [Historiales]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Número de página (por defecto 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Cantidad de historiales por página (por defecto 10)
  *     responses:
  *       200:
- *         description: Lista de historiales obtenida exitosamente
+ *         description: Lista paginada de historiales obtenida exitosamente
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   descripcion:
- *                     type: string
- *                   fecha_registro:
- *                     type: string
- *                     format: date-time
- *                   dispositivo:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       nombre:
- *                         type: string
- *                       tipo:
- *                         type: string
- *                       serial:
- *                         type: string
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/HistorialDispositivo'
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
  */
 router.get('/', historialDispositivoController.getAllHistoriales);
 

@@ -741,3 +741,20 @@ Para reforzar la privacidad y evitar errores de ingreso, deshabilité el autocom
 
 Esto se implementó en los archivos `Login.jsx` y `Users.jsx` usando el atributo `autoComplete="off"`.
 Así, el navegador ya no muestra ni almacena valores previos en estos campos. 
+
+## Manejo y Limpieza de Secretos en el Historial de Git
+
+Durante el desarrollo del frontend, accidentalmente subí un archivo de credenciales sensibles al repositorio. GitHub bloqueó el push por seguridad, exigiendo la eliminación del secreto de TODO el historial de commits.
+
+**Solución aplicada:**
+- Eliminé el archivo y realicé un commit.
+- Utilicé BFG Repo-Cleaner para limpiar el historial:
+  ```bash
+  java -jar bfg-1.14.0.jar --delete-files nombre-del-archivo-secreto.json
+  ```
+- Limpié los objetos huérfanos y forcé el push.
+
+**Lecciones aprendidas:**
+- Siempre agregar archivos sensibles a `.gitignore`.
+- Si ocurre un error similar, limpiar el historial y avisar a los colaboradores.
+- Verificar que el historial esté limpio antes de subir cambios importantes. 

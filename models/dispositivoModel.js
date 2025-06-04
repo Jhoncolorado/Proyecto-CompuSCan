@@ -150,6 +150,23 @@ const dispositivoModel = {
     countDispositivos: async () => {
         const result = await pool.query('SELECT COUNT(*) FROM dispositivo');
         return parseInt(result.rows[0].count, 10);
+    },
+
+    getDispositivosPaginados: async (limit, offset) => {
+        const query = `
+            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, d.estado_validacion, d.mime_type, u.nombre as nombre_usuario
+            FROM dispositivo d
+            JOIN usuario u ON d.id_usuario = u.id
+            ORDER BY d.fecha_registro DESC
+            LIMIT $1 OFFSET $2`;
+        const result = await pool.query(query, [limit, offset]);
+        return result.rows.map(device => {
+            if (device.foto) {
+                const mime = device.mime_type || device.mimeType || 'image/jpeg';
+                device.foto = `data:${mime};base64,` + Buffer.from(device.foto).toString('base64');
+            }
+            return device;
+        });
     }
 };
 

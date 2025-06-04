@@ -18,6 +18,10 @@ const Devices = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showRegistrationForm, setShowRegistrationForm] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const fetchDevices = async () => {
@@ -27,17 +31,31 @@ const Devices = () => {
         let url = '/api/dispositivos';
         if (user && (user.rol === 'aprendiz' || user.rol === 'instructor')) {
           url = `/api/dispositivos/usuario/${user.id}`;
+        } else {
+          url = `/api/dispositivos?page=${page}&limit=${limit}`;
         }
         const res = await api.get(url);
-        setDevices(Array.isArray(res.data) ? res.data : []);
+        if (user && (user.rol === 'aprendiz' || user.rol === 'instructor')) {
+          setDevices(Array.isArray(res.data) ? res.data : []);
+          setTotalPages(1);
+          setTotal(res.data.length || 0);
+        } else {
+          setDevices(Array.isArray(res.data.data) ? res.data.data : []);
+          setTotalPages(res.data.totalPages || 1);
+          setTotal(res.data.total || 0);
+        }
       } catch (err) {
         setError('No se pudieron cargar los dispositivos.');
+        setDevices([]);
+        setTotalPages(1);
+        setTotal(0);
       } finally {
         setLoading(false);
       }
     };
     fetchDevices();
-  }, [user, showRegistrationForm]);
+    // eslint-disable-next-line
+  }, [user, showRegistrationForm, page, limit]);
 
   const handleToggleRegistrationForm = () => {
     setShowRegistrationForm(!showRegistrationForm);
@@ -90,49 +108,64 @@ const Devices = () => {
                 )}
               </div>
             ) : (
-              <table className="devices-table">
-                <thead>
-                  <tr>
-                    <th>Foto</th>
-                    <th>Nombre</th>
-                    <th>Tipo</th>
-                    <th>Serial</th>
-                    <th>Usuario</th>
-                    <th>RFID</th>
-                    <th>Estado</th>
-                    <th>Fecha Registro</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {devices.map(device => (
-                    <tr key={device.id}>
-                      <td>
-                        {device.foto ? (
-                          <img 
-                            src={device.foto} 
-                            alt="foto" 
-                            className="device-img" 
-                            onError={(e) => {
-                              console.error("Error al cargar imagen:", e);
-                              e.target.onerror = null;
-                              e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
-                            }}
-                          />
-                        ) : (
-                          <span className="device-noimg">(Sin imagen)</span>
-                        )}
-                      </td>
-                      <td>{device.nombre}</td>
-                      <td>{device.tipo}</td>
-                      <td>{device.serial}</td>
-                      <td>{device.nombre_usuario}</td>
-                      <td>{device.rfid || <span className="device-norfid">No asignado</span>}</td>
-                      <td>{estadoBadge(device.estado_validacion || 'pendiente')}</td>
-                      <td>{device.fecha_registro ? new Date(device.fecha_registro).toLocaleDateString() : ''}</td>
+              <>
+                <table className="devices-table">
+                  <thead>
+                    <tr>
+                      <th>Foto</th>
+                      <th>Nombre</th>
+                      <th>Tipo</th>
+                      <th>Serial</th>
+                      <th>Usuario</th>
+                      <th>RFID</th>
+                      <th>Estado</th>
+                      <th>Fecha Registro</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {devices.map(device => (
+                      <tr key={device.id}>
+                        <td>
+                          {device.foto ? (
+                            <img 
+                              src={device.foto} 
+                              alt="foto" 
+                              className="device-img" 
+                              onError={(e) => {
+                                console.error("Error al cargar imagen:", e);
+                                e.target.onerror = null;
+                                e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                              }}
+                            />
+                          ) : (
+                            <span className="device-noimg">(Sin imagen)</span>
+                          )}
+                        </td>
+                        <td>{device.nombre}</td>
+                        <td>{device.tipo}</td>
+                        <td>{device.serial}</td>
+                        <td>{device.nombre_usuario}</td>
+                        <td>{device.rfid || <span className="device-norfid">No asignado</span>}</td>
+                        <td>{estadoBadge(device.estado_validacion || 'pendiente')}</td>
+                        <td>{device.fecha_registro ? new Date(device.fecha_registro).toLocaleDateString() : ''}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {totalPages > 1 && (
+                  <div className="pagination">
+                    <button onClick={() => setPage(page - 1)} disabled={page === 1}>Anterior</button>
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button key={i+1} className={page === i+1 ? 'active' : ''} onClick={() => setPage(i+1)}>{i+1}</button>
+                    ))}
+                    <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>Siguiente</button>
+                    <span style={{marginLeft:8}}>Total: {total}</span>
+                    <select value={limit} onChange={e => { setLimit(Number(e.target.value)); setPage(1); }} style={{marginLeft:8}}>
+                      {[5,10,20,50].map(opt => <option key={opt} value={opt}>{opt} por página</option>)}
+                    </select>
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
