@@ -18,9 +18,10 @@ CompuSCan es una plataforma web desarrollada para el **SENA - Centro de Comercio
 9. [Documentación Oficial](#documentación-oficial)
 10. [Tecnologías Utilizadas](#tecnologías-utilizadas)
 11. [Mejoras Recientes](#mejoras-recientes)
-12. [FAQ](#faq)
-13. [Contribuciones](#contribuciones)
-14. [Licencia](#licencia)
+12. [Mejoras de Seguridad y Experiencia en Formularios](#mejoras-de-seguridad-y-experiencia-en-formularios)
+13. [FAQ](#faq)
+14. [Contribuciones](#contribuciones)
+15. [Licencia](#licencia)
 
 ---
 
@@ -275,6 +276,13 @@ Documentación completa sobre la arquitectura, API RESTful, modelos de datos, au
 - Mensajes de retroalimentación claros para todas las acciones
 - Interfaces diferenciadas según el rol del usuario
 - Diseño visual coherente en toda la aplicación
+
+## Mejoras de Seguridad y Experiencia en Formularios
+
+Durante la revisión y pruebas del sistema, identifiqué que algunos campos de los formularios (nombre, documento, correo, teléfonos, etc.) mostraban el historial/autocompletado del navegador, lo cual representa un riesgo de privacidad.
+Para solucionarlo, deshabilité el autocompletado en todos los campos sensibles de los formularios de registro y edición de usuario, agregando el atributo `autoComplete="off"` en los inputs correspondientes.
+
+Esto mejora la seguridad y la experiencia del usuario, evitando que el navegador sugiera datos previos en campos personales.
 
 ---
 

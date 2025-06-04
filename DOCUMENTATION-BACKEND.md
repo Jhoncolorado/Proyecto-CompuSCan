@@ -934,3 +934,8 @@ app.use('/api/nuevo', require('./routes/nuevoRoutes'));
 - Manejar errores con try/catch
 - Documentar funciones y endpoints
 - Seguir principios SOLID y DRY 
+
+## Nota sobre Seguridad en Formularios
+
+Se implementó en el frontend la desactivación del autocompletado en campos sensibles de los formularios de usuario, para evitar exposición de datos previos y reforzar la privacidad.
+No requiere cambios en la API, pero es importante para la seguridad integral del sistema. 

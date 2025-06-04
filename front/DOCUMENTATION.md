@@ -730,4 +730,14 @@ const handleAssignRfid = async () => {
 
 ---
 
-## (Resto de secciones igual) 
+## Eliminación de Autocompletado en Campos Sensibles
+
+Para reforzar la privacidad y evitar errores de ingreso, deshabilité el autocompletado en los siguientes campos de los formularios del frontend:
+- Nombre completo
+- Correo electrónico
+- Documento
+- Teléfonos
+- RH
+
+Esto se implementó en los archivos `Login.jsx` y `Users.jsx` usando el atributo `autoComplete="off"`.
+Así, el navegador ya no muestra ni almacena valores previos en estos campos. 

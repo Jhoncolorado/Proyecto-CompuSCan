@@ -6,6 +6,7 @@ import logo from '../../assets/CompuSCan2025.jfif';
 import FormError from '../../components/FormError';
 import PasswordStrength from '../../components/PasswordStrength';
 import { isValidEmail, validatePassword, validatePasswordMatch, validateDocumento } from '../../utils/validators';
+import api from '../../services/api';
 
 const Login = () => {
   const { login } = useAuth();
@@ -24,7 +25,8 @@ const Login = () => {
     telefono2: '',
     rh: '',
     ficha: '',
-    observacion: ''
+    observacion: '',
+    programa: ''
   });
   const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState('');
@@ -35,6 +37,7 @@ const Login = () => {
   const [passwordStrength, setPasswordStrength] = useState({ strength: 0, message: '' });
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [registerPhotoPreview, setRegisterPhotoPreview] = useState('');
+  const [programas, setProgramas] = useState([]);
 
   const handleTabChange = (tab) => {
     if (tab === activeTab) return;
@@ -309,6 +312,7 @@ const Login = () => {
         rh: registerData.rh || null,
         ficha: registerData.ficha || null,
         observacion: registerData.observacion || null,
+        programa: registerData.programa || null,
         estado: 'activo',
         foto: registerData.foto || null
       };
@@ -357,6 +361,14 @@ const Login = () => {
     
     return classes;
   };
+
+  useEffect(() => {
+    if (activeTab === 'register' && registerStep === 2 && registerData.rol === 'aprendiz') {
+      api.get('/api/programas')
+        .then(res => setProgramas(res.data))
+        .catch(() => setProgramas([]));
+    }
+  }, [activeTab, registerStep, registerData.rol]);
 
   return (
     <div className="auth-bg-gradient">
@@ -464,6 +476,7 @@ const Login = () => {
                         onChange={handleRegisterChange}
                   placeholder="Ingresa tu nombre completo"
                   className={errors.nombre ? 'input-error' : ''}
+                  autoComplete="off"
                 />
                 <FormError message={errors.nombre} visible={!!errors.nombre} />
               </div>
@@ -504,6 +517,7 @@ const Login = () => {
                         onChange={handleRegisterChange}
                     placeholder="Ingresa tu documento"
                     className={errors.documento ? 'input-error' : ''}
+                    autoComplete="off"
                       />
                   <FormError message={errors.documento} visible={!!errors.documento} />
                 </div>
@@ -521,6 +535,7 @@ const Login = () => {
                         onChange={handleRegisterChange}
                   placeholder="Ingresa tu correo electrónico"
                   className={errors.correo ? 'input-error' : ''}
+                  autoComplete="off"
                 />
                 <FormError message={errors.correo} visible={!!errors.correo} />
               </div>
@@ -607,7 +622,6 @@ const Login = () => {
                   <option value="">Selecciona tu rol</option>
                         <option value="aprendiz">Aprendiz</option>
                         <option value="instructor">Instructor</option>
-                        <option value="administrador">Administrador</option>
                       </select>
                 <FormError message={errors.rol} visible={!!errors.rol} />
               </div>
@@ -627,6 +641,7 @@ const Login = () => {
                         value={registerData.telefono1}
                         onChange={handleRegisterChange}
                     placeholder="Teléfono principal"
+                    autoComplete="off"
                       />
                     </div>
                 
@@ -641,6 +656,7 @@ const Login = () => {
                         value={registerData.telefono2}
                         onChange={handleRegisterChange}
                     placeholder="Opcional"
+                    autoComplete="off"
                       />
                     </div>
               </div>
@@ -660,6 +676,7 @@ const Login = () => {
                         value={registerData.rh}
                         onChange={handleRegisterChange}
                     placeholder="Ej: O+, A-, AB+"
+                    autoComplete="off"
                       />
                     </div>
                 
@@ -674,6 +691,19 @@ const Login = () => {
                       onChange={handleRegisterChange}
                       placeholder="Para aprendices"
                     />
+                    <label htmlFor="programa">Programa de formación</label>
+                    <select
+                      id="programa"
+                      name="programa"
+                      value={registerData.programa}
+                      onChange={handleRegisterChange}
+                      required
+                    >
+                      <option value="">Selecciona un programa</option>
+                      {programas.map(p => (
+                        <option key={p.id} value={p.id}>{p.nombre_programa}</option>
+                      ))}
+                    </select>
                   </div>
                 )}
               </div>
@@ -691,12 +721,13 @@ const Login = () => {
               </div>
               
               <div className="form-group">
-                <label htmlFor="foto">Foto de perfil (opcional)</label>
+                <label htmlFor="foto">Foto de perfil (obligatoria)</label>
                 <input
                   type="file"
                   id="foto"
                   name="foto"
                   accept="image/*"
+                  required
                   onChange={e => {
                     const file = e.target.files[0];
                     if (file) {
