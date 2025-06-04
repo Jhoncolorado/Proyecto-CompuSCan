@@ -126,17 +126,28 @@ const Devices = () => {
                     {devices.map(device => (
                       <tr key={device.id}>
                         <td>
-                          {device.foto ? (
-                            <img 
-                              src={device.foto} 
-                              alt="foto" 
-                              className="device-img" 
-                              onError={(e) => {
-                                console.error("Error al cargar imagen:", e);
-                                e.target.onerror = null;
-                                e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
-                              }}
-                            />
+                          {Array.isArray(device.foto) && device.foto.length > 0 ? (
+                            <div style={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
+                              {device.foto.map((img, idx) => (
+                                img ? (
+                                  <div key={idx} style={{ textAlign: 'center' }}>
+                                    <img
+                                      src={`http://localhost:3000/uploads/${img}`}
+                                      alt={`Foto ${idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}`}
+                                      className="device-img"
+                                      style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: 4, border: '1px solid #ccc', marginBottom: 2 }}
+                                      onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                                      }}
+                                    />
+                                    <div style={{ fontSize: 9, color: '#388e3c', fontWeight: 700 }}>
+                                      {idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}
+                                    </div>
+                                  </div>
+                                ) : null
+                              ))}
+                            </div>
                           ) : (
                             <span className="device-noimg">(Sin imagen)</span>
                           )}

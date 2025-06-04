@@ -400,15 +400,15 @@ const Header = () => {
             display: 'flex', 
             flexDirection: 'column', 
             alignItems: 'flex-end', 
-            minWidth: 80, 
-            maxWidth: 180, 
+            minWidth: 220, 
+            maxWidth: 350, 
             lineHeight: 1.1,
-            marginRight: 5 // Reduce el espacio entre fecha y botón
+            marginRight: 8
           }}>
-            <span style={{ fontSize: 13, color: '#fff', fontWeight: 700, letterSpacing: 0.2, textShadow: '0 1px 6px rgba(26,35,126,0.18)' }}>
+            <span style={{ fontSize: 15, color: '#fff', fontWeight: 600, textAlign: 'right', letterSpacing: 0.2 }}>
               {formatDate(currentTime)}
             </span>
-            <span style={{ color: '#fff', fontFamily: 'monospace', fontWeight: 700, fontSize: 18, marginTop: 2, textShadow: '0 1px 6px rgba(26,35,126,0.18)' }}>
+            <span style={{ fontSize: 15, color: '#fff', fontWeight: 600, textAlign: 'right', letterSpacing: 0.2, fontFamily: 'monospace', marginTop: 0 }}>
               {formatTime(currentTime)}
             </span>
           </div>

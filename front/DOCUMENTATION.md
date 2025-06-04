@@ -758,3 +758,30 @@ Durante el desarrollo del frontend, accidentalmente subí un archivo de credenci
 - Siempre agregar archivos sensibles a `.gitignore`.
 - Si ocurre un error similar, limpiar el historial y avisar a los colaboradores.
 - Verificar que el historial esté limpio antes de subir cambios importantes. 
+
+---
+
+## Gestión de imágenes múltiples por dispositivo
+
+### Descripción general
+El frontend permite subir, editar y visualizar hasta **3 imágenes** (frontal, trasera y cerrado) por dispositivo, de forma intuitiva y consistente en todas las vistas.
+
+### Flujo técnico
+- **Carga de imágenes:**
+  - En los formularios de registro y edición de dispositivos (`UserDevices.jsx`), el usuario puede seleccionar hasta 3 archivos (foto frontal, trasera y cerrado).
+  - Se utiliza un objeto `FormData` para enviar los archivos al backend en el campo `foto` (pueden ser menos de 3 si el usuario no sube todas).
+- **Visualización:**
+  - En las tablas y tarjetas de dispositivos, se recorre el array de nombres de imagen recibido desde la API y se muestran las fotos con su etiqueta correspondiente.
+  - Si no hay imagen, se muestra un placeholder "Sin imagen".
+- **Edición:**
+  - Al editar un dispositivo, se pueden subir nuevas imágenes (las anteriores se mantienen si no se reemplazan).
+- **Compatibilidad:**
+  - El sistema es retrocompatible: dispositivos antiguos con una sola foto se muestran correctamente.
+- **Recomendaciones:**
+  - Se recomienda subir imágenes en formato JPG o PNG, de hasta 5MB cada una.
+  - El frontend no fuerza el tipo de archivo, pero valida que sean imágenes antes de enviarlas.
+
+### Ejemplo de uso
+- Registrar o editar un dispositivo:
+  - Seleccionar hasta 3 imágenes en el formulario.
+  - Guardar los cambios; las imágenes se mostrarán automáticamente en la tabla y en la vista de detalle. 

@@ -14,6 +14,7 @@
 11. [Despliegue](#despliegue)
 12. [Guía de Mantenimiento](#guía-de-mantenimiento)
 13. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
+14. [Gestión de imágenes múltiples por dispositivo](#gestión-de-imágenes-múltiples-por-dispositivo)
 
 ---
 
@@ -136,10 +137,13 @@ Las respuestas siguen un formato estandarizado:
 }
 ```
 
+> **Nota sobre exportación de reportes:**
+> Los endpoints de usuarios, historial y dispositivos permiten traer todos los datos mediante paginación (usando un límite alto). El backend NO genera archivos Excel ni expone endpoints especiales para exportar reportes; la exportación a Excel es realizada completamente en el frontend, que consume estos endpoints y genera el archivo en el navegador del usuario.
+
 ---
 
 ## Modelos de Datos
-
+|
 ### Esquema de Base de Datos
 
 El sistema utiliza PostgreSQL con las siguientes tablas principales:
@@ -957,3 +961,36 @@ Durante el desarrollo, detecté que un archivo de credenciales sensibles fue sub
 - Nunca subir archivos de credenciales o secretos al repositorio.
 - Agregar archivos sensibles a `.gitignore` antes de hacer commit.
 - Si ocurre un error similar, limpiar el historial y avisar a los colaboradores para que vuelvan a clonar el repo. 
+
+---
+
+## Gestión de imágenes múltiples por dispositivo
+
+### Descripción general
+El sistema permite asociar hasta **3 imágenes** (frontal, trasera y cerrado) a cada dispositivo. Las imágenes se reciben desde el frontend, se almacenan en el backend y se exponen para su visualización en todas las vistas.
+
+### Flujo técnico
+- **Recepción:**
+  - Los endpoints `POST /api/dispositivos` y `PUT /api/dispositivos/:id` aceptan hasta 3 archivos en el campo `foto` usando `multipart/form-data`.
+  - Se utiliza el middleware `multer` para procesar la carga de archivos.
+- **Almacenamiento:**
+  - Los archivos se guardan en la carpeta `/uploads` del backend.
+  - En la base de datos, el campo `foto` de la tabla `dispositivo` es de tipo `TEXT` y almacena un array JSON con los nombres de archivo (ejemplo: `["img1.jpg","img2.jpg","img3.jpg"]`).
+- **Compatibilidad:**
+  - Si solo se sube una imagen, el array contendrá un solo nombre.
+  - El sistema es retrocompatible: dispositivos antiguos con una sola foto siguen funcionando.
+- **Exposición de imágenes:**
+  - El backend expone la carpeta `/uploads` como ruta pública mediante `express.static`, permitiendo que el frontend acceda a las imágenes por URL (`/uploads/nombre.jpg`).
+- **Respuesta de la API:**
+  - Todos los endpoints que devuelven dispositivos (`GET /api/dispositivos`, `GET /api/dispositivos/:id`, etc.) retornan el campo `foto` como un array de strings.
+
+### Ejemplo de uso
+- Registrar dispositivo:
+  - Enviar un `FormData` con hasta 3 archivos en el campo `foto`.
+- Visualizar imágenes:
+  - El frontend recorre el array de nombres y construye la URL para mostrar cada imagen.
+
+### Notas de implementación
+- El backend valida que los archivos sean imágenes y limita el tamaño máximo por archivo (configurable en `multer`).
+- Si no se suben imágenes, el campo `foto` será un array vacío o `null`.
+- El sistema nunca almacena imágenes en base64 ni en formato binario en la base de datos. 

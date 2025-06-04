@@ -1,5 +1,13 @@
 const pool = require('../config/database');
 
+/**
+ * El campo 'foto' en la tabla 'dispositivo' es de tipo TEXT y almacena un array JSON de nombres de archivo.
+ * Todas las funciones del modelo (getAllDispositivos, getDispositivosPaginados, getDispositivoById, etc.)
+ * devuelven el campo 'foto' como un array de strings, nunca como base64 ni binario.
+ * Ejemplo de valor en la base de datos:
+ *   ["img1.jpg","img2.jpg","img3.jpg"]
+ */
+
 const dispositivoModel = {
     getAllDispositivos: async () => {
         const query = `
@@ -8,11 +16,14 @@ const dispositivoModel = {
             JOIN usuario u ON d.id_usuario = u.id
             ORDER BY d.fecha_registro DESC`;
         const result = await pool.query(query);
-        // Convertir foto a base64 si existe
+        // Devolver foto como array de nombres de archivo
         return result.rows.map(device => {
             if (device.foto) {
-                const mime = device.mime_type || device.mimeType || 'image/jpeg';
-                device.foto = `data:${mime};base64,` + Buffer.from(device.foto).toString('base64');
+                try {
+                    device.foto = JSON.parse(device.foto);
+                } catch {
+                    device.foto = [device.foto];
+                }
             }
             return device;
         });
@@ -25,7 +36,15 @@ const dispositivoModel = {
             JOIN usuario u ON d.id_usuario = u.id
             WHERE d.id = $1`;
         const result = await pool.query(query, [id]);
-        return result.rows[0];
+        const device = result.rows[0];
+        if (device && device.foto) {
+            try {
+                device.foto = JSON.parse(device.foto);
+            } catch {
+                device.foto = [device.foto];
+            }
+        }
+        return device;
     },
 
     getDispositivoBySerial: async (serial) => {
@@ -35,7 +54,15 @@ const dispositivoModel = {
             JOIN usuario u ON d.id_usuario = u.id
             WHERE d.serial = $1`;
         const result = await pool.query(query, [serial]);
-        return result.rows[0];
+        const device = result.rows[0];
+        if (device && device.foto) {
+            try {
+                device.foto = JSON.parse(device.foto);
+            } catch {
+                device.foto = [device.foto];
+            }
+        }
+        return device;
     },
 
     getDispositivoByRFID: async (rfid) => {
@@ -47,8 +74,11 @@ const dispositivoModel = {
         const result = await pool.query(query, [rfid]);
         const dispositivo = result.rows[0];
         if (dispositivo && dispositivo.foto) {
-            const mime = dispositivo.mime_type || dispositivo.mimeType || 'image/jpeg';
-            dispositivo.foto = `data:${mime};base64,` + Buffer.from(dispositivo.foto).toString('base64');
+            try {
+                dispositivo.foto = JSON.parse(dispositivo.foto);
+            } catch {
+                dispositivo.foto = [dispositivo.foto];
+            }
         }
         return dispositivo;
     },
@@ -122,11 +152,14 @@ const dispositivoModel = {
             WHERE d.id_usuario = $1
             ORDER BY d.fecha_registro DESC`;
         const result = await pool.query(query, [usuarioId]);
-        // Convertir foto a base64 si existe
+        // Devolver foto como array de nombres de archivo
         return result.rows.map(device => {
             if (device.foto) {
-                const mime = device.mime_type || device.mimeType || 'image/jpeg';
-                device.foto = `data:${mime};base64,` + Buffer.from(device.foto).toString('base64');
+                try {
+                    device.foto = JSON.parse(device.foto);
+                } catch {
+                    device.foto = [device.foto];
+                }
             }
             return device;
         });
@@ -162,8 +195,11 @@ const dispositivoModel = {
         const result = await pool.query(query, [limit, offset]);
         return result.rows.map(device => {
             if (device.foto) {
-                const mime = device.mime_type || device.mimeType || 'image/jpeg';
-                device.foto = `data:${mime};base64,` + Buffer.from(device.foto).toString('base64');
+                try {
+                    device.foto = JSON.parse(device.foto);
+                } catch {
+                    device.foto = [device.foto];
+                }
             }
             return device;
         });

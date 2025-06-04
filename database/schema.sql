@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS dispositivo (
     tipo VARCHAR(50) NOT NULL,           -- Tipo del dispositivo (ej. computadora, teléfono).
     serial VARCHAR(100) UNIQUE,         -- Número de serie del dispositivo.
     rfid VARCHAR(30) UNIQUE NOT NULL,   -- Número RFID con VARCHAR(30).
-    foto BYTEA,                          -- Foto del dispositivo (almacenada como un archivo binario).
+    foto TEXT,                           -- El campo 'foto' es de tipo TEXT y almacena un array JSON de nombres de archivo de las imágenes subidas.
     id_usuario INTEGER NOT NULL,        -- Relación con el usuario.
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Fecha de registro del dispositivo.
     

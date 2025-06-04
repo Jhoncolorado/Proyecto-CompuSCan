@@ -14,8 +14,8 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
     nombre: '',
     tipo: '',
     serial: '',
-    foto: null,
-    mimeType: ''
+    fotos: [null, null, null], // [frontal, trasera, cerrado]
+    mimeTypes: ['', '', '']
   });
   const [editId, setEditId] = useState(null);
   const [formError, setFormError] = useState('');
@@ -25,7 +25,7 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
   const handleShowForm = () => {
     setShowForm(true);
     setEditId(null);
-    setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
+    setForm({ nombre: '', tipo: '', serial: '', fotos: [null, null, null], mimeTypes: ['', '', ''] });
   };
   const handleHideForm = () => {
     if (onClose) {
@@ -33,7 +33,7 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
     } else {
     setShowForm(false);
     setEditId(null);
-    setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
+    setForm({ nombre: '', tipo: '', serial: '', fotos: [null, null, null], mimeTypes: ['', '', ''] });
     }
   };
 
@@ -61,9 +61,14 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
 
   const handleFormChange = (e) => {
     const { name, value, files } = e.target;
-    if (name === 'foto') {
+    if (name.startsWith('foto')) {
+      const idx = parseInt(name.replace('foto', ''), 10);
       const file = files[0];
-      setForm({ ...form, foto: file, mimeType: file ? file.type : '' });
+      const newFotos = [...form.fotos];
+      const newMimeTypes = [...form.mimeTypes];
+      newFotos[idx] = file;
+      newMimeTypes[idx] = file ? file.type : '';
+      setForm({ ...form, fotos: newFotos, mimeTypes: newMimeTypes });
     } else {
       setForm({ ...form, [name]: value });
     }
@@ -76,8 +81,8 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
       nombre: device.nombre || '',
       tipo: device.tipo || '',
       serial: device.serial || '',
-      foto: null, // No precargamos la foto, solo permitimos subir una nueva
-      mimeType: ''
+      fotos: [null, null, null], // No precargamos las fotos, solo permitimos subir nuevas
+      mimeTypes: ['', '', '']
     });
   };
 
@@ -91,58 +96,46 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
         setFormLoading(false);
         return;
       }
-      let fotoBase64 = null;
-      let mimeType = form.mimeType;
-      if (form.foto) {
-        fotoBase64 = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(form.foto);
-        });
-        // Extraer el mimeType del dataURL
-        mimeType = fotoBase64.split(';')[0].split(':')[1];
-      }
+      // Usar FormData para enviar imágenes
+      const formData = new window.FormData();
+      formData.append('nombre', form.nombre);
+      formData.append('tipo', form.tipo);
+      formData.append('serial', form.serial);
+      formData.append('id_usuario', userId);
+      form.fotos.forEach((file, idx) => {
+        if (file) {
+          formData.append('foto', file); // El nombre debe coincidir con el backend
+        }
+      });
       if (editId) {
-        // Edición
-        await api.put(`/api/dispositivos/${editId}`, {
-          nombre: form.nombre,
-          tipo: form.tipo,
-          serial: form.serial,
-          foto: fotoBase64,
-          mimeType: mimeType
+        await api.put(`/api/dispositivos/${editId}`, formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
         });
         setSuccessMessage('¡Dispositivo actualizado exitosamente!');
         setTimeout(() => {
           if (onClose) {
             onClose();
           } else {
-          setShowForm(false);
-          setEditId(null);
+            setShowForm(false);
+            setEditId(null);
           }
           setSuccessMessage('');
         }, 1500);
       } else {
-        // Registro de nuevo dispositivo
-        await api.post('/api/dispositivos', {
-          nombre: form.nombre,
-          tipo: form.tipo,
-          serial: form.serial,
-          foto: fotoBase64,
-          mimeType: mimeType,
-          id_usuario: userId
+        await api.post('/api/dispositivos', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' }
         });
         setSuccessMessage('¡Dispositivo registrado exitosamente!');
         setTimeout(() => {
           if (onClose) {
             onClose();
           } else {
-          setShowForm(false);
+            setShowForm(false);
           }
           setSuccessMessage('');
         }, 1500);
       }
-      setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
+      setForm({ nombre: '', tipo: '', serial: '', fotos: [null, null, null], mimeTypes: ['', '', ''] });
       setFormError('');
       setFormLoading(false);
       // Recargar dispositivos
@@ -184,8 +177,16 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
             <input type="text" name="serial" value={form.serial} onChange={handleFormChange} required />
           </div>
           <div className="form-group">
-            <label>Foto (opcional):</label>
-            <input type="file" name="foto" accept="image/*" onChange={handleFormChange} />
+            <label>Foto Frontal:</label>
+            <input type="file" name="foto0" accept="image/*" onChange={handleFormChange} />
+          </div>
+          <div className="form-group">
+            <label>Foto Trasera:</label>
+            <input type="file" name="foto1" accept="image/*" onChange={handleFormChange} />
+          </div>
+          <div className="form-group">
+            <label>Foto Cerrado:</label>
+            <input type="file" name="foto2" accept="image/*" onChange={handleFormChange} />
           </div>
           <div className="form-actions inline-buttons">
             <button type="submit" className="add-device-button" disabled={formLoading}>
@@ -230,29 +231,54 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
               <label>Serial:</label>
               <input type="text" name="serial" value={form.serial} onChange={handleFormChange} required />
             </div>
+            <div className="form-group">
+              <label>Foto Frontal:</label>
+              <input type="file" name="foto0" accept="image/*" onChange={handleFormChange} />
+            </div>
+            <div className="form-group">
+              <label>Foto Trasera:</label>
+              <input type="file" name="foto1" accept="image/*" onChange={handleFormChange} />
+            </div>
+            <div className="form-group">
+              <label>Foto Cerrado:</label>
+              <input type="file" name="foto2" accept="image/*" onChange={handleFormChange} />
+            </div>
             {editId && devices && devices.length > 0 && (
               <div className="form-group">
-                <label>Imagen actual:</label>
-                {devices.find(d => d.id === editId)?.foto ? (
-                  <img
-                    src={devices.find(d => d.id === editId).foto}
-                    alt="Foto actual del equipo"
-                    style={{ width: 120, height: 90, borderRadius: 10, objectFit: 'cover', border: '2px solid #2196f3', marginBottom: 10 }}
-                    onError={(e) => {
-                      console.error("Error al cargar imagen:", e);
-                      e.target.onerror = null;
-                      e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
-                    }}
-                  />
-                ) : (
-                  <span style={{ color: '#888' }}>(Sin imagen)</span>
+                <label>Imágenes actuales:</label>
+                {devices.find(d => d.id === editId)?.foto && (
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    {(() => {
+                      let fotos = [];
+                      try {
+                        fotos = Array.isArray(devices.find(d => d.id === editId).foto) ? devices.find(d => d.id === editId).foto : JSON.parse(devices.find(d => d.id === editId).foto);
+                      } catch {
+                        fotos = [devices.find(d => d.id === editId).foto];
+                      }
+                      return (
+                        fotos.map((f, idx) => (
+                          <div key={idx} style={{ textAlign: 'center' }}>
+                            <img
+                              src={typeof f === 'string' && f.startsWith('data:') ? f : `/uploads/${f}`}
+                              alt={`Foto ${idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}`}
+                              className="device-card-img"
+                              style={{ width: 80, height: 60, borderRadius: 8, objectFit: 'cover', border: '2px solid #2196f3', marginBottom: 4 }}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                              }}
+                            />
+                            <div style={{ fontSize: 11, color: '#388e3c', fontWeight: 700 }}>
+                              {idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}
+                            </div>
+                          </div>
+                        ))
+                      );
+                    })()}
+                  </div>
                 )}
               </div>
             )}
-            <div className="form-group">
-              <label>Foto (opcional, reemplaza la actual):</label>
-              <input type="file" name="foto" accept="image/*" onChange={handleFormChange} />
-            </div>
             <div className="form-actions inline-buttons">
               <button type="submit" className="add-device-button" disabled={formLoading}>
                 {formLoading ? 'Guardando...' : 'Guardar'}
@@ -270,20 +296,29 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
           {devices.map(device => (
             <div key={device.id} className="device-card">
               <h3>{device.nombre}</h3>
-              {device.foto && (
-                <div className="device-image-container">
-                  <img 
-                    src={device.foto} 
-                    alt={device.nombre} 
-                    className="device-card-img"
-                    onError={(e) => {
-                      console.error("Error al cargar imagen:", e);
-                      e.target.onerror = null;
-                      e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
-                    }}
-                  />
+              {device.foto && Array.isArray(device.foto) && device.foto.length > 0 ? (
+                <div className="device-image-container" style={{ display: 'flex', flexDirection: 'row', gap: 8 }}>
+                  {device.foto.map((img, idx) => (
+                    img ? (
+                      <div key={idx} style={{ textAlign: 'center' }}>
+                        <img
+                          src={`http://localhost:3000/uploads/${img}`}
+                          alt={`Foto ${idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}`}
+                          className="device-card-img"
+                          style={{ width: 60, height: 60, borderRadius: 8, objectFit: 'cover', border: '2px solid #2196f3', marginBottom: 4 }}
+                          onError={(e) => {
+                            e.target.onerror = null;
+                            e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                          }}
+                        />
+                        <div style={{ fontSize: 11, color: '#388e3c', fontWeight: 700 }}>
+                          {idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}
+                        </div>
+                      </div>
+                    ) : null
+                  ))}
                 </div>
-              )}
+              ) : null}
               <div className="device-info-row">
                 <span className="device-info-label">Tipo:</span>
                 <span className="device-info-value">{device.tipo}</span>
