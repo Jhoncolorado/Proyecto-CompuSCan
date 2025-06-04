@@ -360,13 +360,19 @@ const Users = () => {
               </div>
                 <div className="form-card">
                   <form onSubmit={handleSubmit} autoComplete="off" className="form-user-profile-singlecol">
-                    <div className="form-control"><label className="label">Nombre</label><input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required autoFocus disabled={submitting} className="input input-bordered" /></div>
-                    <div className="form-control"><label className="label">Correo</label><input type="email" name="correo" value={formData.correo} onChange={handleChange} required disabled={submitting} className="input input-bordered" /></div>
-                    <div className="form-control"><label className="label">Rol</label><select name="rol" value={formData.rol} onChange={handleChange} required disabled={submitting} className="select select-bordered"><option value="">Seleccionar rol</option><option value="administrador">Administrador/Validador</option><option value="instructor">Instructor</option><option value="aprendiz">Aprendiz</option></select></div>
-                    <div className="form-control"><label className="label">Teléfono Principal</label><input type="tel" name="telefono1" value={formData.telefono1} onChange={handleChange} disabled={submitting} className="input input-bordered" /></div>
-                    <div className="form-control"><label className="label">Documento</label><input type="text" name="documento" value={formData.documento} onChange={handleChange} disabled={submitting} className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">Nombre</label><input type="text" name="nombre" value={formData.nombre} onChange={handleChange} required autoFocus disabled={submitting} className="input input-bordered" autoComplete="off" /></div>
+                    <div className="form-control"><label className="label">Correo</label><input type="email" name="correo" value={formData.correo} onChange={handleChange} required disabled={submitting} className="input input-bordered" autoComplete="off" /></div>
+                    <div className="form-control"><label className="label">Rol</label><select name="rol" value={formData.rol} onChange={handleChange} required disabled={submitting} className="select select-bordered">
+                      <option value="">Seleccionar rol</option>
+                      <option value="instructor">Instructor</option>
+                      <option value="aprendiz">Aprendiz</option>
+                    </select></div>
+                    <div className="form-control"><label className="label">Teléfono Principal</label><input type="tel" name="telefono1" value={formData.telefono1} onChange={handleChange} disabled={submitting} className="input input-bordered" autoComplete="off" /></div>
+                    <div className="form-control"><label className="label">Documento</label><input type="text" name="documento" value={formData.documento} onChange={handleChange} disabled={submitting} className="input input-bordered" autoComplete="off" /></div>
                     <div className="form-control"><label className="label">Tipo de Documento</label><input type="text" name="tipo_documento" value={formData.tipo_documento} onChange={handleChange} disabled={submitting} className="input input-bordered" /></div>
-                    <div className="form-control"><label className="label">RH</label><input type="text" name="rh" value={formData.rh} onChange={handleChange} disabled={submitting} maxLength="3" placeholder="Ej: O+, A-, B+, AB+" className="input input-bordered" /></div>
+                    <div className="form-control"><label className="label">RH</label><input type="text" name="rh" value={formData.rh} onChange={handleChange} disabled={submitting} maxLength="3" placeholder="Ej: O+, A-, B+, AB+" className="input input-bordered" autoComplete="off" /></div>
+                    <div className="form-control"><label className="label">Foto</label>
+                    </div>
                     <div className="form-control"><label className="label">Estado</label><select name="estado" value={formData.estado} onChange={handleChange} required disabled={submitting} className="select select-bordered"><option value="activo">Activo</option><option value="inactivo">Inactivo</option><option value="pendiente">Pendiente</option></select></div>
                     <div className="form-control form-control-full"><label className="label">Observación</label><textarea name="observacion" value={formData.observacion} onChange={handleChange} disabled={submitting} placeholder="Observaciones adicionales" className="textarea textarea-bordered"></textarea></div>
                     {formError && (<div className="alert alert-error shadow-lg form-control-full">{formError}</div>)}

@@ -1,0 +1,126 @@
+.landing-bg {
+  min-height: 100vh;
+  height: 100vh;
+  background: linear-gradient(135deg, #e8f5e9 0%, #fff 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.landing-content {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px 0 rgba(44, 62, 80, 0.10);
+  padding: 2.5rem 3.5rem 2rem 3.5rem;
+  max-width: 900px;
+  width: 98vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+
+.landing-logo {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 1.2rem;
+}
+
+.landing-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #2e7d32;
+  margin-bottom: 0.2rem;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.landing-subtitle {
+  font-size: 1.1rem;
+  color: #388e3c;
+  font-weight: 600;
+  margin-bottom: 1.1rem;
+  text-align: center;
+}
+
+.landing-description {
+  font-size: 1.05rem;
+  color: #333;
+  margin-bottom: 1.2rem;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.landing-highlight {
+  color: #2e7d32;
+  font-weight: 700;
+}
+
+.landing-benefits {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  width: 100%;
+}
+.landing-benefits li {
+  font-size: 1rem;
+  color: #388e3c;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.landing-login-btn {
+  background: linear-gradient(90deg, #43a047 0%, #388e3c 100%);
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  padding: 0.85rem 2.2rem;
+  margin-top: 0.7rem;
+  box-shadow: 0 2px 8px 0 rgba(67,160,71,0.10);
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+}
+.landing-login-btn:hover {
+  background: linear-gradient(90deg, #388e3c 0%, #43a047 100%);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.landing-footer {
+  margin-top: auto;
+  text-align: center;
+  color: #888;
+  font-size: 0.98rem;
+  width: 100vw;
+  padding-bottom: 1.2rem;
+}
+
+@media (max-width: 900px) {
+  .landing-content {
+    max-width: 99vw;
+    padding: 1.5rem 1rem 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .landing-content {
+    padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+    max-width: 99vw;
+  }
+  .landing-title {
+    font-size: 1.5rem;
+  }
+  .landing-logo {
+    width: 80px;
+    height: 80px;
+  }
+  .landing-benefits li {
+    font-size: 0.98rem;
+  }
+} 

@@ -76,6 +76,40 @@ const historialDispositivoModel = {
             ORDER BY h.fecha_hora DESC`;
         const result = await pool.query(query, [dispositivo_id]);
         return result.rows;
+    },
+
+    countActividadHoy: async () => {
+        const query = `
+            SELECT 
+                SUM(CASE WHEN descripcion ILIKE '%entrada%' THEN 1 ELSE 0 END) AS entradas,
+                SUM(CASE WHEN descripcion ILIKE '%salida%' THEN 1 ELSE 0 END) AS salidas,
+                COUNT(*) AS total
+            FROM historial_dispositivo
+            WHERE DATE(fecha_hora) = CURRENT_DATE
+        `;
+        const result = await pool.query(query);
+        return {
+            entradas: parseInt(result.rows[0].entradas, 10) || 0,
+            salidas: parseInt(result.rows[0].salidas, 10) || 0,
+            total: parseInt(result.rows[0].total, 10) || 0
+        };
+    },
+
+    getActividadReciente: async () => {
+        const query = `
+            SELECT 
+                h.id_historial,
+                h.fecha_hora,
+                h.descripcion,
+                d.nombre as dispositivo_nombre,
+                d.serial as dispositivo_serial
+            FROM historial_dispositivo h
+            LEFT JOIN dispositivo d ON h.id_dispositivo = d.id
+            ORDER BY h.fecha_hora DESC
+            LIMIT 5
+        `;
+        const result = await pool.query(query);
+        return result.rows;
     }
 };
 

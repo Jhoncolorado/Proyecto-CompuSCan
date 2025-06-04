@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
 import '../styles/UserDevices.css';
 
-const UserDevices = ({ userId: propUserId, isAdminView }) => {
+const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
   const { user } = useAuth();
   const userId = propUserId || (user && user.id);
   const [devices, setDevices] = useState([]);
@@ -28,9 +28,13 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
     setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
   };
   const handleHideForm = () => {
+    if (onClose) {
+      onClose();
+    } else {
     setShowForm(false);
     setEditId(null);
     setForm({ nombre: '', tipo: '', serial: '', foto: null, mimeType: '' });
+    }
   };
 
   const canRegisterDevice = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
@@ -88,6 +92,7 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
         return;
       }
       let fotoBase64 = null;
+      let mimeType = form.mimeType;
       if (form.foto) {
         fotoBase64 = await new Promise((resolve, reject) => {
           const reader = new FileReader();
@@ -95,6 +100,8 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
           reader.onerror = reject;
           reader.readAsDataURL(form.foto);
         });
+        // Extraer el mimeType del dataURL
+        mimeType = fotoBase64.split(';')[0].split(':')[1];
       }
       if (editId) {
         // Edición
@@ -103,12 +110,16 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
           tipo: form.tipo,
           serial: form.serial,
           foto: fotoBase64,
-          mimeType: form.mimeType
+          mimeType: mimeType
         });
         setSuccessMessage('¡Dispositivo actualizado exitosamente!');
         setTimeout(() => {
+          if (onClose) {
+            onClose();
+          } else {
           setShowForm(false);
           setEditId(null);
+          }
           setSuccessMessage('');
         }, 1500);
       } else {
@@ -118,12 +129,16 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
           tipo: form.tipo,
           serial: form.serial,
           foto: fotoBase64,
-          mimeType: form.mimeType,
+          mimeType: mimeType,
           id_usuario: userId
         });
         setSuccessMessage('¡Dispositivo registrado exitosamente!');
         setTimeout(() => {
+          if (onClose) {
+            onClose();
+          } else {
           setShowForm(false);
+          }
           setSuccessMessage('');
         }, 1500);
       }
@@ -139,8 +154,51 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
     }
   };
 
-  if (loading) return <div className="loading">Cargando dispositivos...</div>;
-  if (error) return <div className="error">{error}</div>;
+  if (loading && !onClose) return <div className="loading">Cargando dispositivos...</div>;
+  if (error && !onClose) return <div className="error">{error}</div>;
+
+  // Si se llama desde la página de dispositivos, solo mostrar el formulario
+  if (onClose) {
+    return (
+      <div className="add-device-form-modal">
+        <form className="add-device-form" onSubmit={handleFormSubmit}>
+          <h3>Registrar Dispositivo</h3>
+          {formError && <div className="error">{formError}</div>}
+          {successMessage && <div className="success">{successMessage}</div>}
+          <div className="form-group">
+            <label>Nombre del dispositivo:</label>
+            <input type="text" name="nombre" value={form.nombre} onChange={handleFormChange} required />
+          </div>
+          <div className="form-group">
+            <label>Tipo:</label>
+            <select name="tipo" value={form.tipo} onChange={handleFormChange} required>
+              <option value="">Seleccione tipo</option>
+              <option value="laptop">Laptop</option>
+              <option value="tablet">Tablet</option>
+              <option value="camera">Cámara</option>
+              <option value="monitor">Monitor</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label>Serial:</label>
+            <input type="text" name="serial" value={form.serial} onChange={handleFormChange} required />
+          </div>
+          <div className="form-group">
+            <label>Foto (opcional):</label>
+            <input type="file" name="foto" accept="image/*" onChange={handleFormChange} />
+          </div>
+          <div className="form-actions inline-buttons">
+            <button type="submit" className="add-device-button" disabled={formLoading}>
+              {formLoading ? 'Guardando...' : 'Guardar'}
+            </button>
+            <button type="button" className="add-device-button" onClick={handleHideForm} disabled={formLoading}>
+              Cancelar
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <div className="user-devices">
@@ -180,6 +238,11 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
                     src={devices.find(d => d.id === editId).foto}
                     alt="Foto actual del equipo"
                     style={{ width: 120, height: 90, borderRadius: 10, objectFit: 'cover', border: '2px solid #2196f3', marginBottom: 10 }}
+                    onError={(e) => {
+                      console.error("Error al cargar imagen:", e);
+                      e.target.onerror = null;
+                      e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                    }}
                   />
                 ) : (
                   <span style={{ color: '#888' }}>(Sin imagen)</span>
@@ -207,6 +270,20 @@ const UserDevices = ({ userId: propUserId, isAdminView }) => {
           {devices.map(device => (
             <div key={device.id} className="device-card">
               <h3>{device.nombre}</h3>
+              {device.foto && (
+                <div className="device-image-container">
+                  <img 
+                    src={device.foto} 
+                    alt={device.nombre} 
+                    className="device-card-img"
+                    onError={(e) => {
+                      console.error("Error al cargar imagen:", e);
+                      e.target.onerror = null;
+                      e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
+                    }}
+                  />
+                </div>
+              )}
               <div className="device-info-row">
                 <span className="device-info-label">Tipo:</span>
                 <span className="device-info-value">{device.tipo}</span>

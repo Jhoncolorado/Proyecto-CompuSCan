@@ -6,10 +6,10 @@ import logo from '../../assets/CompuSCan2025.jfif';
 import './Header.css';
 
 const menuItems = [
-  { path: '/home', label: 'Inicio' },
+  { path: '/dashboard', label: 'Inicio' },
   { path: '/users', label: 'Usuarios' },
   { path: '/devices', label: 'Dispositivos' },
-  { path: '/alerts', label: 'Alertas' },
+  { path: '/reports', label: 'Reportes' },
   { path: '/history', label: 'Historial' },
   { path: '/device-validation', label: 'Validación de Dispositivos' }
 ];
@@ -21,6 +21,16 @@ const Header = () => {
   const location = useLocation();
   const isHistory = location.pathname.startsWith('/history');
   const navigate = useNavigate();
+
+  // Determinar a dónde debe llevar el logo
+  let logoLink = '/';
+  if (user) {
+    if (user.rol === 'aprendiz' || user.rol === 'instructor') {
+      logoLink = '/home-user';
+    } else {
+      logoLink = '/dashboard';
+    }
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -187,7 +197,7 @@ const Header = () => {
       >
         {/* IZQUIERDA: Logo y nombre */}
         <div style={{ display: 'flex', alignItems: 'center', minWidth: 0, maxWidth: 220, flexShrink: 0, gap: 10 }}>
-          <Link to="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: 10 }} className="hover-effect">
+          <Link to={logoLink} style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', gap: 10 }} className="hover-effect">
             <img
               src={logo}
               alt="Logo CompuScan"

@@ -284,7 +284,7 @@ La navegación se implementa usando React Router v6 con las siguientes rutas pri
     <Route path="dashboard" element={<Home />} />
     <Route path="devices" element={<Devices />} />
     <Route path="users" element={<PrivateRoute requiredRole="administrador"><Users /></PrivateRoute>} />
-    <Route path="alerts" element={<Alerts />} />
+    <Route path="reports" element={<Reports />} />
     <Route path="history" element={<History />} />
     <Route path="profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
     <Route path="device-validation" element={<DeviceValidation />} />
@@ -672,3 +672,72 @@ const dispositivosService = {
 - Nombres de funciones y variables en camelCase
 - Archivos de componentes con extensión `.jsx`
 - Archivos de estilos con extensión `.css` o `.module.css` 
+
+En la sección de reportes, el tab 'Usuarios' ya muestra datos reales de la API /api/usuarios. Los demás tabs están listos para integración de datos reales (historial, casos, dispositivos, actividad). 
+
+---
+
+## Pantalla de Validación/Asignación de RFID
+
+### Flujo de usuario para validar un dispositivo con RFID
+
+1. El admin/validador ingresa a la sección "Validación de Dispositivos".
+2. Selecciona un dispositivo pendiente de validación.
+3. Da clic en "Validar/Asignar RFID".
+4. Pasa la tarjeta RFID por el lector.
+5. El frontend captura el RFID y envía una petición PUT al backend (`/api/dispositivos/:id`).
+6. El backend valida y responde con el estado actualizado.
+7. El frontend muestra confirmación y actualiza la lista de dispositivos.
+
+**Diagrama de flujo:**
+
+```
+[Admin/Validador] -> [Pantalla de Validación] -> [Selecciona dispositivo] -> [Da clic en Validar/Asignar RFID]
+    -> [Pasa tarjeta RFID] -> [PUT /api/dispositivos/:id] -> [Backend responde] -> [Muestra confirmación]
+```
+
+### Ejemplo de integración frontend-backend para RFID
+
+```js
+// Fragmento de DeviceValidation.jsx
+const handleAssignRfid = async () => {
+  if (!rfid) return;
+  setLoading(true);
+  await axios.put(`/api/dispositivos/${selectedDevice.id}`, {
+    rfid,
+    estado_validacion: 'aprobado',
+  });
+  setLoading(false);
+  // Actualiza la lista y muestra confirmación
+};
+```
+
+---
+
+## Buenas Prácticas de UI/UX
+- Usar feedback visual claro para cada acción (mensajes de éxito/error).
+- Deshabilitar botones mientras se procesa una acción.
+- Validar campos antes de enviar formularios.
+- Mantener la interfaz limpia y accesible.
+- Adaptar el diseño a dispositivos móviles y escritorio.
+
+---
+
+## Troubleshooting (Solución de problemas)
+- **No se asigna el RFID:** Verifica que el RFID no esté ya asignado a otro dispositivo.
+- **No se actualiza la lista:** Asegúrate de recargar los datos tras una validación exitosa.
+- **Errores de red:** Comprueba la conexión con el backend y revisa la consola para detalles.
+
+---
+
+## Eliminación de Autocompletado en Campos Sensibles
+
+Para reforzar la privacidad y evitar errores de ingreso, deshabilité el autocompletado en los siguientes campos de los formularios del frontend:
+- Nombre completo
+- Correo electrónico
+- Documento
+- Teléfonos
+- RH
+
+Esto se implementó en los archivos `Login.jsx` y `Users.jsx` usando el atributo `autoComplete="off"`.
+Así, el navegador ya no muestra ni almacena valores previos en estos campos. 

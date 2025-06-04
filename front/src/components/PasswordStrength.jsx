@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
  * @param {string} props.message - Mensaje descriptivo de la fortaleza
  * @returns {JSX.Element} - Componente de visualización de fortaleza
  */
-const PasswordStrength = ({ strength, message }) => {
+const PasswordStrength = ({ strength = 0, message = '' }) => {
   // Determinar color según fortaleza
   const getColor = () => {
     switch (strength) {
@@ -62,11 +62,6 @@ const PasswordStrength = ({ strength, message }) => {
 PasswordStrength.propTypes = {
   strength: PropTypes.number.isRequired,
   message: PropTypes.string
-};
-
-PasswordStrength.defaultProps = {
-  strength: 0,
-  message: ''
 };
 
 export default PasswordStrength; 

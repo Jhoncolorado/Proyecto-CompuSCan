@@ -255,3 +255,60 @@
   color: white;
   border: 1px solid #757575;
 } 
+
+.register-device-button {
+  background: #1db954;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.1s;
+  box-shadow: 0 2px 8px rgba(46, 125, 50, 0.15);
+  white-space: nowrap;
+}
+
+.register-device-button:hover {
+  background: #178d40;
+  transform: translateY(-2px);
+}
+
+.register-device-button:active {
+  transform: translateY(0);
+}
+
+/* Estilos para el formulario de registro dentro de la página de dispositivos */
+.devices-panel .add-device-form-modal {
+  margin: 1rem auto;
+  max-width: 500px;
+  width: 100%;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(44,62,80,0.15);
+  padding: 2rem;
+  border: 1px solid #e3eaf2;
+}
+
+.devices-panel .add-device-form {
+  width: 100%;
+}
+
+.devices-panel .add-device-form h3 {
+  color: #1b5e20;
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.devices-panel .form-actions.inline-buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+} 
