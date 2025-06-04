@@ -57,10 +57,14 @@ const Users = () => {
   const [deviceImage, setDeviceImage] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(5);
+  const [totalPages, setTotalPages] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [page, limit]);
 
   useEffect(() => {
     if (showModal && editingUser && editingUser.id) {
@@ -80,19 +84,25 @@ const Users = () => {
     setError('');
     
     try {
-      const response = await api.get('/api/usuarios');
+      const response = await api.get(`/api/usuarios?page=${page}&limit=${limit}`);
       
-      if (Array.isArray(response.data)) {
-        setUsers(response.data);
+      if (response.data && Array.isArray(response.data.data)) {
+        setUsers(response.data.data);
+        setTotalPages(response.data.totalPages);
+        setTotal(response.data.total);
       } else {
         console.error('Respuesta del servidor no es un array:', response.data);
         setError('Error al cargar usuarios: Formato de datos incorrecto');
         setUsers([]);
+        setTotalPages(1);
+        setTotal(0);
       }
     } catch (err) {
       console.error('Error al cargar usuarios:', err);
       setError(`Error al cargar usuarios: ${err.response?.data?.message || err.message}`);
       setUsers([]);
+      setTotalPages(1);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
@@ -342,6 +352,19 @@ const Users = () => {
                 ))}
               </tbody>
             </table>
+          )}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button onClick={() => setPage(page - 1)} disabled={page === 1}>Anterior</button>
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button key={i+1} className={page === i+1 ? 'active' : ''} onClick={() => setPage(i+1)}>{i+1}</button>
+              ))}
+              <button onClick={() => setPage(page + 1)} disabled={page === totalPages}>Siguiente</button>
+              <span style={{marginLeft:8}}>Total: {total}</span>
+              <select value={limit} onChange={e => { setLimit(Number(e.target.value)); setPage(1); }} style={{marginLeft:8}}>
+                {[5,10,20,50].map(opt => <option key={opt} value={opt}>{opt} por página</option>)}
+              </select>
+            </div>
           )}
         </div>
         

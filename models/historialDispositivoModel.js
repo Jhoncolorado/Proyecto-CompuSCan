@@ -110,6 +110,27 @@ const historialDispositivoModel = {
         `;
         const result = await pool.query(query);
         return result.rows;
+    },
+
+    getHistorialesPaginados: async (limit, offset) => {
+        const query = `
+            SELECT 
+                h.id_historial,
+                h.fecha_hora,
+                h.descripcion,
+                d.nombre as dispositivo_nombre,
+                d.serial as dispositivo_serial
+            FROM historial_dispositivo h
+            LEFT JOIN dispositivo d ON h.id_dispositivo = d.id
+            ORDER BY h.fecha_hora DESC
+            LIMIT $1 OFFSET $2`;
+        const result = await pool.query(query, [limit, offset]);
+        return result.rows;
+    },
+
+    countHistoriales: async () => {
+        const result = await pool.query('SELECT COUNT(*) FROM historial_dispositivo');
+        return parseInt(result.rows[0].count, 10);
     }
 };
 

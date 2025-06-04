@@ -196,6 +196,17 @@ const usuarioModel = {
     updateUltimoAcceso: async (id) => {
         const query = 'UPDATE usuario SET ultimo_acceso = NOW() WHERE id = $1';
         await pool.query(query, [id]);
+    },
+
+    getUsuariosPaginados: async (limit, offset) => {
+        const query = 'SELECT id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, estado FROM usuario ORDER BY id DESC LIMIT $1 OFFSET $2';
+        const result = await pool.query(query, [limit, offset]);
+        return result.rows.map(user => {
+            if (user.foto) {
+                user.foto = 'data:image/jpeg;base64,' + Buffer.from(user.foto).toString('base64');
+            }
+            return user;
+        });
     }
 };
 

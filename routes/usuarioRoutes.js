@@ -174,47 +174,41 @@ router.post('/', usuarioController.createUsuario);
  * @swagger
  * /api/usuarios:
  *   get:
- *     summary: Obtener todos los usuarios
+ *     summary: Obtener todos los usuarios (paginado)
  *     tags: [Usuarios]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Número de página (por defecto 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Cantidad de usuarios por página (por defecto 10)
  *     responses:
  *       200:
- *         description: Lista de usuarios
+ *         description: Lista paginada de usuarios
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   nombre:
- *                     type: string
- *                   correo:
- *                     type: string
- *                   documento:
- *                     type: string
- *                   tipo_documento:
- *                     type: string
- *                   rol:
- *                     type: string
- *                   telefono1:
- *                     type: string
- *                   telefono2:
- *                     type: string
- *                   rh:
- *                     type: string
- *                   ficha:
- *                     type: string
- *                   observacion:
- *                     type: string
- *                   foto:
- *                     type: string
- *                   fecha_registro:
- *                     type: string
- *                     format: date-time
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Usuario'
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
  *       401:
  *         description: No autorizado
  */

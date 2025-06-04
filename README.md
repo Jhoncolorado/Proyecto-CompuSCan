@@ -22,6 +22,7 @@ CompuSCan es una plataforma web desarrollada para el **SENA - Centro de Comercio
 13. [FAQ](#faq)
 14. [Contribuciones](#contribuciones)
 15. [Licencia](#licencia)
+16. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
 
 ---
 
@@ -314,4 +315,40 @@ Este proyecto está licenciado bajo términos específicos del SENA. Consulte la
 
 ---
 
-© 2023 SENA - Centro de Comercio y Turismo. Todos los derechos reservados. 
+© 2023 SENA - Centro de Comercio y Turismo. Todos los derechos reservados.
+
+## Remoción de Secretos del Historial de Git (Caso Real)
+
+### Problema Detectado
+Durante el desarrollo, accidentalmente subí un archivo de credenciales sensibles (`active-tome-461303-c6-67856b9faa48.json`) al repositorio. GitHub detectó el secreto en el historial de commits y activó la protección de push, bloqueando cualquier intento de subir cambios hasta eliminar completamente el archivo de TODO el historial.
+
+### Proceso de Solución
+1. **Identificación:** GitHub mostró un error indicando la presencia de un secreto en un commit específico, impidiendo el push.
+2. **Backup:** Realicé una copia de seguridad del repositorio por precaución.
+3. **Eliminación del archivo:** Borré el archivo de la carpeta y realicé un commit para reflejar el cambio.
+4. **Limpieza del historial:** Utilicé la herramienta [BFG Repo-Cleaner](https://rtyley.github.io/bfg-repo-cleaner/) con el comando:
+   ```bash
+   java -jar bfg-1.14.0.jar --delete-files active-tome-461303-c6-67856b9faa48.json
+   ```
+5. **Limpieza de objetos huérfanos:**
+   ```bash
+   git reflog expire --expire=now --all
+   git gc --prune=now --aggressive
+   ```
+6. **Verificación:** Me aseguré de que el archivo ya no existía en el historial con:
+   ```bash
+   git log --all -- active-tome-461303-c6-67856b9faa48.json
+   ```
+7. **Push forzado:** Subí los cambios limpiados con:
+   ```bash
+   git push origin --force --all
+   git push origin --force --tags
+   ```
+
+### Aprendizaje y Recomendaciones
+- **Nunca subir archivos de credenciales o secretos al repositorio.**
+- **Agregar archivos sensibles a `.gitignore` antes de hacer commit.**
+- Si ocurre un error similar, limpiar el historial con BFG o `git filter-repo` y forzar el push.
+- Avisar a los colaboradores para que vuelvan a clonar el repo después de una limpieza de historial.
+
+Este proceso garantiza la seguridad del proyecto y el cumplimiento de las políticas de GitHub. 

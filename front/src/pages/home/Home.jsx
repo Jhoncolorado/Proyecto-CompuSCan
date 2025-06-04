@@ -177,16 +177,16 @@ const Home = () => {
             )}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
-            <h2 style={{
-              fontSize: '1.5rem',
-              fontWeight: '600',
-              margin: '0'
-            }}>
-              ¡Bienvenido, <span style={{
-                color: 'white',
-                fontWeight: '700'
-              }}>{user?.nombre || 'Administrador'}</span>!
-            </h2>
+          <h2 style={{
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            margin: '0'
+          }}>
+            ¡Bienvenido, <span style={{
+              color: 'white',
+              fontWeight: '700'
+            }}>{user?.nombre || 'Administrador'}</span>!
+          </h2>
             {/* Enlace a perfil */}
             <a href="/profile" style={{
               color: '#fff',

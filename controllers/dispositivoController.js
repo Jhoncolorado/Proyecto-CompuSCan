@@ -40,8 +40,22 @@ const validarFotos = (fotos) => {
 const dispositivoController = {
     getAllDispositivos: async (req, res) => {
         try {
-            const dispositivos = await dispositivoModel.getAllDispositivos();
-            res.json(dispositivos);
+            // Soporte de paginación
+            const page = parseInt(req.query.page, 10) || 1;
+            const limit = parseInt(req.query.limit, 10) || 10;
+            const offset = (page - 1) * limit;
+
+            const total = await dispositivoModel.countDispositivos();
+            const dispositivos = await dispositivoModel.getDispositivosPaginados(limit, offset);
+            const totalPages = Math.ceil(total / limit);
+
+            res.json({
+                data: dispositivos,
+                total,
+                page,
+                totalPages,
+                limit
+            });
         } catch (error) {
             console.error('Error al obtener dispositivos:', error);
             res.status(500).json({ 

@@ -45,31 +45,39 @@ router.post('/', dispositivoController.createDispositivo);
  * @swagger
  * /api/dispositivos:
  *   get:
- *     summary: Obtener todos los dispositivos
+ *     summary: Obtener todos los dispositivos (paginado)
  *     tags: [Dispositivos]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *         description: Número de página (por defecto 1)
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *         description: Cantidad de dispositivos por página (por defecto 10)
  *     responses:
  *       200:
- *         description: Lista de dispositivos
+ *         description: Lista paginada de dispositivos
  *         content:
  *           application/json:
  *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   nombre:
- *                     type: string
- *                   tipo:
- *                     type: string
- *                   serial:
- *                     type: string
- *                   foto:
- *                     type: string
- *                   fecha_registro:
- *                     type: string
- *                     format: date-time
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Dispositivo'
+ *                 total:
+ *                   type: integer
+ *                 page:
+ *                   type: integer
+ *                 totalPages:
+ *                   type: integer
+ *                 limit:
+ *                   type: integer
  */
 router.get('/', dispositivoController.getAllDispositivos);
 
