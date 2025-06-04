@@ -15,14 +15,16 @@ CompuSCan es una plataforma web desarrollada para el **SENA - Centro de Comercio
 6. [Flujo de Asignación y Validación de RFID](#flujo-de-asignación-y-validación-de-rfid)
 7. [Roles y Permisos](#roles-y-permisos)
 8. [Ejemplo de Uso Real](#ejemplo-de-uso-real)
-9. [Documentación Oficial](#documentación-oficial)
-10. [Tecnologías Utilizadas](#tecnologías-utilizadas)
-11. [Mejoras Recientes](#mejoras-recientes)
-12. [Mejoras de Seguridad y Experiencia en Formularios](#mejoras-de-seguridad-y-experiencia-en-formularios)
-13. [FAQ](#faq)
-14. [Contribuciones](#contribuciones)
-15. [Licencia](#licencia)
-16. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
+9. [Descarga de Reportes en Excel](#descarga-de-reportes-en-excel)
+10. [Documentación Oficial](#documentación-oficial)
+11. [Tecnologías Utilizadas](#tecnologías-utilizadas)
+12. [Mejoras Recientes](#mejoras-recientes)
+13. [Mejoras de Seguridad y Experiencia en Formularios](#mejoras-de-seguridad-y-experiencia-en-formularios)
+14. [FAQ](#faq)
+15. [Contribuciones](#contribuciones)
+16. [Licencia](#licencia)
+17. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
+18. [Gestión de imágenes múltiples por dispositivo](#gestión-de-imágenes-múltiples-por-dispositivo)
 
 ---
 
@@ -217,6 +219,54 @@ npm start
 
 ---
 
+## Descarga de Reportes en Excel
+
+El sistema permite a los administradores y validadores descargar los reportes de **Usuarios**, **Historial** y **Dispositivos** en formato Excel (.xlsx) directamente desde el panel de reportes del frontend.
+
+### ¿Cómo funciona?
+- En la página de reportes, cada pestaña (Usuarios, Historial, Dispositivos) tiene un botón **Exportar a Excel**.
+- Al hacer clic, el sistema descarga automáticamente un archivo Excel con los datos actuales de la pestaña seleccionada.
+
+### Proceso de implementación
+1. **Frontend (React):**
+   - El botón "Exportar a Excel" ejecuta la función `handleExport`, que:
+     - Llama a la API correspondiente (`/api/usuarios`, `/api/historiales`, `/api/dispositivos`) con un límite alto para traer todos los datos.
+     - Filtra y transforma los datos para dejar solo los campos relevantes.
+     - Usa la librería [xlsx](https://www.npmjs.com/package/xlsx) para generar el archivo Excel en el navegador.
+     - Descarga automáticamente el archivo con el nombre adecuado (por ejemplo, `usuarios.xlsx`).
+2. **Backend (Node/Express):**
+   - Los endpoints de la API soportan paginación y permiten traer todos los registros si se solicita un límite alto.
+   - No es necesario ningún cambio especial en el backend para la exportación, ya que el frontend se encarga de transformar y descargar el archivo.
+3. **Librería utilizada:**
+   - Se utiliza la librería `xlsx` en el frontend para convertir los datos JSON a formato Excel y disparar la descarga.
+
+### Ejemplo de uso
+1. Ve al panel de **Reportes**.
+2. Selecciona la pestaña que deseas exportar (Usuarios, Historial, Dispositivos).
+3. Haz clic en el botón **Exportar a Excel**.
+4. El archivo se descargará automáticamente con los datos actuales de la pestaña seleccionada.
+
+### Fragmento de código relevante (frontend)
+
+```jsx
+import * as XLSX from 'xlsx';
+
+const handleExport = async () => {
+  // ...fetch de datos según la pestaña activa...
+  const ws = XLSX.utils.json_to_sheet(filteredData);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, activeTab);
+  XLSX.writeFile(wb, filename);
+};
+```
+
+### Consideraciones
+- El proceso es 100% en el navegador, no requiere instalar nada adicional en el backend.
+- El archivo Excel incluye solo los campos relevantes y está listo para ser usado o compartido.
+- Si hay muchos registros, la exportación puede tardar unos segundos.
+
+---
+
 ## Documentación Oficial
 
 Para facilitar el entendimiento y mantenimiento del proyecto, hemos creado documentación técnica detallada para cada componente principal:
@@ -351,4 +401,17 @@ Durante el desarrollo, accidentalmente subí un archivo de credenciales sensible
 - Si ocurre un error similar, limpiar el historial con BFG o `git filter-repo` y forzar el push.
 - Avisar a los colaboradores para que vuelvan a clonar el repo después de una limpieza de historial.
 
-Este proceso garantiza la seguridad del proyecto y el cumplimiento de las políticas de GitHub. 
+Este proceso garantiza la seguridad del proyecto y el cumplimiento de las políticas de GitHub.
+
+## Gestión de imágenes múltiples por dispositivo
+
+Cada dispositivo puede tener hasta 3 fotos (frontal, trasera y cerrado).
+Las imágenes se suben desde el frontend, se almacenan en el backend en la carpeta `/uploads` y se visualizan tanto en el panel de usuario como en el panel de administración.
+
+- Al registrar o editar un dispositivo, el usuario puede subir hasta 3 imágenes.
+- El backend guarda los archivos y almacena en la base de datos un array JSON con los nombres de archivo en el campo `foto`.
+- El backend expone la carpeta `/uploads` para que el frontend pueda mostrar las imágenes.
+- En todas las vistas, el frontend recorre el array de nombres y muestra las imágenes con sus etiquetas correspondientes.
+- Si no hay imágenes, se muestra un placeholder "Sin imagen".
+
+Este flujo es robusto, retrocompatible y profesional. 

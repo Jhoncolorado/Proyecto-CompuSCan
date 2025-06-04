@@ -1,5 +1,13 @@
 const dispositivoModel = require('../models/dispositivoModel');
 
+/**
+ * Gestión de imágenes múltiples por dispositivo:
+ * - Se reciben hasta 3 archivos por dispositivo usando multer (campo 'foto').
+ * - Los archivos se guardan en /uploads y sus nombres se almacenan como un array JSON en el campo 'foto' de la base de datos.
+ * - Todas las funciones del controlador devuelven el campo 'foto' como un array de strings (nombres de archivo).
+ * - El backend expone la carpeta /uploads como ruta pública para que el frontend pueda mostrar las imágenes.
+ */
+
 // Funciones de validación
 const validarTipoDispositivo = (tipo) => {
     const tiposValidos = ['laptop', 'tablet', 'camera', 'monitor'];
@@ -86,19 +94,25 @@ const dispositivoController = {
 
     createDispositivo: async (req, res) => {
         try {
-            const { nombre, tipo, serial, foto, mimeType, id_usuario } = req.body;
-            // Procesar la foto (base64)
-            let fotoProcesada = null;
-            if (foto && typeof foto === 'string' && foto.startsWith('data:')) {
-                fotoProcesada = foto.split(',')[1];
+            console.log('BODY:', req.body);
+            console.log('FILES:', req.files);
+            const { nombre, tipo, serial, mimeType, id_usuario } = req.body;
+            // Procesar fotos
+            let fotos = [];
+            if (req.files && req.files.length > 0) {
+                fotos = req.files.map(f => f.filename);
+            } else if (req.body.foto) {
+                // Compatibilidad con una sola foto enviada como string
+                fotos = [req.body.foto];
             }
-            // Quitar validación Google Vision: solo guardar
+            // Validar que tipo exista antes de usar toLowerCase
+            const tipoFinal = (typeof tipo === 'string') ? tipo.toLowerCase() : '';
             const newDevice = await dispositivoModel.createDispositivo({
                 nombre,
-                tipo: tipo.toLowerCase(),
+                tipo: tipoFinal,
                 serial,
                 rfid: null, // Se asigna después
-                foto: fotoProcesada,
+                foto: JSON.stringify(fotos),
                 mimeType,
                 id_usuario
             });
@@ -118,37 +132,40 @@ const dispositivoController = {
     updateDispositivo: async (req, res) => {
         try {
             const { id } = req.params;
-            // Validar que el dispositivo exista
             const dispositivo = await dispositivoModel.getDispositivoById(id);
             if (!dispositivo) {
                 return res.status(404).json({ message: 'Dispositivo no encontrado' });
             }
-
-            // Si se está actualizando el serial, verificar que no exista
             if (req.body.serial && req.body.serial !== dispositivo.serial) {
                 const dispositivoExistente = await dispositivoModel.getDispositivoBySerial(req.body.serial);
                 if (dispositivoExistente) {
                     return res.status(400).json({ message: 'Ya existe un dispositivo con ese serial' });
                 }
             }
-
-            // Procesar la foto (base64)
-            let fotoProcesada = dispositivo.foto;
-            if (req.body.foto && typeof req.body.foto === 'string' && req.body.foto.startsWith('data:')) {
-                fotoProcesada = req.body.foto.split(',')[1];
+            // Procesar fotos
+            let fotos = [];
+            if (req.files && req.files.length > 0) {
+                fotos = req.files.map(f => f.filename);
+            } else if (req.body.foto) {
+                // Compatibilidad con una sola foto enviada como string
+                fotos = Array.isArray(req.body.foto) ? req.body.foto : [req.body.foto];
+            } else if (dispositivo.foto) {
+                try {
+                    fotos = JSON.parse(dispositivo.foto);
+                } catch {
+                    fotos = [dispositivo.foto];
+                }
             }
-
             const dispositivoData = {
                 nombre: req.body.nombre || dispositivo.nombre,
                 tipo: req.body.tipo || dispositivo.tipo,
                 serial: req.body.serial || dispositivo.serial,
                 rfid: req.body.rfid !== undefined ? req.body.rfid : dispositivo.rfid,
-                foto: fotoProcesada,
+                foto: JSON.stringify(fotos),
                 mimeType: req.body.mimeType || dispositivo.mimeType,
                 id_usuario: req.body.id_usuario || dispositivo.id_usuario,
                 estado_validacion: req.body.estado_validacion || dispositivo.estado_validacion
             };
-
             const updatedDispositivo = await dispositivoModel.updateDispositivo(id, dispositivoData);
             res.json({
                 message: 'Dispositivo actualizado exitosamente',
@@ -156,7 +173,7 @@ const dispositivoController = {
             });
         } catch (error) {
             console.error('Error al actualizar dispositivo:', error);
-            res.status(500).json({ 
+            res.status(500).json({
                 message: 'Error al actualizar dispositivo',
                 error: error.message
             });

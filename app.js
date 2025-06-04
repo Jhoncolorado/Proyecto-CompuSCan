@@ -87,17 +87,8 @@ app.get('/api/test-cors', (req, res) => {
   res.json({ message: 'La configuración CORS está funcionando correctamente' });
 });
 
-// Servir archivos estáticos desde la carpeta public con una ruta absoluta
-app.use(express.static(publicPath));
-
-// Ruta específica para CSS
-app.use('/css', express.static(path.join(publicPath, 'css')));
-
-// Ruta específica para imágenes
-app.use('/images', express.static(path.join(publicPath, 'images')));
-
-// Ruta específica para JavaScript
-app.use('/js', express.static(path.join(publicPath, 'js')));
+// Exponer la carpeta uploads para servir imágenes subidas por usuarios
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Ruta para el frontend - enviar index.html
 app.get('/', (req, res) => {
@@ -111,6 +102,15 @@ app.get('*', (req, res) => {
   console.log('Sirviendo index.html para ruta desconocida');
   res.sendFile(indexPath);
 });
+
+// Ruta específica para CSS
+app.use('/css', express.static(path.join(publicPath, 'css')));
+
+// Ruta específica para imágenes
+app.use('/images', express.static(path.join(publicPath, 'images')));
+
+// Ruta específica para JavaScript
+app.use('/js', express.static(path.join(publicPath, 'js')));
 
 // Manejo de errores
 app.use((err, req, res, next) => {

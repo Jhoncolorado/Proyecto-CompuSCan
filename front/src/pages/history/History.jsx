@@ -153,8 +153,15 @@ export const UserHistory = () => {
           throw new Error('Error al cargar el historial');
         }
         const data = await response.json();
+        // Asegurarse de que data sea un array antes de filtrar
+        let eventos = [];
+        if (Array.isArray(data.data)) {
+          eventos = data.data;
+        } else if (Array.isArray(data)) {
+          eventos = data;
+        }
         // Filtrar solo los accesos del usuario logueado
-        const userEvents = data.filter(ev => ev.descripcion && user && user.nombre && ev.descripcion.includes(user.nombre));
+        const userEvents = eventos.filter(ev => ev.descripcion && user && user.nombre && ev.descripcion.includes(user.nombre));
         setHistorial(userEvents);
       } catch (error) {
         setError(error.message);

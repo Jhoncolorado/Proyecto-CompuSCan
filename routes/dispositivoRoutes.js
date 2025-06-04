@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const dispositivoController = require('../controllers/dispositivoController');
 const pool = require('../config/database');
+const upload = require('../middleware/upload');
 
 /**
  * @swagger
@@ -39,7 +40,7 @@ const pool = require('../config/database');
  *       400:
  *         description: Datos inválidos o dispositivo ya existe
  */
-router.post('/', dispositivoController.createDispositivo);
+router.post('/', upload.array('foto', 3), dispositivoController.createDispositivo);
 
 /**
  * @swagger
@@ -153,7 +154,7 @@ router.get('/:id', dispositivoController.getDispositivoById);
  *       400:
  *         description: Datos inválidos
  */
-router.put('/:id', dispositivoController.updateDispositivo);
+router.put('/:id', upload.array('foto', 3), dispositivoController.updateDispositivo);
 
 /**
  * @swagger

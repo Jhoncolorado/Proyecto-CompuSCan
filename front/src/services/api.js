@@ -1,10 +1,11 @@
 import axios from 'axios';
 
+// NOTA: No se debe forzar el header 'Content-Type' a 'application/json'.
+// Cuando se suben imágenes, se usa FormData y el navegador pone el header correcto automáticamente.
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
-  headers: {
-    'Content-Type': 'application/json'
-  }
+  // No forzar Content-Type aquí, se pondrá automáticamente según el tipo de body
 });
 
 // Interceptor para agregar el token a las peticiones
