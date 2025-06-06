@@ -1077,7 +1077,7 @@
   gap: 2.5rem;
   justify-content: center;
   align-items: flex-start;
-  margin: 2.5rem 0 1.5rem 0;
+  margin: 0.5rem 0 1.5rem 0;
   flex-wrap: wrap;
 }
 .carnet-tarjeta-sena {
@@ -1202,7 +1202,14 @@
   align-items: center;
   gap: 1.1rem;
 }
-.carnet-tarjeta-foto img {
+.carnet-tarjeta-foto {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+.carnet-tarjeta-foto img, .carnet-tarjeta-foto .sin-imagen-box {
   width: 90px;
   height: 120px;
   object-fit: cover;
@@ -1210,6 +1217,15 @@
   border: 2.5px solid #43a047;
   background: #f7faf7;
   box-shadow: 0 2px 8px #0001;
+  display: block;
+  margin: 0;
+}
+.carnet-tarjeta-foto .sin-imagen-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 13px;
 }
 .carnet-tarjeta-info {
   font-size: 1rem;
@@ -1353,3 +1369,47 @@
   }
 }
 /* === FIN CARNET FÍSICO SENA === */
+
+.carnet-vertical-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+  margin-top: 1.5rem;
+}
+.carnet-tarjeta {
+  background: #fff;
+  border: 2px solid #43a047;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 1.5rem 2.2rem 1.2rem 2.2rem;
+  min-width: 340px;
+  max-width: 350px;
+  min-height: 390px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0;
+}
+.carnet-aprendiz {
+  /* Hereda de .carnet-tarjeta, pero puedes personalizar si quieres */
+}
+.carnet-equipo {
+  /* Igual que .carnet-tarjeta para que sean idénticas */
+}
+.acceso-titulo {
+  text-align: center;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #43a047;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px #0001;
+  text-transform: uppercase;
+}
+.carnet-tarjeta-foto-vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}

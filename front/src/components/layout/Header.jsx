@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useLocation, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { FaSignOutAlt } from 'react-icons/fa';
+import { FaSignOutAlt, FaUsers, FaDesktop, FaHistory, FaClipboardList, FaPlus } from 'react-icons/fa';
 import logo from '../../assets/CompuSCan2025.jfif';
 import './Header.css';
 
@@ -21,6 +21,7 @@ const Header = () => {
   const location = useLocation();
   const isHistory = location.pathname.startsWith('/history');
   const navigate = useNavigate();
+  const [showQuickAccess, setShowQuickAccess] = useState(false);
 
   // Determinar a dónde debe llevar el logo
   let logoLink = '/';
@@ -161,6 +162,29 @@ const Header = () => {
     logout();
     navigate('/login');
   };
+
+  const quickAccessStyle = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    color: '#388e3c',
+    fontWeight: 600,
+    fontSize: 16,
+    textDecoration: 'none',
+    padding: '7px 10px',
+    borderRadius: 8,
+    transition: 'background 0.15s, color 0.15s',
+    cursor: 'pointer',
+  };
+  const iconStyle = {
+    fontSize: 18,
+    color: '#43a047',
+  };
+
+  // Animación fadeInQuickAccess
+  const styleSheet = document.createElement('style');
+  styleSheet.innerText = `@keyframes fadeInQuickAccess { from { opacity: 0; transform: translateY(-10px);} to { opacity: 1; transform: none; } }`;
+  document.head.appendChild(styleSheet);
 
   return (
     <header className={`header-fixed ${scrolled ? 'scrolled' : ''}`}
@@ -394,7 +418,8 @@ const Header = () => {
           flexShrink: 1, 
           gap: 16,
           marginLeft: 'auto', // Asegura que esté lo más a la derecha posible
-          paddingRight: 0
+          paddingRight: 0,
+          position: 'relative' // Para posicionar el speed dial
         }}>
           <div className="header-date-time" style={{ 
             display: 'flex', 

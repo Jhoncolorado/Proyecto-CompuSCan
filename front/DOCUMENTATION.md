@@ -785,3 +785,46 @@ El frontend permite subir, editar y visualizar hasta **3 imágenes** (frontal, t
 - Registrar o editar un dispositivo:
   - Seleccionar hasta 3 imágenes en el formulario.
   - Guardar los cambios; las imágenes se mostrarán automáticamente en la tabla y en la vista de detalle. 
+
+---
+
+## Menú de Validación y Asignación de RFID (Diseño Responsive y Profesional)
+
+El menú de validación de dispositivos pendientes para asignación de RFID fue rediseñado para ofrecer una experiencia profesional, moderna y totalmente adaptable a cualquier dispositivo.
+
+### Características principales
+- **Grid adaptable:**
+  - 3 columnas en desktop, 2 en tablet, 1 en móvil.
+  - Las tarjetas de dispositivos se distribuyen automáticamente según el ancho de pantalla.
+- **Tarjetas compactas y limpias:**
+  - Cada dispositivo pendiente se muestra en una tarjeta con fondo blanco, sombra, bordes suaves y espaciado generoso.
+  - Imágenes (frontal, trasera, cerrado) y datos clave (nombre, tipo, serial, usuario) bien jerarquizados.
+  - Botón de acción ancho y destacado.
+- **Formulario de validación en contexto:**
+  - Al seleccionar un dispositivo, el formulario de asignación de RFID aparece **en el lugar exacto de la tarjeta seleccionada** dentro del grid, sin centrar ni desplazar la pantalla.
+  - El usuario no pierde el contexto ni el scroll, y puede validar varios dispositivos de forma fluida.
+- **Scroll automático:**
+  - Si hay muchos dispositivos, la lista tiene altura máxima y scroll vertical, evitando que la página se haga infinita.
+- **Colores institucionales y visual profesional:**
+  - Verde SENA para botones y acentos, fondo blanco, sombras suaves.
+
+### Ventajas UX
+- Experiencia moderna y clara, ideal para listas largas.
+- El usuario siempre mantiene el contexto y puede volver fácilmente a la lista.
+- 100% responsive y usable en cualquier dispositivo.
+
+### Ubicación del código
+- Componente: `front/src/components/DeviceValidation.jsx`
+- Estilos: `front/src/styles/DeviceValidation.css`
+
+---
+
+## Actualización en tiempo real del dashboard admin
+
+El panel de control del administrador ahora muestra la "Actividad Hoy" (ingresos y salidas) en tiempo real, sin necesidad de recargar la página. Esto se logra mediante la integración de **socket.io**:
+
+- El backend emite un evento cada vez que se registra un nuevo acceso/salida.
+- El frontend escucha el evento y actualiza automáticamente el contador y la actividad reciente.
+- Si el socket no está disponible, el dashboard sigue funcionando con la carga inicial por HTTP.
+
+**Ventaja UX:** El admin ve los cambios de actividad al instante, ideal para monitoreo en vivo. 

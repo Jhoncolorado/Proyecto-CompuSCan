@@ -1,4 +1,6 @@
 const historialDispositivoModel = require('../models/historialDispositivoModel');
+const { io } = require('../app');
+const dashboardController = require('./dashboardController');
 
 const historialDispositivoController = {
     getAllHistoriales: async (req, res) => {
@@ -58,6 +60,13 @@ const historialDispositivoController = {
                 descripcion,
                 id_dispositivo
             });
+
+            // Emitir evento de actualización de actividad
+            if (io) {
+                // Obtener los nuevos stats del dashboard
+                const stats = await dashboardController.getDashboardStatsData();
+                io.emit('actividad_actualizada', stats);
+            }
 
             res.status(201).json({
                 message: 'Historial creado exitosamente',

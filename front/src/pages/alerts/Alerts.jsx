@@ -144,35 +144,68 @@ const Reports = () => {
   };
 
   return (
-    <div className="reports-bg">
-      <div className="reports-container">
+    <div className="reports-bg" style={{ background: '#fff', boxShadow: 'none' }}>
+      <div
+        className="reports-container"
+        style={{
+          marginTop: '0',
+          marginLeft: '0',
+          background: '#fff',
+          boxShadow: 'none',
+          borderRadius: 0,
+          width: '100%',
+          maxWidth: '100%',
+          padding: '20px 40px 40px 40px',
+        }}
+      >
         <h1 className="reports-title">Reportes</h1>
-        <div className="reports-tabs">
+        <div
+          className="reports-tabs-row"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'stretch',
+            marginBottom: 28,
+          }}
+        >
+          <div className="reports-tabs" style={{ height: 48, display: 'flex', alignItems: 'center' }}>
           {tabs.map(tab => (
             <button
               key={tab.key}
               className={activeTab === tab.key ? 'reports-tab active' : 'reports-tab'}
               onClick={() => setActiveTab(tab.key)}
+                style={{ height: 48, display: 'flex', alignItems: 'center' }}
             >
               <span className="tab-icon">{tab.icon}</span>
               <span>{tab.label}</span>
             </button>
           ))}
         </div>
-        <div className="reports-content">
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 18 }}>
-            <button onClick={handleExport} className="export-btn" disabled={loading}>
+          <button
+            onClick={handleExport}
+            className="export-btn"
+            disabled={loading}
+            style={{
+              height: 48,
+              paddingTop: 0,
+              paddingBottom: 0,
+              display: 'flex',
+              alignItems: 'center',
+              marginBottom: 0,
+            }}
+          >
               <FaFileExcel style={{ marginRight: 8, fontSize: 18, verticalAlign: 'middle' }} />
               Exportar a Excel
             </button>
           </div>
-          <div className="reports-panel">
+        <div className="reports-content" style={{ paddingLeft: 0, paddingTop: '0.2rem' }}>
+          <div className="reports-panel" style={{ paddingLeft: 0, paddingTop: '0.2rem', background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
             {activeTab === 'users' && (
               <div>
                 <h2 className="reports-section-title">Usuarios</h2>
                 {loading ? <p className="reports-loading">Cargando usuarios...</p> : error ? <p className="reports-error">{error}</p> : (
-                  <div className="reports-table-wrapper">
-                    <table className="reports-table">
+                  <div className="reports-table-wrapper" style={{ paddingLeft: 0, paddingTop: 0, background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
+                    <table className="reports-table" style={{ background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
                       <thead>
                         <tr>
                           <th>Nombre</th>
@@ -188,7 +221,9 @@ const Reports = () => {
                             <td>{user.nombre}</td>
                             <td>{user.correo}</td>
                             <td>{user.rol}</td>
-                            <td>{user.estado || 'Activo'}</td>
+                            <td>
+                              <span className="badge-estado">{user.estado || 'Activo'}</span>
+                            </td>
                             <td>{user.fecha_registro ? new Date(user.fecha_registro).toLocaleDateString() : ''}</td>
                           </tr>
                         ))}
@@ -215,8 +250,8 @@ const Reports = () => {
               <div>
                 <h2 className="reports-section-title">Historial</h2>
                 {loading ? <p className="reports-loading">Cargando historial...</p> : error ? <p className="reports-error">{error}</p> : (
-                  <div className="reports-table-wrapper">
-                    <table className="reports-table">
+                  <div className="reports-table-wrapper" style={{ paddingLeft: 0, paddingTop: 0, background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
+                    <table className="reports-table" style={{ background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
                       <thead>
                         <tr>
                           <th>ID</th>
@@ -259,8 +294,8 @@ const Reports = () => {
               <div>
                 <h2 className="reports-section-title">Dispositivos</h2>
                 {loading ? <p className="reports-loading">Cargando dispositivos...</p> : error ? <p className="reports-error">{error}</p> : (
-                  <div className="reports-table-wrapper">
-                    <table className="reports-table">
+                  <div className="reports-table-wrapper" style={{ paddingLeft: 0, paddingTop: 0, background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
+                    <table className="reports-table" style={{ background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
                       <thead>
                         <tr>
                           <th>ID</th>
@@ -306,143 +341,140 @@ const Reports = () => {
           </div>
         </div>
         <style>{`
-          .reports-bg {
-            min-height: 100vh;
-            background: #f4f7f6;
-            padding: 24px 0 0 0;
+          .reports-bg, .reports-container, .reports-panel, .reports-table-wrapper, .reports-table {
+            background: #fff !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
           }
           .reports-container {
-            width: 96vw;
-            max-width: 1800px;
-            margin: 0 auto;
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 6px 32px rgba(44, 120, 60, 0.10);
-            padding: 36px 32px 44px 32px;
-            position: relative;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0 0 32px 0;
           }
           .reports-title {
-            font-size: 2.4rem;
+            font-size: 2rem;
             font-weight: 800;
+            color: #183c1c;
+            margin: 0 0 24px 0;
+            letter-spacing: 1px;
+          }
+          .reports-tabs-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 28px;
-            color: #1b5e20;
-            letter-spacing: 1.2px;
-            text-shadow: 0 2px 8px #e8f5e9;
           }
           .reports-tabs {
             display: flex;
-            gap: 18px;
-            margin-bottom: 28px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 2px;
+            gap: 16px;
           }
           .reports-tab {
-            background: #e8f5e9;
+            background: #f3f7f5;
             border: none;
-            border-radius: 10px 10px 0 0;
+            border-radius: 8px;
             padding: 13px 38px 13px 28px;
             font-size: 1.13rem;
             font-weight: 700;
-            color: #388e3c;
+            color: #183c1c;
             cursor: pointer;
-            transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            transition: background 0.2s, color 0.2s;
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 2px 8px rgba(56, 142, 60, 0.04);
-            position: relative;
           }
           .reports-tab.active {
-            background: #388e3c;
+            background: #218838;
             color: #fff;
-            box-shadow: 0 4px 16px rgba(56, 142, 60, 0.10);
-            z-index: 2;
           }
-          .tab-icon {
-            font-size: 1.3em;
+          .export-btn {
+            background: #218838;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 13px 38px;
+            font-size: 1.13rem;
+            font-weight: 700;
+            cursor: pointer;
             display: flex;
             align-items: center;
+            box-shadow: none;
+            margin-bottom: 0;
           }
           .reports-content {
-            background: #f9fbe7;
-            border-radius: 0 0 14px 14px;
-            padding: 28px 16px 16px 16px;
-            min-height: 400px;
+            padding: 0;
           }
           .reports-panel {
             background: #fff;
-            border-radius: 14px;
-            box-shadow: 0 2px 12px rgba(44, 120, 60, 0.07);
-            padding: 28px 18px 18px 18px;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
             margin-top: 0;
-            min-height: 320px;
           }
           .reports-section-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #1b5e20;
+            color: #183c1c;
             margin-bottom: 18px;
             letter-spacing: 0.5px;
           }
           .reports-table-wrapper {
             overflow-x: auto;
+            background: #fff;
+            box-shadow: none;
+            border-radius: 0;
+            margin: 0;
+            padding: 0;
           }
           .reports-table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             background: #fff;
-            min-width: 900px;
             margin: 0;
-            table-layout: fixed;
-            border-radius: 8px;
-            box-shadow: 0 1px 4px #e0e0e0;
-          }
-          .reports-table thead {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background: #e8f5e9;
+            table-layout: auto;
+            border-radius: 12px;
+            box-shadow: none;
+            font-size: 1.08rem;
+            border: 1.5px solid #e0e0e0;
+            overflow: hidden;
           }
           .reports-table th, .reports-table td {
-            padding: 12px 18px;
+            padding: 16px 18px;
             border-bottom: 1px solid #e0e0e0;
             text-align: left;
-            font-size: 1.04rem;
+            font-size: 1.08rem;
           }
           .reports-table th {
-            background: #e8f5e9;
-            color: #388e3c;
+            background: #f3f7f5;
+            color: #218838;
             font-weight: 800;
             letter-spacing: 0.5px;
           }
+          .reports-table tr:last-child td {
+            border-bottom: none;
+          }
           .reports-table tr:hover {
-            background: #f1f8e9;
+            background: #f7faf9;
             transition: background 0.15s;
+          }
+          .badge-estado {
+            display: inline-block;
+            background: #218838;
+            color: #fff;
+            font-weight: 700;
+            font-size: 1.02rem;
+            padding: 4px 18px;
+            border-radius: 16px;
+            margin-left: 0;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+            vertical-align: middle;
           }
           .reports-loading, .reports-error {
             color: #c62828;
             font-weight: 600;
             font-size: 1.1rem;
-          }
-          .export-btn {
-            background: linear-gradient(90deg, #43a047 0%, #388e3c 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 28px;
-            font-size: 1.08rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-bottom: 8px;
-            transition: background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px #e8f5e9;
-            display: flex;
-            align-items: center;
-          }
-          .export-btn:disabled {
-            background: #bdbdbd;
-            cursor: not-allowed;
           }
           .pagination {
             display: flex;
@@ -477,28 +509,9 @@ const Reports = () => {
             font-size: 1.05rem;
           }
           @media (max-width: 900px) {
-            .reports-container {
-              width: 100vw;
-              max-width: 100vw;
-              padding: 8px 0 10px 0;
-            }
-            .reports-title {
-              font-size: 1.3rem;
-            }
-            .reports-section-title {
-              font-size: 1.1rem;
-            }
-            .reports-tab {
-              padding: 8px 10px;
-              font-size: 0.95rem;
-            }
-            .reports-panel {
-              padding: 10px 2px 2px 2px;
-            }
-            .reports-table th, .reports-table td {
-              padding: 7px 6px;
-              font-size: 0.95rem;
-            }
+            .reports-title { font-size: 1.5rem; }
+            .reports-tab, .export-btn { padding: 8px 10px; font-size: 0.95rem; }
+            .reports-table th, .reports-table td { padding: 7px 6px; font-size: 0.95rem; }
           }
         `}</style>
       </div>

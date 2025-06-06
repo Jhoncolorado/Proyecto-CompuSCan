@@ -9,6 +9,15 @@ const app = express();
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const dashboardController = require('./controllers/dashboardController');
+const http = require('http');
+const { Server } = require('socket.io');
+const io = new Server(http.createServer(app), {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+  }
+});
 
 // Mostrar las variables de entorno cargadas (solo para desarrollo)
 console.log('Variables de entorno:');
@@ -97,7 +106,11 @@ app.get('/', (req, res) => {
 });
 
 // Capturar todas las demás rutas para enviar al frontend
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/socket.io')) {
+    // No loguear ni servir index.html para socket.io
+    return next();
+  }
   console.log('Ruta solicitada:', req.path);
   console.log('Sirviendo index.html para ruta desconocida');
   res.sendFile(indexPath);
@@ -120,9 +133,9 @@ app.use((err, req, res, next) => {
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+http.createServer(app).listen(PORT, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📚 Documentación API disponible en http://localhost:${PORT}/api-docs`);
 });
 
-module.exports = app;
+module.exports = { app, io };

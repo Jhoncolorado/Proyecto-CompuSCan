@@ -43,6 +43,7 @@ const AccessControl = () => {
 
   return (
     <div className="access-bg access-bg-full">
+      <h1 className="acceso-titulo">registro de entrada/salida</h1>
       <form className="access-form" onSubmit={handleSubmit}>
         <input
           ref={inputRef}
@@ -55,12 +56,10 @@ const AccessControl = () => {
         />
         <button type="submit" style={{ display: 'none' }}>Buscar</button>
       </form>
-      <h2 className="carnet-main-title">CARNET DE ACCESO</h2>
       {error && <div style={{ color: 'red', margin: 10 }}>{error}</div>}
       {data && data.usuario && data.dispositivo && (
         <div className="carnet-separado-wrapper">
-          {/* Tarjeta de Usuario estilo carnet SENA FÍSICO */}
-          <div className="carnet-tarjeta-sena carnet-fisico">
+          <div className="carnet-tarjeta carnet-aprendiz">
             <div className="carnet-fisico-header">
               <div className="carnet-fisico-logo-aprendiz">
                 <img src="/images.png" alt="Logo SENA" className="carnet-fisico-logo" />
@@ -93,12 +92,52 @@ const AccessControl = () => {
               </div>
             </div>
           </div>
-          {/* Tarjeta de Equipo (sencilla) */}
-          <div className="carnet-tarjeta carnet-tarjeta-equipo">
-            <div className="carnet-tarjeta-foto">
-              <img src={data.dispositivo.foto || '/images/default-device.png'} alt="Foto equipo" />
+          <div className="carnet-tarjeta carnet-equipo">
+            <div className="carnet-fisico-header">
+              <div className="carnet-tarjeta-fotos-row" style={{ display: 'flex', flexDirection: 'row', gap: 16, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+                {[0, 1, 2].map(idx => (
+                  <div key={idx} style={{ textAlign: 'center' }}>
+                    {Array.isArray(data.dispositivo.foto) && data.dispositivo.foto[idx] ? (
+                      <img
+                        src={`http://localhost:3000/uploads/${data.dispositivo.foto[idx]}`}
+                        alt={['Frontal', 'Trasera', 'Cerrado'][idx]}
+                        style={{
+                          width: 90,
+                          height: 120,
+                          borderRadius: 10,
+                          objectFit: 'cover',
+                          border: '2.5px solid #2196f3',
+                          background: '#fff',
+                          marginBottom: 2
+                        }}
+                        onError={e => { e.target.onerror = null; e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI3MCIgaGVpZ2h0PSI1NCI+PHJlY3Qgd2lkdGg9IjcwIiBoZWlnaHQ9IjU0IiBmaWxsPSIjZTBkZWUwIi8+PHRleHQgeD0iMzUiIHk9IjI3IiBmb250LXNpemU9IjEwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5Ij5TaW48L3RleHQ+PC9zdmc+"; }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: 90,
+                        height: 120,
+                        background: '#eee',
+                        borderRadius: 10,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        border: '2.5px solid #2196f3',
+                        marginBottom: 2,
+                        color: '#888',
+                        fontSize: 13
+                      }}>
+                        Sin imagen
+                      </div>
+                    )}
+                    <div style={{ fontSize: 12, color: '#388e3c', fontWeight: 700, marginTop: 2 }}>
+                      {['Frontal', 'Trasera', 'Cerrado'][idx]}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <div className="carnet-tarjeta-info">
+            <div className="carnet-fisico-divider" style={{ background: '#2e7d32' }}></div>
+            <div className="carnet-fisico-info">
               <div><b>Equipo:</b> {data.dispositivo.nombre}</div>
               <div><b>Tipo:</b> {data.dispositivo.tipo}</div>
               <div><b>Serial:</b> {data.dispositivo.serial}</div>

@@ -229,9 +229,15 @@ router.post('/acceso-rfid', async (req, res) => {
       usuario.foto = 'data:image/jpeg;base64,' + Buffer.from(usuario.foto).toString('base64');
     }
     if (dispositivo && dispositivo.foto) {
-      const mime = dispositivo.mime_type || dispositivo.mimeType || 'image/jpeg';
-      // IMPORTANTE: Esta conversión es necesaria para que el frontend muestre la foto del dispositivo correctamente
-      dispositivo.foto = `data:${mime};base64,` + Buffer.from(dispositivo.foto).toString('base64');
+      try {
+        let arr = JSON.parse(dispositivo.foto);
+        if (Array.isArray(arr) && Array.isArray(arr[0])) {
+          arr = arr[0];
+        }
+        dispositivo.foto = Array.isArray(arr) ? arr : [arr];
+      } catch {
+        dispositivo.foto = [dispositivo.foto];
+      }
     }
     // -------------------------------------------------------------
 
@@ -295,8 +301,15 @@ router.get('/acceso/rfid/:rfid', async (req, res) => {
       usuario.foto = 'data:image/jpeg;base64,' + Buffer.from(usuario.foto).toString('base64');
     }
     if (dispositivo && dispositivo.foto) {
-      const mime = dispositivo.mime_type || dispositivo.mimeType || 'image/jpeg';
-      dispositivo.foto = `data:${mime};base64,` + Buffer.from(dispositivo.foto).toString('base64');
+      try {
+        let arr = JSON.parse(dispositivo.foto);
+        if (Array.isArray(arr) && Array.isArray(arr[0])) {
+          arr = arr[0];
+        }
+        dispositivo.foto = Array.isArray(arr) ? arr : [arr];
+      } catch {
+        dispositivo.foto = [dispositivo.foto];
+      }
     }
     // -------------------------------------------------------------
     // Debug: mostrar el nombre del programa antes de responder
