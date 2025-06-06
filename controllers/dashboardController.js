@@ -18,6 +18,14 @@ const dashboardController = {
     } catch (error) {
       res.status(500).json({ message: 'Error al obtener estadísticas', error: error.message });
     }
+  },
+  getDashboardStatsData: async () => {
+    const usuarios = await usuarioModel.countUsuarios();
+    const dispositivos = await dispositivoModel.countDispositivos();
+    let estadoDispositivos = { aprobados: 0, pendientes: 0, rechazados: 0 };
+    const actividad = await historialDispositivoModel.countActividadHoy();
+    const actividadReciente = await historialDispositivoModel.getActividadReciente();
+    return { usuarios, dispositivos, estadoDispositivos, actividad, actividadReciente };
   }
 };
 

@@ -247,7 +247,7 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
               <div className="form-group">
                 <label>Imágenes actuales:</label>
                 {devices.find(d => d.id === editId)?.foto && (
-                  <div style={{ display: 'flex', gap: 8 }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                     {(() => {
                       let fotos = [];
                       try {
@@ -255,11 +255,11 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
                       } catch {
                         fotos = [devices.find(d => d.id === editId).foto];
                       }
-                      return (
-                        fotos.map((f, idx) => (
-                          <div key={idx} style={{ textAlign: 'center' }}>
+                      return [0,1,2].map(idx => (
+                        <div key={idx} style={{ textAlign: 'center' }}>
+                          {fotos[idx] ? (
                             <img
-                              src={typeof f === 'string' && f.startsWith('data:') ? f : `/uploads/${f}`}
+                              src={`http://localhost:3000/uploads/${fotos[idx]}`}
                               alt={`Foto ${idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}`}
                               className="device-card-img"
                               style={{ width: 80, height: 60, borderRadius: 8, objectFit: 'cover', border: '2px solid #2196f3', marginBottom: 4 }}
@@ -268,12 +268,16 @@ const UserDevices = ({ userId: propUserId, isAdminView, onClose }) => {
                                 e.target.src = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiB2aWV3Qm94PSIwIDAgMTAwIDEwMCI+PHJlY3Qgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxMDAiIGZpbGw9IiNlMGUwZTAiLz48dGV4dCB4PSI1MCIgeT0iNTAiIGZvbnQtc2l6ZT0iMTQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzk5OTk5OSI+U2luIGltYWdlbjwvdGV4dD48L3N2Zz4=";
                               }}
                             />
-                            <div style={{ fontSize: 11, color: '#388e3c', fontWeight: 700 }}>
-                              {idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}
+                          ) : (
+                            <div style={{ width: 80, height: 60, background: '#eee', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid #2196f3', marginBottom: 4, color: '#888', fontSize: 13 }}>
+                              Sin imagen
                             </div>
+                          )}
+                          <div style={{ fontSize: 11, color: '#388e3c', fontWeight: 700 }}>
+                            {idx === 0 ? 'Frontal' : idx === 1 ? 'Trasera' : 'Cerrado'}
                           </div>
-                        ))
-                      );
+                        </div>
+                      ));
                     })()}
                   </div>
                 )}

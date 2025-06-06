@@ -15,6 +15,7 @@
 12. [Guía de Mantenimiento](#guía-de-mantenimiento)
 13. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
 14. [Gestión de imágenes múltiples por dispositivo](#gestión-de-imágenes-múltiples-por-dispositivo)
+15. [Actualización en tiempo real del dashboard admin (socket.io)](#actualización-en-tiempo-real-del-dashboard-admin-socketio)
 
 ---
 
@@ -964,33 +965,38 @@ Durante el desarrollo, detecté que un archivo de credenciales sensibles fue sub
 
 ---
 
-## Gestión de imágenes múltiples por dispositivo
+## Gestión de Imágenes de Dispositivos
 
-### Descripción general
-El sistema permite asociar hasta **3 imágenes** (frontal, trasera y cerrado) a cada dispositivo. Las imágenes se reciben desde el frontend, se almacenan en el backend y se exponen para su visualización en todas las vistas.
+- **Subida:**  
+  Las imágenes se suben mediante endpoints que usan `multer` y se guardan en `/uploads`.
+- **Almacenamiento:**  
+  El campo `foto` en la tabla `dispositivo` almacena un array JSON serializado con los nombres de archivo.
+- **Entrega:**  
+  Todos los endpoints (`getAllDispositivos`, `getDispositivoById`, `getDispositivosPendientes`, `/api/dispositivos/acceso-rfid`, etc.) procesan el campo `foto` para que siempre sea un array plano de strings.
+- **Compatibilidad:**  
+  Si el campo `foto` es un string base64 (caso antiguo), el backend lo entrega como un array con ese string.
+- **Visualización:**  
+  El frontend accede a las imágenes mediante URLs del tipo:  
+  `http://localhost:3000/uploads/<nombre_de_archivo>`
+- **Notas de migración:**  
+  Se corrigieron errores donde el campo `foto` podía ser un array anidado o un string base64, asegurando que siempre sea un array plano.
 
-### Flujo técnico
-- **Recepción:**
-  - Los endpoints `POST /api/dispositivos` y `PUT /api/dispositivos/:id` aceptan hasta 3 archivos en el campo `foto` usando `multipart/form-data`.
-  - Se utiliza el middleware `multer` para procesar la carga de archivos.
-- **Almacenamiento:**
-  - Los archivos se guardan en la carpeta `/uploads` del backend.
-  - En la base de datos, el campo `foto` de la tabla `dispositivo` es de tipo `TEXT` y almacena un array JSON con los nombres de archivo (ejemplo: `["img1.jpg","img2.jpg","img3.jpg"]`).
-- **Compatibilidad:**
-  - Si solo se sube una imagen, el array contendrá un solo nombre.
-  - El sistema es retrocompatible: dispositivos antiguos con una sola foto siguen funcionando.
-- **Exposición de imágenes:**
-  - El backend expone la carpeta `/uploads` como ruta pública mediante `express.static`, permitiendo que el frontend acceda a las imágenes por URL (`/uploads/nombre.jpg`).
-- **Respuesta de la API:**
-  - Todos los endpoints que devuelven dispositivos (`GET /api/dispositivos`, `GET /api/dispositivos/:id`, etc.) retornan el campo `foto` como un array de strings.
+---
 
-### Ejemplo de uso
-- Registrar dispositivo:
-  - Enviar un `FormData` con hasta 3 archivos en el campo `foto`.
-- Visualizar imágenes:
-  - El frontend recorre el array de nombres y construye la URL para mostrar cada imagen.
+## Actualización en tiempo real del dashboard admin (socket.io)
 
-### Notas de implementación
-- El backend valida que los archivos sean imágenes y limita el tamaño máximo por archivo (configurable en `multer`).
-- Si no se suben imágenes, el campo `foto` será un array vacío o `null`.
-- El sistema nunca almacena imágenes en base64 ni en formato binario en la base de datos. 
+El backend implementa **socket.io** para permitir la actualización en tiempo real del panel de control del administrador:
+
+- **Evento emitido:** `actividad_actualizada`
+- **¿Cuándo se emite?**
+  - Cada vez que se registra un nuevo acceso o salida (al crear un historial de dispositivo).
+  - El evento se emite desde el controlador `historialDispositivoController.js` tras guardar el historial.
+- **Datos enviados:**
+  - Un objeto con los nuevos stats del dashboard (usuarios, dispositivos, actividad de hoy, actividad reciente, etc.), igual que la respuesta del endpoint `/api/dashboard/stats`.
+- **Ventaja UX:**
+  - El frontend puede escuchar este evento y actualizar automáticamente la sección "Actividad Hoy" y la actividad reciente, sin recargar la página.
+  - Permite monitoreo en vivo para administradores y validadores.
+
+**Referencia de código:**
+- Integración de socket.io: ver `app.js` (inicialización y exportación de io)
+- Emisión del evento: ver `controllers/historialDispositivoController.js` (método `createHistorial`) 

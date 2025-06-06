@@ -25,6 +25,7 @@ CompuSCan es una plataforma web desarrollada para el **SENA - Centro de Comercio
 16. [Licencia](#licencia)
 17. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
 18. [Gestión de imágenes múltiples por dispositivo](#gestión-de-imágenes-múltiples-por-dispositivo)
+19. [Manejo de Imágenes de Dispositivos](#manejo-de-imágenes-de-dispositivos)
 
 ---
 
@@ -328,6 +329,10 @@ Documentación completa sobre la arquitectura, API RESTful, modelos de datos, au
 - Interfaces diferenciadas según el rol del usuario
 - Diseño visual coherente en toda la aplicación
 
+### Rediseño profesional y responsive del menú de validación y asignación de RFID: grid adaptable, tarjetas compactas, formulario en contexto y experiencia moderna para listas largas.
+
+### Actualización en tiempo real del dashboard admin: la sección "Actividad Hoy" se actualiza automáticamente con socket.io al registrar ingresos/salidas, sin recargar la página.
+
 ## Mejoras de Seguridad y Experiencia en Formularios
 
 Durante la revisión y pruebas del sistema, identifiqué que algunos campos de los formularios (nombre, documento, correo, teléfonos, etc.) mostraban el historial/autocompletado del navegador, lo cual representa un riesgo de privacidad.
@@ -414,4 +419,13 @@ Las imágenes se suben desde el frontend, se almacenan en el backend en la carpe
 - En todas las vistas, el frontend recorre el array de nombres y muestra las imágenes con sus etiquetas correspondientes.
 - Si no hay imágenes, se muestra un placeholder "Sin imagen".
 
-Este flujo es robusto, retrocompatible y profesional. 
+Este flujo es robusto, retrocompatible y profesional.
+
+## Manejo de Imágenes de Dispositivos
+
+- Cada dispositivo puede tener hasta 3 fotos: **frontal, trasera y cerrado**.
+- Las imágenes se almacenan en la carpeta `/uploads` del backend.
+- El campo `foto` en la base de datos es un **array JSON serializado** con los nombres de archivo.
+- El backend siempre entrega el campo `foto` como un **array plano de strings** en todas las respuestas.
+- El frontend muestra las 3 imágenes en la tarjeta del equipo, alineadas y con etiquetas.
+- El sistema es retrocompatible: si un dispositivo solo tiene una imagen (o formato antiguo), igual se visualiza correctamente. 

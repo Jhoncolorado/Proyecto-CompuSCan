@@ -21,6 +21,9 @@ const dispositivoModel = {
             if (device.foto) {
                 try {
                     device.foto = JSON.parse(device.foto);
+                    if (Array.isArray(device.foto) && Array.isArray(device.foto[0])) {
+                        device.foto = device.foto[0];
+                    }
                 } catch {
                     device.foto = [device.foto];
                 }
@@ -40,6 +43,9 @@ const dispositivoModel = {
         if (device && device.foto) {
             try {
                 device.foto = JSON.parse(device.foto);
+                if (Array.isArray(device.foto) && Array.isArray(device.foto[0])) {
+                    device.foto = device.foto[0];
+                }
             } catch {
                 device.foto = [device.foto];
             }
@@ -58,6 +64,9 @@ const dispositivoModel = {
         if (device && device.foto) {
             try {
                 device.foto = JSON.parse(device.foto);
+                if (Array.isArray(device.foto) && Array.isArray(device.foto[0])) {
+                    device.foto = device.foto[0];
+                }
             } catch {
                 device.foto = [device.foto];
             }
@@ -76,6 +85,9 @@ const dispositivoModel = {
         if (dispositivo && dispositivo.foto) {
             try {
                 dispositivo.foto = JSON.parse(dispositivo.foto);
+                if (Array.isArray(dispositivo.foto) && Array.isArray(dispositivo.foto[0])) {
+                    dispositivo.foto = dispositivo.foto[0];
+                }
             } catch {
                 dispositivo.foto = [dispositivo.foto];
             }
@@ -157,6 +169,9 @@ const dispositivoModel = {
             if (device.foto) {
                 try {
                     device.foto = JSON.parse(device.foto);
+                    if (Array.isArray(device.foto) && Array.isArray(device.foto[0])) {
+                        device.foto = device.foto[0];
+                    }
                 } catch {
                     device.foto = [device.foto];
                 }
@@ -173,9 +188,18 @@ const dispositivoModel = {
             WHERE d.rfid IS NULL
             ORDER BY d.fecha_registro DESC`;
         const result = await pool.query(query);
-        // Forzar el campo foto a null para evitar problemas en el frontend
+        // Procesar foto igual que en los otros métodos
         return result.rows.map(device => {
-            device.foto = null;
+            if (device.foto) {
+                try {
+                    device.foto = JSON.parse(device.foto);
+                    if (Array.isArray(device.foto) && Array.isArray(device.foto[0])) {
+                        device.foto = device.foto[0];
+                    }
+                } catch {
+                    device.foto = [device.foto];
+                }
+            }
             return device;
         });
     },
@@ -197,6 +221,9 @@ const dispositivoModel = {
             if (device.foto) {
                 try {
                     device.foto = JSON.parse(device.foto);
+                    if (Array.isArray(device.foto) && Array.isArray(device.foto[0])) {
+                        device.foto = device.foto[0];
+                    }
                 } catch {
                     device.foto = [device.foto];
                 }

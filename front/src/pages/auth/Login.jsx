@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/auth.css';
 import { FaUser, FaEnvelope, FaLock, FaIdCard, FaPhone, FaTint, FaIdBadge, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { IoMdClose } from 'react-icons/io';
 import logo from '../../assets/CompuSCan2025.jfif';
 import FormError from '../../components/FormError';
 import PasswordStrength from '../../components/PasswordStrength';
@@ -38,6 +39,8 @@ const Login = () => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [registerPhotoPreview, setRegisterPhotoPreview] = useState('');
   const [programas, setProgramas] = useState([]);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
 
   const handleTabChange = (tab) => {
     if (tab === activeTab) return;
@@ -747,6 +750,69 @@ const Login = () => {
                 )}
               </div>
               
+              {/* Términos y condiciones */}
+              <div className="form-group" style={{ marginTop: 16, marginBottom: 8, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0 }}>
+                <label htmlFor="termsCheckbox" style={{ display: 'flex', alignItems: 'center', fontWeight: 400, fontSize: 15, color: '#222', margin: 0, cursor: 'pointer', gap: 10 }}>
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={e => setAcceptedTerms(e.target.checked)}
+                    style={{ marginTop: 2, width: 16, height: 16 }}
+                    required
+                    id="termsCheckbox"
+                  />
+                  <span style={{ display: 'inline', fontWeight: 400 }}>
+                    Acepto los
+                    <button
+                      type="button"
+                      onClick={() => setShowTermsModal(true)}
+                      style={{ color: '#1976d2', textDecoration: 'underline', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', fontSize: 15, padding: 0, margin: 0, marginLeft: 4 }}
+                    >
+                      términos y condiciones
+                    </button>
+                    {' '}de la política de protección de datos.
+                  </span>
+                </label>
+                <div style={{ color: '#888', fontSize: 15, paddingLeft: 24, marginTop: 2, userSelect: 'text', fontWeight: 400 }}>
+                  Recibirás confirmación del registro por correo electrónico.
+                </div>
+              </div>
+              
+              {/* Modal de Términos y Condiciones */}
+              {showTermsModal && (
+                <div style={{
+                  position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(44,62,80,0.25)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <div style={{
+                    background: '#fff', borderRadius: 12, boxShadow: '0 8px 32px rgba(44,62,80,0.18)', width: '90vw', maxWidth: 700, minHeight: 480, maxHeight: '90vh', display: 'flex', flexDirection: 'column', position: 'relative',
+                  }}>
+                    <button
+                      onClick={() => setShowTermsModal(false)}
+                      style={{ position: 'absolute', top: 12, right: 16, background: 'none', border: 'none', fontSize: 28, color: '#888', cursor: 'pointer', zIndex: 2 }}
+                      aria-label="Cerrar"
+                    >
+                      <IoMdClose />
+                    </button>
+                    <div style={{ padding: '18px 24px 0 24px', fontWeight: 700, fontSize: 20, color: '#1976d2', textAlign: 'center' }}>
+                      Términos y Condiciones
+                    </div>
+                    <iframe
+                      src="/politica_confidencialidad_sena.pdf"
+                      title="Términos y Condiciones"
+                      style={{ flex: 1, width: '100%', height: 500, border: 'none', marginTop: 12, borderRadius: 8 }}
+                    />
+                    <div style={{ padding: 16, textAlign: 'center' }}>
+                      <button
+                        onClick={() => setShowTermsModal(false)}
+                        style={{ background: '#1976d2', color: '#fff', border: 'none', borderRadius: 6, padding: '8px 24px', fontWeight: 600, fontSize: 16, cursor: 'pointer', marginTop: 8 }}
+                      >
+                        Cerrar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
               {success && <div className="auth-success">{success}</div>}
               {errors.general && <FormError message={errors.general} visible={true} />}
               
@@ -758,7 +824,7 @@ const Login = () => {
                 >
                   Anterior
                 </button>
-                <button type="button" className="auth-button" disabled={loading} onClick={handleRegisterSubmit}>
+                <button type="button" className="auth-button" disabled={loading || !acceptedTerms} onClick={handleRegisterSubmit}>
                   {loading ? 'Registrando...' : 'Registrarse'}
                 </button>
               </div>

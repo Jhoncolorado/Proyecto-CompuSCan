@@ -36,3 +36,18 @@ const handleExport = async () => {
 ```
 
 - El backend solo entrega los datos en JSON; toda la lógica de exportación ocurre en el frontend.
+
+## Visualización de Imágenes de Dispositivos
+
+- El frontend espera que el campo `foto` de cada dispositivo sea un **array de strings**.
+- Muestra hasta 3 imágenes (frontal, trasera, cerrado) en la tarjeta del equipo, alineadas y con etiquetas.
+- Si falta alguna imagen, se muestra un recuadro "Sin imagen".
+- Las imágenes se obtienen de la URL:  
+  `http://localhost:3000/uploads/<nombre_de_archivo>`
+- El sistema es robusto ante formatos antiguos: si solo hay una imagen o el campo es base64, igual se visualiza correctamente.
+
+### ¿Por qué no se veían las imágenes antes?
+
+- El campo `foto` podía llegar como un string base64, un array serializado, o incluso un array dentro de otro array.
+- El frontend solo podía mostrar imágenes si recibía un array plano de nombres de archivo.
+- Se corrigió el backend para que **siempre entregue un array plano**, sin importar el formato original, garantizando la visualización en todos los puntos de la app.

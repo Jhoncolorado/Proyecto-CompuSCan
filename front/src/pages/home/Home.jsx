@@ -16,12 +16,15 @@ import {
   FaRegClock,
   FaBriefcase,
   FaHistory,
-  FaClipboardList
+  FaClipboardList,
+  FaPlus,
+  FaClipboardCheck
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import './home.css';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/CompuSCan2025.jfif';
+import { io as socketIOClient } from 'socket.io-client';
 
 // Componente para mostrar la fecha actual
 const CurrentDateDisplay = () => {
@@ -57,6 +60,7 @@ const Home = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showQuickAccess, setShowQuickAccess] = useState(false);
   
   const formatDate = (date) =>
     new Intl.DateTimeFormat('es-ES', {
@@ -86,6 +90,18 @@ const Home = () => {
       }
     };
     fetchStats();
+  }, []);
+
+  useEffect(() => {
+    const socket = socketIOClient('http://localhost:3000');
+    socket.on('actividad_actualizada', (newStats) => {
+      setStats(prev => ({
+        ...prev,
+        actividad: newStats.actividad,
+        actividadReciente: newStats.actividadReciente
+      }));
+    });
+    return () => socket.disconnect();
   }, []);
 
   useEffect(() => {
@@ -119,25 +135,60 @@ const Home = () => {
   }
 
   return (
-    <div className="dashboard-container">
-      {/* Header Section ELIMINADO */}
-      {/* <header className="dashboard-header">
-        <div className="welcome-message">
-          <div className="user-avatar">
-            {user?.foto ? (
-              <img src={user.foto} alt="Avatar" />
-            ) : (
-              <FaUserCircle />
+    <div className="dashboard-container" style={{ position: 'relative', minHeight: '90vh' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 8 }}>
+        {/* Botón de accesos rápidos solo para admin/validador */}
+        {(user && (user.rol === 'administrador' || user.rol === 'validador')) && (
+          <div style={{ position: 'relative' }}>
+            <button
+              aria-label="Accesos rápidos"
+              onClick={() => setShowQuickAccess(v => !v)}
+              style={{
+                background: '#fff',
+                border: 'none',
+                borderRadius: '50%',
+                width: 44,
+                height: 44,
+                boxShadow: '0 4px 16px 0 rgba(67,160,71,0.18)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'box-shadow 0.18s',
+                outline: showQuickAccess ? '2.5px solid #43a047' : 'none',
+                zIndex: 1200
+              }}
+            >
+              <FaPlus style={{ color: '#43a047', fontSize: 22, transform: showQuickAccess ? 'rotate(45deg)' : 'none', transition: 'transform 0.18s' }} />
+            </button>
+            {/* Speed dial */}
+            {showQuickAccess && (
+              <div style={{
+                position: 'absolute',
+                top: 54,
+                left: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 10,
+                background: 'rgba(255,255,255,0.98)',
+                borderRadius: 14,
+                boxShadow: '0 8px 32px 0 rgba(44,62,80,0.18)',
+                padding: '14px 10px',
+                minWidth: 170,
+                zIndex: 1201,
+                animation: 'fadeInQuickAccess 0.18s'
+              }}>
+                <Link to="/users" style={quickAccessStyle}><FaUsers style={iconStyle}/> Usuarios</Link>
+                <Link to="/devices" style={quickAccessStyle}><FaDesktop style={iconStyle}/> Dispositivos</Link>
+                <Link to="/history" style={quickAccessStyle}><FaHistory style={iconStyle}/> Historial</Link>
+                <Link to="/reports" style={quickAccessStyle}><FaClipboardList style={iconStyle}/> Reportes</Link>
+                <Link to="/device-validation" style={quickAccessStyle}><FaClipboardCheck style={iconStyle}/> Validación de Equipos</Link>
+              </div>
             )}
           </div>
-          <div className="welcome-text">
-            <h2>¡Bienvenido, <span className="highlight-name">{user?.nombre || 'Usuario'}</span>!</h2>
-            <p>Último acceso: {formatDate(new Date())}</p>
-          </div>
-        </div>
-        <CurrentDateDisplay />
-      </header> */}
+        )}
       <h1 className="dashboard-title">Panel de Control</h1>
+      </div>
       {/* Panel de Bienvenida con estilos directos */}
       <div style={{
         background: '#fff',
@@ -455,29 +506,6 @@ const Home = () => {
             )}
           </div>
           <Link to="/history" className="view-all-link">Ver todo el historial</Link>
-        </div>
-      </div>
-      
-      {/* Quick Access */}
-      <div className="quick-access" style={{ marginTop: '2rem' }}>
-        <h3 className="section-title" style={{ fontSize: '1.3rem', color: '#2e7d32', fontWeight: 700, marginBottom: '1.2rem' }}>Acceso Rápido</h3>
-        <div className="quick-links" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.2rem' }}>
-          <Link to="/users" className="quick-link" style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(44,62,80,0.07)', padding: '2.2rem 1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#2e7d32', fontWeight: 600, fontSize: '1.1rem', transition: 'box-shadow 0.2s', border: '1.5px solid #e0e0e0' }}>
-            <FaUsers style={{ fontSize: '2.2rem', marginBottom: '0.7rem' }} />
-            Usuarios
-          </Link>
-          <Link to="/devices" className="quick-link" style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(44,62,80,0.07)', padding: '2.2rem 1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#2e7d32', fontWeight: 600, fontSize: '1.1rem', transition: 'box-shadow 0.2s', border: '1.5px solid #e0e0e0' }}>
-            <FaDesktop style={{ fontSize: '2.2rem', marginBottom: '0.7rem' }} />
-            Dispositivos
-          </Link>
-          <Link to="/history" className="quick-link" style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(44,62,80,0.07)', padding: '2.2rem 1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#2e7d32', fontWeight: 600, fontSize: '1.1rem', transition: 'box-shadow 0.2s', border: '1.5px solid #e0e0e0' }}>
-            <FaChartLine style={{ fontSize: '2.2rem', marginBottom: '0.7rem' }} />
-            Historial
-          </Link>
-          <Link to="/reports" className="quick-link" style={{ background: '#fff', borderRadius: '14px', boxShadow: '0 2px 12px rgba(44,62,80,0.07)', padding: '2.2rem 1.2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textDecoration: 'none', color: '#2e7d32', fontWeight: 600, fontSize: '1.1rem', transition: 'box-shadow 0.2s', border: '1.5px solid #e0e0e0' }}>
-            <FaClipboardList style={{ fontSize: '2.2rem', marginBottom: '0.7rem' }} />
-            Reportes
-          </Link>
         </div>
       </div>
     </div>
@@ -898,4 +926,29 @@ export const HomeUser = () => {
     </div>
   );
 }; 
+
+const quickAccessStyle = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 10,
+  color: '#388e3c',
+  fontWeight: 600,
+  fontSize: 16,
+  textDecoration: 'none',
+  padding: '7px 10px',
+  borderRadius: 8,
+  transition: 'background 0.15s, color 0.15s',
+  cursor: 'pointer',
+};
+const iconStyle = {
+  fontSize: 18,
+  color: '#43a047',
+};
+// Animación fadeInQuickAccess
+if (typeof window !== 'undefined' && !document.getElementById('quickaccess-anim')) {
+  const styleSheet = document.createElement('style');
+  styleSheet.id = 'quickaccess-anim';
+  styleSheet.innerText = `@keyframes fadeInQuickAccess { from { opacity: 0; transform: translateY(-10px);} to { opacity: 1; transform: none; } }`;
+  document.head.appendChild(styleSheet);
+}
 
