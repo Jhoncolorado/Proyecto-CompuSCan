@@ -65,6 +65,7 @@ const historialDispositivoController = {
             if (io) {
                 // Obtener los nuevos stats del dashboard
                 const stats = await dashboardController.getDashboardStatsData();
+                console.log('Emitiendo evento actividad_actualizada con stats:', stats);
                 io.emit('actividad_actualizada', stats);
             }
 

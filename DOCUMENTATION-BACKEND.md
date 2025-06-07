@@ -16,6 +16,7 @@
 13. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
 14. [Gestión de imágenes múltiples por dispositivo](#gestión-de-imágenes-múltiples-por-dispositivo)
 15. [Actualización en tiempo real del dashboard admin (socket.io)](#actualización-en-tiempo-real-del-dashboard-admin-socketio)
+16. [Integración de WebSockets con Socket.IO en el Backend](#integración-de-websockets-con-socketio-en-el-backend)
 
 ---
 
@@ -1000,3 +1001,97 @@ El backend implementa **socket.io** para permitir la actualización en tiempo re
 **Referencia de código:**
 - Integración de socket.io: ver `app.js` (inicialización y exportación de io)
 - Emisión del evento: ver `controllers/historialDispositivoController.js` (método `createHistorial`) 
+
+## Notas sobre Términos y Condiciones
+
+- El backend **no almacena explícitamente** la aceptación de términos, ya que el frontend bloquea el registro si el usuario no acepta.
+- El PDF de términos y condiciones es servido por el frontend y mostrado en un modal durante el registro.
+- Si se requiere máxima robustez legal, se puede agregar un campo booleano y un timestamp en la tabla de usuarios para guardar la aceptación y la fecha/hora.
+- El sistema está preparado para cumplir con normativas de protección de datos y consentimiento informado. 
+
+## Errores Críticos y Funcionalidades Profesionales
+
+### 1. Error 404 de Socket.IO y Actualización en Tiempo Real
+
+- **Problema:** El frontend mostraba errores 404 al intentar conectarse a `/socket.io`, y el panel no se actualizaba en tiempo real.
+- **Causa:** El backend creaba dos servidores HTTP distintos: uno para Express y otro para Socket.IO.
+- **Solución:**  
+  - Se creó el servidor HTTP una sola vez:  
+    ```js
+    const server = require('http').createServer(app);
+    ```
+  - Se inicializó Socket.IO sobre ese servidor:  
+    ```js
+    const io = new Server(server, { cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'] } });
+    ```
+  - Se usó `server.listen(...)` para iniciar el backend.
+  - Cuando se registra una nueva actividad (entrada/salida), el backend emite el evento `actividad_actualizada` con los datos actualizados del dashboard.
+- **Referencia de código:**  
+  - Integración de socket.io: ver `app.js` (inicialización y exportación de io)
+  - Emisión del evento: ver `controllers/historialDispositivoController.js` (método `createHistorial`)
+
+---
+
+### 2. Implementación del Correo de Registro Exitoso (Backend)
+
+- Se utiliza Nodemailer y una contraseña de aplicación de Gmail para enviar el correo de bienvenida.
+- El backend lee las variables `EMAIL_USER` y `EMAIL_PASS` desde el archivo `.env`.
+- El correo incluye:
+  - Saludo personalizado.
+  - Mensaje de bienvenida y confirmación.
+  - Botón para iniciar sesión.
+  - Información de soporte y firma institucional.
+  - (Opcional) Logo institucional.
+- Si el correo no se envía, el registro no se interrumpe y se muestra el error en consola para depuración.
+- El código relevante está en `controllers/usuarioController.js` (función `sendRegistroExitosoEmail`). 
+
+# Integración de WebSockets con Socket.IO en el Backend
+
+## ¿Qué es Socket.IO y por qué se eligió?
+- **Socket.IO** es una librería para Node.js que permite implementar WebSockets de forma sencilla y compatible con todos los navegadores.
+- Se eligió por su facilidad de integración con Express, su robustez y su comunidad activa.
+
+## Paso a paso de la implementación
+1. **Unificación del servidor HTTP y Socket.IO**
+   - Se crea el servidor HTTP una sola vez y se pasa tanto a Express como a Socket.IO:
+     ```js
+     const app = express();
+     const server = require('http').createServer(app);
+     const { Server } = require('socket.io');
+     const io = new Server(server, { cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'] } });
+     ```
+   - Esto asegura que tanto la API REST como los sockets compartan el mismo puerto y contexto.
+
+2. **Exportación de la instancia de Socket.IO**
+   - Se exporta `io` desde `app.js` para poder usarlo en cualquier controlador:
+     ```js
+     module.exports = { app, io };
+     ```
+
+3. **Emisión del evento en el flujo crítico**
+   - Cada vez que se registra una entrada/salida por RFID (endpoint `/acceso-rfid`), después de guardar el historial, se emite el evento:
+     ```js
+     const { io } = require('../app');
+     const dashboardController = require('../controllers/dashboardController');
+     if (io) {
+       const stats = await dashboardController.getDashboardStatsData();
+       io.emit('actividad_actualizada', stats);
+     }
+     ```
+   - Esto envía los datos actualizados del dashboard a todos los clientes conectados.
+
+4. **Buenas prácticas**
+   - Solo se deja en consola el log esencial de acceso autorizado.
+   - Los logs de depuración y emisión de eventos se eliminan para producción.
+   - Si ocurre un error al emitir el evento, se muestra como error pero no interrumpe el flujo principal.
+
+## Flujo resumido
+1. El usuario pasa la tarjeta RFID.
+2. El backend registra el acceso y actualiza el historial.
+3. El backend emite el evento `actividad_actualizada` con los nuevos datos.
+4. Todos los dashboards conectados reciben el evento y actualizan la UI en tiempo real.
+
+## Ventajas para la industria
+- Permite monitoreo en vivo y reacción inmediata ante eventos críticos.
+- La arquitectura es escalable y puede adaptarse a otros eventos o módulos.
+- El código es limpio, desacoplado y fácil de mantener. 

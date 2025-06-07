@@ -1,7 +1,7 @@
 const usuarioModel = require('../models/usuarioModel');
 const bcrypt = require('bcrypt');
-const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const transporter = require('../config/mailer');
 
 // Función auxiliar para convertir base64 a formato adecuado para BYTEA
 const prepareImageForDB = (base64String) => {
@@ -28,15 +28,34 @@ const prepareImageForDB = (base64String) => {
 // Almacenamiento temporal de tokens de recuperación (en memoria para demo)
 const passwordResetTokens = {};
 
-// Configuración de nodemailer usando variables de entorno
-const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
-    port: process.env.MAIL_PORT,
-    auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS
-    }
-});
+async function sendRegistroExitosoEmail(email, nombre) {
+  await transporter.sendMail({
+    from: 'CompuSCan <' + process.env.EMAIL_USER + '>',
+    to: email,
+    subject: '¡Registro exitoso en CompuSCan!',
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 480px; margin: 0 auto;">
+        <!-- Logo institucional (descomenta y pon tu URL real si quieres mostrarlo)
+        <img src=\"logo-compSCan.png.png\" alt=\"CompuSCan\" style=\"height: 48px; margin-bottom: 16px;\" />
+        -->
+        <h2 style="color: #388e3c;">¡Bienvenido/a, ${nombre}!</h2>
+        <p>Tu registro en <b>CompuSCan</b> fue exitoso.</p>
+        <p>Ya puedes iniciar sesión y gestionar tus dispositivos en la plataforma.</p>
+        <a href="http://localhost:5173/login" style="display:inline-block;padding:10px 20px;background:#388e3c;color:#fff;text-decoration:none;border-radius:5px;margin:16px 0;">Iniciar sesión</a>
+        <hr style="border: none; border-top: 1px solid #e0e0e0; margin: 18px 0;">
+        <p style="color: #888; font-size: 13px;">
+          ¿Tienes dudas? Responde a este correo o contacta a nuestro equipo de soporte.<br>
+          Si no reconoces este registro, ignora este mensaje.<br>
+          Nunca compartas tu contraseña con nadie.
+        </p>
+        <div style="margin-top: 18px; color: #888; font-size: 12px;">
+          <b>Equipo CompuSCan</b><br>
+          https://compuscan.com
+        </div>
+      </div>
+    `
+  });
+}
 
 const usuarioController = {
     getAllUsuarios: async (req, res) => {
@@ -131,6 +150,14 @@ const usuarioController = {
                 observacion,
                 foto: fotoProcesada
             });
+
+            // Enviar correo de registro exitoso
+            try {
+              await sendRegistroExitosoEmail(newUsuario.correo, newUsuario.nombre);
+            } catch (mailError) {
+              console.error('Error enviando correo de registro:', mailError);
+              // No interrumpe el registro si falla el correo
+            }
 
             res.status(201).json({
                 message: 'Usuario creado exitosamente',

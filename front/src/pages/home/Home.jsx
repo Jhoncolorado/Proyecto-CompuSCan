@@ -93,8 +93,9 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const socket = socketIOClient('http://localhost:3000');
+    const socket = socketIOClient(`http://${window.location.hostname}:3000`);
     socket.on('actividad_actualizada', (newStats) => {
+      console.log('Evento actividad_actualizada recibido:', newStats);
       setStats(prev => ({
         ...prev,
         actividad: newStats.actividad,
@@ -539,7 +540,8 @@ export const HomeUser = () => {
           // Obtener historial reciente
           const historyRes = await fetch(`/api/historiales`);
           if (historyRes.ok) {
-            const history = await historyRes.json();
+            const historyRaw = await historyRes.json();
+            const history = Array.isArray(historyRaw) ? historyRaw : (Array.isArray(historyRaw.data) ? historyRaw.data : []);
             // Filtrar solo los eventos relacionados con este usuario
             const userEvents = history.filter(ev => 
               ev.descripcion && ev.descripcion.includes(user.nombre)

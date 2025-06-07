@@ -13,6 +13,7 @@
 10. [Seguridad](#seguridad)
 11. [Optimización y Rendimiento](#optimización-y-rendimiento)
 12. [Guía de Mantenimiento](#guía-de-mantenimiento)
+13. [Integración de WebSockets con Socket.IO en el Frontend](#integración-de-websockets-con-socketio-en-el-frontend)
 
 ---
 
@@ -828,3 +829,97 @@ El panel de control del administrador ahora muestra la "Actividad Hoy" (ingresos
 - Si el socket no está disponible, el dashboard sigue funcionando con la carga inicial por HTTP.
 
 **Ventaja UX:** El admin ve los cambios de actividad al instante, ideal para monitoreo en vivo. 
+
+## Implementación de Términos y Condiciones
+
+- **Ubicación:** Segundo paso del formulario de registro de usuario.
+- **Componente:**  
+  - Se muestra un checkbox obligatorio con el texto:  
+    > Acepto los términos y condiciones de la política de protección de datos.
+  - El enlace "términos y condiciones" abre un modal elegante con el PDF embebido (`/public/politica_confidencialidad_sena.pdf`).
+  - El botón de registro solo se habilita si el usuario acepta los términos.
+  - Debajo, aparece el texto:  
+    > Recibirás confirmación del registro por correo electrónico.
+    en gris claro y perfectamente alineado.
+- **Accesibilidad y UX:**  
+  - El usuario no puede registrarse sin aceptar los términos.
+  - El modal permite leer el PDF sin salir del registro.
+  - El diseño es compacto, alineado y profesional.
+- **Personalización:**  
+  - El PDF puede ser reemplazado por otro documento en la carpeta `public` si se actualizan los términos. 
+
+## Errores Críticos y Funcionalidades de Experiencia de Usuario
+
+### 1. Error 404 de Socket.IO y Actualización en Tiempo Real
+
+- **Problema:** El frontend mostraba errores 404 al intentar conectarse a `/socket.io`, y el panel de actividad no se actualizaba automáticamente.
+- **Causa:** El backend no tenía Socket.IO correctamente configurado en el mismo servidor HTTP.
+- **Solución:**  
+  - El backend fue corregido para compartir el mismo servidor HTTP entre Express y Socket.IO.
+  - El frontend mantiene el cliente Socket.IO y escucha el evento `actividad_actualizada`.
+  - Cuando el backend emite el evento, el panel de "Actividad Hoy" y la actividad reciente se actualizan automáticamente, sin recargar la página.
+- **Ventaja UX:** El administrador ve los cambios de actividad al instante, ideal para monitoreo en vivo.
+
+**Fragmento relevante en el frontend:**
+```js
+import { io as socketIOClient } from 'socket.io-client';
+
+useEffect(() => {
+  const socket = socketIOClient('http://localhost:3000');
+  socket.on('actividad_actualizada', (newStats) => {
+    setStats(prev => ({
+      ...prev,
+      actividad: newStats.actividad,
+      actividadReciente: newStats.actividadReciente
+    }));
+  });
+  return () => socket.disconnect();
+}, []);
+```
+
+---
+
+### 2. Implementación del Correo de Registro Exitoso (Frontend)
+
+- El frontend muestra mensajes claros al usuario tras el registro.
+- El usuario recibe un correo automático de bienvenida, con diseño profesional y botón para iniciar sesión.
+- El frontend **no gestiona el envío**, solo muestra el resultado y guía al usuario.
+- El diseño del correo es amigable, institucional y cumple con las mejores prácticas de UX. 
+
+# Integración de WebSockets con Socket.IO en el Frontend
+
+## ¿Cómo se conecta el frontend?
+- Se utiliza la librería `socket.io-client` para conectarse al backend:
+  ```js
+  import { io as socketIOClient } from 'socket.io-client';
+  ```
+- La conexión se realiza usando el hostname dinámico para compatibilidad:
+  ```js
+  const socket = socketIOClient(`http://${window.location.hostname}:3000`);
+  ```
+
+## Escucha y actualización en tiempo real
+- En el dashboard, se escucha el evento `actividad_actualizada`:
+  ```js
+  useEffect(() => {
+    const socket = socketIOClient(`http://${window.location.hostname}:3000`);
+    socket.on('actividad_actualizada', (newStats) => {
+      setStats(prev => ({
+        ...prev,
+        actividad: newStats.actividad,
+        actividadReciente: newStats.actividadReciente
+      }));
+    });
+    return () => socket.disconnect();
+  }, []);
+  ```
+- Cuando el backend emite el evento, el dashboard actualiza automáticamente la sección de "Actividad Hoy" y la actividad reciente, sin recargar la página.
+
+## Beneficios UX
+- El usuario ve los cambios al instante, lo que es ideal para monitoreo y control en tiempo real.
+- La solución es robusta, compatible con cualquier navegador moderno y fácil de extender a otros módulos.
+
+## Buenas prácticas
+- Se usa un solo socket por componente.
+- Se desconecta el socket al desmontar el componente para evitar fugas de memoria.
+- El código es claro y fácil de mantener. 

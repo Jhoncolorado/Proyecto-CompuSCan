@@ -117,35 +117,20 @@ const dispositivoModel = {
     updateDispositivo: async (id, { 
         nombre, tipo, serial, rfid, foto, id_usuario, estado_validacion
     }) => {
-        let query, values;
-        if (foto && typeof foto === 'string' && foto.length > 10) {
-            query = `
-                UPDATE dispositivo
-                SET 
-                    nombre = COALESCE($1, nombre),
-                    tipo = COALESCE($2, tipo),
-                    serial = COALESCE($3, serial),
-                    rfid = COALESCE($4, rfid),
-                    foto = decode($5, 'base64'),
-                    id_usuario = COALESCE($6, id_usuario),
-                    estado_validacion = COALESCE($7, estado_validacion)
-                WHERE id = $8
-                RETURNING *`;
-            values = [nombre, tipo, serial, rfid, foto, id_usuario, estado_validacion, id];
-        } else {
-            query = `
-                UPDATE dispositivo
-                SET 
-                    nombre = COALESCE($1, nombre),
-                    tipo = COALESCE($2, tipo),
-                    serial = COALESCE($3, serial),
-                    rfid = COALESCE($4, rfid),
-                    id_usuario = COALESCE($5, id_usuario),
-                    estado_validacion = COALESCE($6, estado_validacion)
-                WHERE id = $7
-                RETURNING *`;
-            values = [nombre, tipo, serial, rfid, id_usuario, estado_validacion, id];
-        }
+        // Siempre guardar foto como string JSON (array de nombres de archivo)
+        const query = `
+            UPDATE dispositivo
+            SET 
+                nombre = COALESCE($1, nombre),
+                tipo = COALESCE($2, tipo),
+                serial = COALESCE($3, serial),
+                rfid = COALESCE($4, rfid),
+                foto = COALESCE($5, foto),
+                id_usuario = COALESCE($6, id_usuario),
+                estado_validacion = COALESCE($7, estado_validacion)
+            WHERE id = $8
+            RETURNING *`;
+        const values = [nombre, tipo, serial, rfid, foto, id_usuario, estado_validacion, id];
         const result = await pool.query(query, values);
         return result.rows[0];
     },
