@@ -10,8 +10,9 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const dashboardController = require('./controllers/dashboardController');
 const http = require('http');
+const server = http.createServer(app);
 const { Server } = require('socket.io');
-const io = new Server(http.createServer(app), {
+const io = new Server(server, {
   cors: {
     origin: '*',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
@@ -133,7 +134,7 @@ app.use((err, req, res, next) => {
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
-http.createServer(app).listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
   console.log(`📚 Documentación API disponible en http://localhost:${PORT}/api-docs`);
 });

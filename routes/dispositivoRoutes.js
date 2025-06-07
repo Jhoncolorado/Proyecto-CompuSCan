@@ -258,9 +258,21 @@ router.post('/acceso-rfid', async (req, res) => {
       [descripcion, dispositivo.id]
     );
 
+    // Emitir evento de actualización de actividad para el dashboard
+    try {
+      const { io } = require('../app');
+      const dashboardController = require('../controllers/dashboardController');
+      if (io) {
+        const stats = await dashboardController.getDashboardStatsData();
+        io.emit('actividad_actualizada', stats);
+      }
+    } catch (e) {
+      // Si hay error al emitir el evento, solo lo mostramos como error
+      console.error('Error al emitir evento actividad_actualizada:', e);
+    }
+
+    // Log esencial de acceso autorizado
     console.log(`[ACCESO] ${descripcion} - Dispositivo: ${dispositivo.nombre}`);
-    // Debug: mostrar el nombre del programa antes de responder
-    console.log('DEBUG nombrePrograma:', nombrePrograma);
 
     res.json({
       usuario,

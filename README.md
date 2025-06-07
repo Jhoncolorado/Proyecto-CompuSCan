@@ -26,6 +26,8 @@ CompuSCan es una plataforma web desarrollada para el **SENA - Centro de Comercio
 17. [Remoción de Secretos del Historial de Git (Caso Real)](#remoción-de-secretos-del-historial-de-git-caso-real)
 18. [Gestión de imágenes múltiples por dispositivo](#gestión-de-imágenes-múltiples-por-dispositivo)
 19. [Manejo de Imágenes de Dispositivos](#manejo-de-imágenes-de-dispositivos)
+20. [Notas sobre Errores Críticos y Funcionalidades Profesionales](#notas-sobre-errores-críticos-y-funcionalidades-profesionales)
+21. [Actualización en Tiempo Real con WebSockets (Socket.IO)](#actualización-en-tiempo-real-con-websockets-socketio)
 
 ---
 
@@ -428,4 +430,89 @@ Este flujo es robusto, retrocompatible y profesional.
 - El campo `foto` en la base de datos es un **array JSON serializado** con los nombres de archivo.
 - El backend siempre entrega el campo `foto` como un **array plano de strings** en todas las respuestas.
 - El frontend muestra las 3 imágenes en la tarjeta del equipo, alineadas y con etiquetas.
-- El sistema es retrocompatible: si un dispositivo solo tiene una imagen (o formato antiguo), igual se visualiza correctamente. 
+- El sistema es retrocompatible: si un dispositivo solo tiene una imagen (o formato antiguo), igual se visualiza correctamente.
+
+## Aceptación de Términos y Condiciones en el Registro
+
+- El sistema requiere que todos los usuarios acepten los términos y condiciones de la política de protección de datos antes de completar el registro.
+- El formulario de registro incluye un checkbox obligatorio y un enlace a los términos y condiciones, que se muestran en un modal con el PDF embebido.
+- El registro no puede finalizarse si el usuario no acepta los términos.
+- El flujo cumple con estándares legales y de experiencia de usuario profesional.
+
+## Notas sobre Errores Críticos y Funcionalidades Profesionales
+
+### 1. Error 404 de Socket.IO y Actualización en Tiempo Real
+
+**Descripción del problema:**  
+El sistema presentaba errores 404 en la consola del navegador al intentar conectarse a `/socket.io`, impidiendo la actualización en tiempo real del dashboard (actividad hoy, entradas/salidas) sin recargar la página.
+
+**Causa:**  
+El backend creaba dos servidores HTTP distintos: uno para Express y otro para Socket.IO. Por esto, Socket.IO no estaba realmente escuchando en el mismo servidor que Express, y el frontend no podía conectarse correctamente.
+
+**Solución profesional:**  
+- Se unificó la creación del servidor HTTP para que Express y Socket.IO compartan el mismo servidor.
+- Ahora, cada vez que se registra una nueva actividad (entrada/salida RFID), el backend emite un evento `actividad_actualizada` con los datos actualizados del dashboard.
+- El frontend escucha este evento y actualiza el panel automáticamente, sin recargar la página.
+
+**Proceso aplicado:**
+1. Se creó el servidor HTTP una sola vez:  
+   ```js
+   const server = require('http').createServer(app);
+   ```
+2. Se inicializó Socket.IO sobre ese servidor:  
+   ```js
+   const io = new Server(server, { ... });
+   ```
+3. Se usó `server.listen(...)` para iniciar el backend.
+4. En el controlador de historial, tras registrar una nueva actividad, se emite el evento:
+   ```js
+   io.emit('actividad_actualizada', stats);
+   ```
+5. El frontend ya estaba preparado para escuchar y actualizar el dashboard en tiempo real.
+
+**Impacto:**  
+- El panel de administrador ahora muestra la actividad en tiempo real, ideal para monitoreo y auditoría.
+- Se eliminan los errores 404 de la consola y se mejora la experiencia de usuario.
+
+---
+
+### 2. Implementación del Correo de Registro Exitoso
+
+**Descripción:**  
+El sistema envía automáticamente un correo de bienvenida a cada usuario que completa su registro, con un diseño profesional y toda la información relevante.
+
+**Proceso técnico:**
+- Se utiliza Nodemailer en el backend, configurado con una cuenta de Gmail y una contraseña de aplicación (no la contraseña normal).
+- Las variables `EMAIL_USER` y `EMAIL_PASS` se almacenan en el archivo `.env` del backend.
+- El correo incluye:
+  - Saludo personalizado.
+  - Mensaje de bienvenida y confirmación.
+  - Botón para iniciar sesión.
+  - Información de soporte y firma institucional.
+  - (Opcional) Logo institucional.
+
+**Flujo resumido:**
+1. El usuario completa el registro en el frontend.
+2. El backend crea el usuario y, si todo es exitoso, ejecuta la función de envío de correo.
+3. Si el correo no se puede enviar, el registro no se interrumpe y el error se muestra en consola para depuración.
+
+**Ventajas:**
+- Cumple con estándares profesionales y legales.
+- Mejora la experiencia y confianza del usuario.
+- Facilita la comunicación y soporte.
+
+## Actualización en Tiempo Real con WebSockets (Socket.IO)
+
+El sistema CompuSCan implementa **actualización en tiempo real** en el dashboard administrativo usando **WebSockets** a través de la librería [Socket.IO](https://socket.io/).
+Esto permite que los cambios críticos (como registros de entradas/salidas por RFID) se reflejen instantáneamente en la interfaz, sin necesidad de recargar la página.
+
+### ¿Por qué WebSockets y Socket.IO?
+- **WebSockets** permiten una comunicación bidireccional y persistente entre el servidor y el navegador, ideal para notificaciones y actualizaciones instantáneas.
+- **Socket.IO** es una solución robusta y ampliamente adoptada en la industria, que abstrae detalles de compatibilidad y reconexión, facilitando la integración en proyectos Node.js y React.
+
+### Beneficios en CompuSCan
+- **Monitoreo en vivo:** El panel de "Actividad Hoy" y la actividad reciente se actualizan al instante cuando ocurre un acceso, mejorando la experiencia y la capacidad de auditoría.
+- **Escalabilidad:** La arquitectura permite agregar más eventos en tiempo real en el futuro (alertas, bloqueos, etc.).
+- **Profesionalismo:** Cumple con estándares modernos de UX y monitoreo en sistemas de control de acceso.
+
+--- 
