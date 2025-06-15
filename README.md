@@ -28,6 +28,10 @@ CompuSCan es una plataforma web desarrollada para el **SENA - Centro de Comercio
 19. [Manejo de Imágenes de Dispositivos](#manejo-de-imágenes-de-dispositivos)
 20. [Notas sobre Errores Críticos y Funcionalidades Profesionales](#notas-sobre-errores-críticos-y-funcionalidades-profesionales)
 21. [Actualización en Tiempo Real con WebSockets (Socket.IO)](#actualización-en-tiempo-real-con-websockets-socketio)
+22. [Modal de Acceso Profesional y Flujo Ágil para Vigilancia](#modal-de-acceso-profesional-y-flujo-ágil-para-vigilancia)
+23. [Gestión institucional de usuarios: deshabilitar y habilitar](#gestión-institucional-de-usuarios-deshabilitar-y-habilitar)
+24. [Control de Acceso por RFID: Alternancia ENTRADA/SALIDA](#control-de-acceso-por-rfid-alternancia-entrada-salida)
+25. [Configuración de dominios, IPs, CORS y QR dinámico](#configuración-de-dominios-ips-cors-y-qr-dinámico)
 
 ---
 
@@ -515,4 +519,74 @@ Esto permite que los cambios críticos (como registros de entradas/salidas por R
 - **Escalabilidad:** La arquitectura permite agregar más eventos en tiempo real en el futuro (alertas, bloqueos, etc.).
 - **Profesionalismo:** Cumple con estándares modernos de UX y monitoreo en sistemas de control de acceso.
 
---- 
+## Modal de Acceso Profesional y Flujo Ágil para Vigilancia
+
+Se implementó una nueva pantalla de control de acceso que muestra, al pasar la tarjeta RFID, un **modal profesional** con los datos del aprendiz y del equipo:
+- El modal resalta la información clave y se cierra solo al presionar **Enter** o **Escape**, permitiendo un flujo ágil y seguro.
+- El carnet del aprendiz se muestra como un carnet físico real, con foto, datos y QR.
+- El equipo se visualiza con fotos (frontal, trasera, cerrado), tipo y estado, perfectamente alineados y sin mostrar datos sensibles (RFID, serial).
+- El fondo es un degradado verde institucional SENA, y el título siempre es visible.
+- El flujo es rápido, seguro y profesional: el vigilante solo compara visualmente y presiona Enter para el siguiente registro.
+
+Esta mejora elimina errores de escritura manual, evita fraudes y refuerza la identidad institucional del sistema.
+
+## Gestión institucional de usuarios: deshabilitar y habilitar
+
+- Cuando un usuario es "eliminado", solo se cambia su estado a `deshabilitado` (no se borra físicamente).
+- El usuario deshabilitado no puede iniciar sesión, pero su información y relaciones (dispositivos, historial) se conservan.
+- Se puede reactivar (habilitar) el usuario en cualquier momento, manteniendo el histórico y la trazabilidad.
+- Los dispositivos asociados nunca se pierden ni quedan huérfanos.
+- **Buenas prácticas:** Mantener siempre el histórico, nunca borrar usuarios con relaciones importantes, y documentar el flujo para auditoría institucional.
+
+## Control de Acceso por RFID: Alternancia ENTRADA/SALIDA
+
+El sistema implementa un control de acceso para dispositivos mediante tarjetas RFID, garantizando que nunca existan dos registros de ENTRADA abiertos para el mismo dispositivo.  
+Cada vez que se pasa una tarjeta, el sistema alterna entre registrar una ENTRADA o una SALIDA, asegurando la integridad y trazabilidad del historial de movimientos de los dispositivos. 
+
+## Configuración de dominios, IPs, CORS y QR dinámico
+
+### 1. Dominios e IPs permitidos (CORS)
+El backend está configurado para aceptar peticiones desde:
+- `http://localhost:5173` (desarrollo local)
+- `http://[TU_IP_LOCAL]:5173` (pruebas en red local, por ejemplo desde el celular)
+- `https://compuscan.com` (dominio de producción)
+
+Esto se define en el array `allowedOrigins` en el backend:
+```js
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://192.168.1.124:5173',
+  'https://compuscan.com',
+];
+```
+Así, el backend acepta solicitudes del frontend sin errores de CORS en cualquier entorno.
+
+### 2. QR dinámico y flexible
+El valor del QR en el carnet digital se genera así:
+```js
+value={`http://${window.location.hostname}:${window.location.port}/usuario/${data.usuario.documento}`}
+```
+Esto hace que el QR use automáticamente la IP, dominio y puerto desde donde se abrió la app. Así, el QR siempre funciona correctamente, ya sea en localhost, en red local o en producción.
+
+### 3. Variables de entorno en el frontend
+En el archivo `.env` del frontend, la variable `VITE_API_URL` debe apuntar al backend según el entorno:
+- Para desarrollo local:
+  ```
+  VITE_API_URL=http://localhost:3000
+  ```
+- Para pruebas desde el celular u otro dispositivo:
+  ```
+  VITE_API_URL=http://[TU_IP_LOCAL]:3000
+  ```
+- Para producción:
+  ```
+  VITE_API_URL=https://compuscan.com/api
+  ```
+
+### 4. Flujo recomendado
+- Trabaja normalmente en localhost para desarrollo.
+- Si necesitas probar desde el celular, cambia el `.env` y abre la app con la IP local.
+- El QR y el backend ya están preparados para cualquier entorno, sin necesidad de modificar el código cada vez.
+
+### 5. Beneficio
+Este sistema permite un desarrollo, pruebas y despliegue profesional, flexible y sin errores de acceso ni QR, tanto en local como en red o producción. 

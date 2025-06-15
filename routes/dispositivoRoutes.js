@@ -3,6 +3,7 @@ const router = express.Router();
 const dispositivoController = require('../controllers/dispositivoController');
 const pool = require('../config/database');
 const upload = require('../middleware/upload');
+const { authenticate, authorize } = require('../middleware/auth');
 
 /**
  * @swagger
@@ -40,7 +41,7 @@ const upload = require('../middleware/upload');
  *       400:
  *         description: Datos inválidos o dispositivo ya existe
  */
-router.post('/', upload.array('foto', 3), dispositivoController.createDispositivo);
+router.post('/', authenticate, authorize(['administrador','validador']), upload.array('foto', 3), dispositivoController.createDispositivo);
 
 /**
  * @swagger
@@ -80,7 +81,7 @@ router.post('/', upload.array('foto', 3), dispositivoController.createDispositiv
  *                 limit:
  *                   type: integer
  */
-router.get('/', dispositivoController.getAllDispositivos);
+router.get('/', authenticate, authorize(['administrador','validador']), dispositivoController.getAllDispositivos);
 
 /**
  * @swagger
@@ -94,7 +95,28 @@ router.get('/', dispositivoController.getAllDispositivos);
  *       500:
  *         description: Error del servidor
  */
-router.get('/pendientes', dispositivoController.getDispositivosPendientes);
+router.get('/pendientes', authenticate, authorize(['administrador','validador']), dispositivoController.getDispositivosPendientes);
+
+/**
+ * @swagger
+ * /api/dispositivos/pendientes/count:
+ *   get:
+ *     summary: Obtener la cantidad de dispositivos pendientes (sin RFID asignado)
+ *     tags: [Dispositivos]
+ *     responses:
+ *       200:
+ *         description: Cantidad de dispositivos pendientes
+ *       500:
+ *         description: Error del servidor
+ */
+router.get('/pendientes/count', authenticate, authorize(['administrador','validador']), async (req, res) => {
+  try {
+    const result = await pool.query('SELECT COUNT(*) FROM dispositivo WHERE rfid IS NULL');
+    res.json({ pendientes: parseInt(result.rows[0].count, 10) });
+  } catch (error) {
+    res.status(500).json({ error: 'Error al contar dispositivos pendientes' });
+  }
+});
 
 /**
  * @swagger
@@ -115,7 +137,7 @@ router.get('/pendientes', dispositivoController.getDispositivosPendientes);
  *       404:
  *         description: Dispositivo no encontrado
  */
-router.get('/:id', dispositivoController.getDispositivoById);
+router.get('/:id', authenticate, authorize(['administrador','validador']), dispositivoController.getDispositivoById);
 
 /**
  * @swagger
@@ -154,7 +176,7 @@ router.get('/:id', dispositivoController.getDispositivoById);
  *       400:
  *         description: Datos inválidos
  */
-router.put('/:id', upload.array('foto', 3), dispositivoController.updateDispositivo);
+router.put('/:id', authenticate, authorize(['administrador','validador']), upload.array('foto', 3), dispositivoController.updateDispositivo);
 
 /**
  * @swagger
@@ -175,7 +197,7 @@ router.put('/:id', upload.array('foto', 3), dispositivoController.updateDisposit
  *       404:
  *         description: Dispositivo no encontrado
  */
-router.delete('/:id', dispositivoController.deleteDispositivo);
+router.delete('/:id', authenticate, authorize(['administrador','validador']), dispositivoController.deleteDispositivo);
 
 /**
  * @swagger
@@ -196,7 +218,16 @@ router.delete('/:id', dispositivoController.deleteDispositivo);
  *       500:
  *         description: Error del servidor
  */
-router.get('/usuario/:usuarioId', dispositivoController.getDispositivosByUsuario);
+router.get('/usuario/:usuarioId', authenticate, (req, res, next) => {
+  if (
+    req.user.rol === 'administrador' ||
+    req.user.rol === 'validador' ||
+    parseInt(req.params.usuarioId) === req.user.id
+  ) {
+    return dispositivoController.getDispositivosByUsuario(req, res, next);
+  }
+  return res.status(403).json({ error: 'No tienes permisos para esta acción' });
+});
 
 // Acceso por RFID (nuevo endpoint POST)
 router.post('/acceso-rfid', async (req, res) => {
@@ -213,6 +244,12 @@ router.post('/acceso-rfid', async (req, res) => {
     // Buscar el usuario asociado
     const usuarioRes = await pool.query('SELECT * FROM usuario WHERE id = $1', [dispositivo.id_usuario]);
     const usuario = usuarioRes.rows[0];
+
+    // --- VALIDACIÓN DE ESTADO DEL USUARIO ---
+    if (!usuario || usuario.estado !== 'activo') {
+      return res.status(403).json({ message: 'Usuario deshabilitado, acceso denegado' });
+    }
+    // ----------------------------------------
 
     // Buscar el nombre del programa usando usuario.id_programa
     let nombrePrograma = null;
@@ -241,22 +278,31 @@ router.post('/acceso-rfid', async (req, res) => {
     }
     // -------------------------------------------------------------
 
-    // Alternancia ENTRADA/SALIDA
-    const ultimoEventoRes = await pool.query(
-      'SELECT descripcion FROM historial_dispositivo WHERE id_dispositivo = $1 ORDER BY fecha_hora DESC LIMIT 1',
+    // Alternancia ENTRADA/SALIDA (corregida)
+    // 1. Buscar si hay registro abierto (sin salida) para este dispositivo
+    const registroAbiertoRes = await pool.query(
+      'SELECT * FROM historial_dispositivo WHERE id_dispositivo = $1 AND fecha_hora_salida IS NULL ORDER BY id_historial DESC LIMIT 1',
       [dispositivo.id]
     );
     let tipoEvento = 'ENTRADA';
-    if (ultimoEventoRes.rows.length > 0) {
-      const ultimaDescripcion = ultimoEventoRes.rows[0].descripcion;
-      if (ultimaDescripcion.includes('Acceso autorizado: ENTRADA')) tipoEvento = 'SALIDA';
-      else if (ultimaDescripcion.includes('Acceso autorizado: SALIDA')) tipoEvento = 'ENTRADA';
+    let descripcion;
+    if (registroAbiertoRes.rows.length === 0) {
+      // No hay entrada abierta, registrar ENTRADA
+      tipoEvento = 'ENTRADA';
+      descripcion = `Acceso autorizado: ENTRADA - RFID: ${rfid} - Usuario: ${usuario.nombre}`;
+      await pool.query(
+        'INSERT INTO historial_dispositivo (id_dispositivo, fecha_hora_entrada, fecha_hora_salida, descripcion) VALUES ($1, NOW(), NULL, $2)',
+        [dispositivo.id, descripcion]
+      );
+    } else {
+      // Hay entrada abierta, registrar SALIDA
+      tipoEvento = 'SALIDA';
+      descripcion = `Acceso autorizado: SALIDA - RFID: ${rfid} - Usuario: ${usuario.nombre}`;
+      await pool.query(
+        'UPDATE historial_dispositivo SET fecha_hora_salida = NOW(), descripcion = $1 WHERE id_historial = $2',
+        [descripcion, registroAbiertoRes.rows[0].id_historial]
+      );
     }
-    const descripcion = `Acceso autorizado: ${tipoEvento} - RFID: ${rfid} - Usuario: ${usuario.nombre}`;
-    await pool.query(
-      'INSERT INTO historial_dispositivo (fecha_hora, descripcion, id_dispositivo) VALUES (NOW(), $1, $2)',
-      [descripcion, dispositivo.id]
-    );
 
     // Emitir evento de actualización de actividad para el dashboard
     try {
@@ -298,6 +344,12 @@ router.get('/acceso/rfid/:rfid', async (req, res) => {
     }
     // Trae los datos del usuario asociado
     const usuario = await require('../models/usuarioModel').getUsuarioById(dispositivo.id_usuario);
+
+    // --- VALIDACIÓN DE ESTADO DEL USUARIO ---
+    if (!usuario || usuario.estado !== 'activo') {
+      return res.status(403).json({ message: 'Usuario deshabilitado, acceso denegado' });
+    }
+    // ----------------------------------------
 
     // Buscar el nombre del programa usando usuario.id_programa
     let nombrePrograma = null;

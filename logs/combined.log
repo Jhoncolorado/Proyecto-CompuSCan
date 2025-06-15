@@ -160,3 +160,1266 @@
 2025-06-06 18:57:37 [[32minfo[39m]: Login exitoso para usuario: 15
 2025-06-06 19:40:48 [[32minfo[39m]: Login exitoso para usuario: 15
 2025-06-06 20:13:12 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-07 12:03:18 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-07 14:26:47 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-07 14:33:40 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-07 14:34:01 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-07 14:39:11 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-07 14:48:24 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-09 06:38:55 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-09 06:40:28 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-09 08:01:22 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-09 08:02:03 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-09 08:02:59 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-09 22:18:22 [[32minfo[39m]: Login exitoso para usuario: 48
+2025-06-09 22:21:08 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-10 19:36:10 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-11 11:29:47 [[32minfo[39m]: Login exitoso para usuario: 49
+2025-06-11 12:21:18 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-11 12:22:12 [[32minfo[39m]: Login exitoso para usuario: 49
+2025-06-11 12:25:54 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-11 13:40:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 13:40:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 13:40:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 13:40:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 13:40:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 13:40:26 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 13:40:26 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 13:40:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:05:16 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-11 14:05:16 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:05:16 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:05:16 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:06:48 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-11 14:06:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:06:58 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:06:58 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:13:11 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:11 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:11 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:12 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:13:13 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:13:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:15 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:16 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:17 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:13:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:14:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:14:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:14:50 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:14:50 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:14:58 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:15:03 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:15:07 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:15:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:15:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:15:47 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:15:47 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:16:17 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:16:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:18:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:18:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:37 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:21:38 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:21:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:21:43 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:21:43 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:23:21 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:23:21 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:23:21 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:23:22 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:23:58 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:23:58 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:25:06 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:25:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:32:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:32:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:32:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:32:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:32:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:32:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:34:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:34:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:35:06 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:35:06 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:35:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:35:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:36:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:36:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:44:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:44:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:44:45 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:44:45 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:45:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:45:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:45:07 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:45:07 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:46:33 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-11 14:46:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:46:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:46:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:46:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:46:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:46:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:46:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:49:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:49:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:49:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:49:57 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:49:57 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 14:50:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:12 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:12 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:50:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:54:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:54:11 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:55:21 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 14:55:21 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 15:06:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:06:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 15:06:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:20:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:20:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:20:09 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 15:20:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 15:20:09 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 15:20:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:47:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:47:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:47:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:47:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:47:44 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:47:44 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:47:52 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:47:52 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:48:00 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:50:12 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:50:45 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:59:44 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:59:47 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:59:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:59:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:59:50 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:59:50 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:59:50 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:59:50 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:59:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:59:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 17:59:59 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 17:59:59 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:00:47 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:00:47 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:00:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:00:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:00:54 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:00:54 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:00:54 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:00:54 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:01:02 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:01:05 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:04:54 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:04:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:04:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:14 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:05:14 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:05:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:21 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:29 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:05:29 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:05:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:05:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:06:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:06:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:06:05 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:06:05 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:06:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:06:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:06:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:06:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:06:36 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:06:36 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:06:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:06:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:09:04 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:10:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:10:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:10:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:10:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:10:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:10:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:11:28 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-11 18:11:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:11:28 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:11:28 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:11:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:11:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:12:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:12:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:12:21 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:18:49 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:22:47 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:22:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:22:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:23:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:23:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:23:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:23:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:23:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:24:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:24:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:24:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:28:24 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:28:26 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:28:26 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:28:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:28:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:28:43 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:28:43 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-11 18:28:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:28:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:30:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:40:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:40:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:40:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:40:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:40:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 18:40:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:21:25 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-11 19:21:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:21:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:21:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:21:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:21:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:25:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:29:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:29:41 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:29:41 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:29:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:30:16 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:30:16 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:33:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:33:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:33:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:33:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:33:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:33:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:35:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:35:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:35:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:35:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:40:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:42:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:42:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:42:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:42:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:48:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:48:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:48:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:48:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:48:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:49:15 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:49:16 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:49:20 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:49:20 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:49:20 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:49:20 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:49:20 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:50:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:50:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:50:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:50:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:50:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:50:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:50:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:50:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:56:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:56:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:56:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 19:56:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 20:00:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 20:00:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 20:00:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-11 20:00:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 09:28:10 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbCI6ImFkbWluaXN0cmFkb3IiLCJpYXQiOjE3NDk2ODc2ODUsImV4cCI6MTc0OTcxNjQ4NX0.vBL6pCFOEJn89MKUrZfRgEUqSuELjQVmu3SZarIy73M
+2025-06-12 09:28:10 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbCI6ImFkbWluaXN0cmFkb3IiLCJpYXQiOjE3NDk2ODc2ODUsImV4cCI6MTc0OTcxNjQ4NX0.vBL6pCFOEJn89MKUrZfRgEUqSuELjQVmu3SZarIy73M
+2025-06-12 09:28:18 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-12 09:28:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 09:28:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 09:28:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 09:32:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 09:32:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 09:32:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 09:32:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:29:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:29:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:29:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:29:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:29:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:29:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:29:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:29:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:30:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:30:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:43:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:43:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:43:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 10:43:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:04:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:04:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:04:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:04:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:04:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:04:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:04:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:04:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:22:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:22:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:22:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:22:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:22:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:52:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:52:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:52:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 12:52:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 13:02:10 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 13:02:10 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:10 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:10 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 13:02:10 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 13:02:23 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:23 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:23 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:23 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:25 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:25 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:25 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:25 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:29 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 13:02:29 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 13:02:54 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:54 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:54 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:54 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:56 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:56 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:56 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:56 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:02:56 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:02:56 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:52:43 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:52:43 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:52:43 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:52:43 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:52:54 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-12 13:52:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 13:52:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 13:52:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 13:52:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 13:52:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 13:53:09 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 13:53:09 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:53:09 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:53:09 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 13:53:09 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 13:53:21 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:53:21 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:53:21 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:53:21 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:53:35 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 13:53:35 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 13:53:35 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 13:53:35 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 13:53:35 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 14:34:48 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 14:34:48 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 14:34:48 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 14:34:48 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 14:34:48 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 14:55:36 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 14:55:36 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 14:55:36 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 14:55:36 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 14:56:02 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 14:56:02 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 14:56:02 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 14:56:02 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 14:56:02 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:41:57 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:41:57 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:41:57 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:41:57 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:42:19 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:19 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:42:19 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:19 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:42:22 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:22 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:22 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:22 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:42:22 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:22 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:42:27 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:27 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:27 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:27 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:42:27 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:27 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:42:42 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:42 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:42:42 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:42:42 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:42:47 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:42:47 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:43:29 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:43:29 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:43:29 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:43:29 [[33mwarn[39m]: Usuario 47 intentó acceder a recurso no autorizado
+2025-06-12 17:46:10 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:10 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:10 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:10 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:10 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:15 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:46:15 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:46:25 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:25 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:25 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:25 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:31 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:31 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:46:37 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:46:37 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:47:24 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 17:47:24 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:47:24 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:47:24 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:47:28 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:47:28 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:47:28 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:47:28 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:47:30 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:47:30 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:49:42 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:49:42 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:49:42 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:49:42 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:49:42 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:49:46 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:49:46 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:49:46 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:49:46 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:50:02 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:50:02 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:50:02 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:50:02 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:50:02 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:50:27 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:50:27 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:50:27 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:50:27 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:50:27 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:50:37 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:50:37 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:50:38 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:50:38 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:50:40 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:50:40 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:51:41 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:51:41 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:51:41 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:51:41 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:52:12 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:52:12 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:52:12 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:52:12 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:52:12 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:52:30 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:52:30 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:54:31 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:54:31 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:54:32 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:54:32 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:54:33 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:54:33 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:54:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:54:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:54:33 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:55:57 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:55:57 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:55:57 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:55:57 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:55:57 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:57:05 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:57:05 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:57:05 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:57:05 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:57:36 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:57:36 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:58:24 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:58:24 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 17:58:25 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 17:58:25 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:11 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:11 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:11 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:00:11 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:12 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:12 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:12 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:00:12 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:52 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:00:52 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:00:52 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:52 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:00:53 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:01:32 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-12 18:01:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:41 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:41 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:01:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:02:18 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 18:02:18 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:02:18 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:02:18 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:04:36 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-12 18:05:23 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 18:05:23 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:23 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:23 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:30 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:30 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:30 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:30 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:33 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:33 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:05:42 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-12 18:05:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:05:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:05:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:06:11 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-12 18:06:11 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:06:11 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:06:11 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-12 18:21:23 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-12 18:21:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:21:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-12 18:21:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:23:15 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-13 06:23:15 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:23:15 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:23:15 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:23:27 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-13 06:23:27 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:23:27 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:23:27 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:23:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:23:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:23:34 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:23:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:23:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:24:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:24:30 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:24:30 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:24:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:24:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:37 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-13 06:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:43 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-13 06:27:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:27:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:29:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:29:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:47:14 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-13 06:47:14 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:47:15 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:47:15 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:47:22 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:47:22 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:47:22 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:47:22 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:47:58 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:47:58 [[32minfo[39m]: Usuario autenticado: 47
+2025-06-13 06:49:43 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-13 06:49:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:49:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:49:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:49:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:49:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:49:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:49:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:50:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:50:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:50:17 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:50:17 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:50:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:50:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:50:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:50:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:51:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 06:51:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:13:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:13:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:13:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:13:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:13:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:39:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:39:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:39:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:39:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:39:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:40 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:40 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:42 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-13 07:47:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:47:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 07:48:04 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-13 08:12:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:12:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:12:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:12:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:12:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:12:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:12:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:28:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:28:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:28:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:28:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:28:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:28:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:28:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:29:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:29:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:40:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:40:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:40:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:40:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:40:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:40:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:40:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:40:10 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-13 08:40:20 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-13 08:58:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:58:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:58:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:58:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:58:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:58:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:58:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-13 08:59:01 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-14 11:45:51 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbCI6ImFkbWluaXN0cmFkb3IiLCJpYXQiOjE3NDk4MTUzODMsImV4cCI6MTc0OTg0NDE4M30.J1h-uwpSSMnbJp8eLdgWnM4eHXXN-fcBOgdV1so4eVg
+2025-06-14 11:45:51 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbCI6ImFkbWluaXN0cmFkb3IiLCJpYXQiOjE3NDk4MTUzODMsImV4cCI6MTc0OTg0NDE4M30.J1h-uwpSSMnbJp8eLdgWnM4eHXXN-fcBOgdV1so4eVg
+2025-06-14 11:46:00 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-14 11:46:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:46:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:46:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:46:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:46:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:46:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:50:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:50:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:50:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:50:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:50:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:50:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:59:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 11:59:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:00:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:02:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:12 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:03:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:06:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:06:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:06:40 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:08:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:08:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:08:40 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:08:40 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:10:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:10:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:10:06 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:10:06 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:10:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:10:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:11:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:11:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:11:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:11:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:11:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:11:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:11:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:11:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:14:40 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:14:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:15:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:21:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:21:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:21:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:21:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:06 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:06 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:27:39 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:31:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:31:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:32:02 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:32:02 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:32:30 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:35:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:35:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:35:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:35:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:36:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:36:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:16 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:16 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:40:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:41:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:43:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:17 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:17 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:20 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:20 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:45:45 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:48:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:48:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:48:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:48:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:50:34 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:50:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:50:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:55:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:55:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:55:27 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:55:27 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:56:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:56:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:56:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:56:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:56:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:56:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:56:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:56:24 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:59:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:59:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 12:59:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:02:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:02:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:02:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:02:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:06:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:06:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:06:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:06:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:12:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:12:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:12:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:12:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:13:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:13:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:13:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:13:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:17:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:17:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:17:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:17:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:19:39 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:19:39 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:19:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:19:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:22:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:22:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:22:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:24:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:24:54 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:24:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:24:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:26:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:26:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:26:45 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:26:45 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:38:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:38:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:38:27 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:38:27 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:39:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:39:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:39:58 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:39:58 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:41:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:41:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:41:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:41:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:42:15 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:42:15 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:42:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:42:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:42:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:42:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:44:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:44:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:45:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:47:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:47:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:47:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:47:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:48:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:48:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:48:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:48:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:48:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:48:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:48:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:49:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:49:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:49:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:49:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:49:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:49:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:49:04 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:49:12 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:53:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:53:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:53:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:53:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:10 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:30 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:54:33 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 13:55:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:00:11 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:00:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:20 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 14:04:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:13:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:13:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:13:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:13:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:13:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:13:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:13:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:15:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:15:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:15:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:15:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:15:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:15:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:15:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:45 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:45 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:18:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:20:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:20:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:20:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:20:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:20:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:20:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:20:44 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:22:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:22:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:22:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:22:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:22:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:22:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:22:08 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:23:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:23:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:23:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:23:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:23:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:23:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:23:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:33:02 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:23 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:39:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:40:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:40:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:44:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:44:03 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:49:32 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:49:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:49:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:49:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:49:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:49:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:55:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:55:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:55:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:55:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 15:55:09 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:50:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:50:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:50:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:50:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:52:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:52:18 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:52:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:52:22 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:52:41 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:52:41 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:53:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:53:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:54:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:54:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:56:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:56:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:56:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:56:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:56:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:56:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 16:56:55 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:05:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:05:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:05:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:05:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:05:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:05:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:06:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:09:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:09:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:16:15 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:16:19 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:23:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:23:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:55:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:55:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:55:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:55:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:55:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:55:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 17:55:35 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:01:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:01:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:01:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:01:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:01:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:01:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:01:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:23:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:23:27 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:28:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 18:28:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:16:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:16:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:16:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:16:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:16:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:16:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:16:14 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:18:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:51 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:21:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:24:02 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:24:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:24:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:35:52 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:35:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 19:41:30 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:17:20 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbCI6ImFkbWluaXN0cmFkb3IiLCJpYXQiOjE3NDk5MTk1NjAsImV4cCI6MTc0OTk0ODM2MH0.PDAHl1O8_8s-4eBn0JKn564GkITZLiMlfKD60uNQUxI
+2025-06-14 20:17:20 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbCI6ImFkbWluaXN0cmFkb3IiLCJpYXQiOjE3NDk5MTk1NjAsImV4cCI6MTc0OTk0ODM2MH0.PDAHl1O8_8s-4eBn0JKn564GkITZLiMlfKD60uNQUxI
+2025-06-14 20:17:42 [[32minfo[39m]: Login exitoso para usuario: 15
+2025-06-14 20:17:42 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:17:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:17:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:17:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:17:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:19:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:19:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:19:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:19:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:19:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:19:59 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:23:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:23:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:23:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:23:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:23:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:23:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:23:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:29:07 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:32:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:32:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:32:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:32:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:32:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:32:49 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:34:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:34:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:34:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:34:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:34:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:34:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:34:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:25 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:26 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:42:56 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:00 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:01 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:05 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:43:13 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:28 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:45:29 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:30 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:30 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:31 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:38 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:48 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:47:57 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:43 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:47 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:50 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:51:53 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:53:46 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:56:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 20:56:37 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 21:30:34 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 21:30:34 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 21:30:34 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 21:30:34 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 21:30:34 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 21:30:36 [[32minfo[39m]: Usuario autenticado: 15
+2025-06-14 21:30:36 [[32minfo[39m]: Usuario autenticado: 15

@@ -9,6 +9,7 @@ const Sidebar = () => {
     { path: '/', label: 'Inicio', icon: 'fa fa-home' },
     { path: '/users', label: 'Usuarios', icon: 'fa fa-users' },
     { path: '/devices', label: 'Dispositivos', icon: 'fa fa-laptop' },
+    { path: '/validacion', label: 'Validación de Dispositivos', icon: 'fa fa-check-circle', badge: pendientes },
     { path: '/alerts', label: 'Alertas', icon: 'fa fa-bell' },
     { path: '/history', label: 'Historial', icon: 'fa fa-history' },
     { path: '/cards', label: 'Carnets', icon: 'fa fa-id-card' },
@@ -33,6 +34,24 @@ const Sidebar = () => {
             >
               <i className={`${item.icon} fs-4`}></i>
               <span>{item.label}</span>
+              {/* Badge solo para Validación de Dispositivos y si hay pendientes */}
+              {item.label === 'Validación de Dispositivos' && pendientes > 0 && (
+                <span
+                  className="badge bg-danger"
+                  style={{
+                    position: 'absolute',
+                    right: 24,
+                    top: 12,
+                    fontSize: '0.9em',
+                    padding: '6px 10px',
+                    borderRadius: '50%',
+                    fontWeight: 'bold',
+                    zIndex: 2
+                  }}
+                >
+                  {pendientes}
+                </span>
+              )}
             </NavLink>
           </li>
         ))}

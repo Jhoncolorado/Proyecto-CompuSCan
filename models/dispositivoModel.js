@@ -167,7 +167,7 @@ const dispositivoModel = {
 
     getDispositivosPendientes: async () => {
         const query = `
-            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, d.estado_validacion, u.nombre as nombre_usuario
+            SELECT d.id, d.nombre, d.tipo, d.serial, d.rfid, d.foto, d.id_usuario, d.fecha_registro, d.estado_validacion, u.nombre as nombre_usuario, u.foto as foto_usuario
             FROM dispositivo d
             JOIN usuario u ON d.id_usuario = u.id
             WHERE d.rfid IS NULL
@@ -184,6 +184,10 @@ const dispositivoModel = {
                 } catch {
                     device.foto = [device.foto];
                 }
+            }
+            // Procesar foto_usuario a base64 si existe
+            if (device.foto_usuario) {
+                device.foto_usuario = 'data:image/jpeg;base64,' + Buffer.from(device.foto_usuario).toString('base64');
             }
             return device;
         });

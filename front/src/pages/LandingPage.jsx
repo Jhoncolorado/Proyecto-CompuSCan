@@ -19,7 +19,6 @@ const LandingPage = () => {
           <li>✔️ Control de acceso con tarjetas RFID</li>
           <li>✔️ Carnet digital personalizado</li>
           <li>✔️ Registro y validación de dispositivos</li>
-          <li>✔️ Reportes y alertas en tiempo real</li>
           <li>✔️ Seguridad y trazabilidad para tu institución</li>
         </ul>
         <button className="landing-login-btn" onClick={() => navigate('/login')}>

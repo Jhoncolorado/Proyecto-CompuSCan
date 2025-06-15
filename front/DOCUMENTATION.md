@@ -923,3 +923,110 @@ useEffect(() => {
 - Se usa un solo socket por componente.
 - Se desconecta el socket al desmontar el componente para evitar fugas de memoria.
 - El código es claro y fácil de mantener. 
+
+## Modal de Acceso Profesional y Tarjetas Alineadas (Control de Acceso)
+
+### Descripción general
+Al pasar la tarjeta RFID en la pantalla de acceso, se muestra un **modal profesional** que presenta:
+- Carnet del aprendiz con diseño idéntico al físico (logo, foto, datos, QR).
+- Tarjeta del equipo con fotos (frontal grande, trasera y cerrado más anchas), tipo y estado, perfectamente alineados y con íconos.
+- No se muestran datos sensibles como RFID ni serial.
+
+### Cierre por teclado
+- El modal solo se cierra al presionar **Enter** o **Escape**.
+- Al cerrar, el input invisible se vuelve a enfocar automáticamente para el siguiente registro.
+
+### Accesibilidad y experiencia
+- 100% accesible por teclado.
+- Diseño responsive y profesional.
+- El fondo de la pantalla es un degradado verde institucional SENA.
+- El título principal es blanco con sombra para máximo contraste.
+
+### Fragmento de código relevante
+```jsx
+React.useEffect(() => {
+  if (!data) return;
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === 'Escape') {
+      handleModalClose();
+    }
+  };
+  window.addEventListener('keydown', handleKeyDown);
+  return () => window.removeEventListener('keydown', handleKeyDown);
+}, [data]);
+```
+
+### Ubicación del código
+- Componente: `front/src/components/AccessControl.jsx`
+- Estilos: Inline y clases CSS (`carnet-tarjeta`, `modal-access-card`, etc.)
+
+### Seguridad y UX
+- El flujo es ágil, seguro y profesional, ideal para puntos de control de acceso.
+- El vigilante solo compara visualmente y presiona Enter para continuar. 
+
+## Gestión de usuarios: Deshabilitar y habilitar (histórico institucional)
+
+### ¿Cómo funciona?
+- Cuando un administrador "elimina" un usuario, **no se borra de la base de datos**: solo se actualiza el campo `estado` a `"deshabilitado"`.
+- El usuario deshabilitado **no puede iniciar sesión** ni usar la app, pero su información y relaciones (dispositivos, historial) se conservan.
+- En el panel de usuarios, hay un **checkbox** para alternar entre ver usuarios activos y deshabilitados.
+- Los usuarios deshabilitados aparecen con un badge gris y la opción de **habilitar** (reactivar) desde el mismo panel.
+- Al habilitar, el usuario vuelve a estado `"activo"` y puede usar la app normalmente.
+
+### ¿Por qué es importante?
+- **Histórico y trazabilidad:** Mantiene el registro de todos los usuarios, incluso los que ya no están activos.
+- **Evita pérdida de datos:** No se pierden relaciones con dispositivos ni historial.
+- **Flexibilidad institucional:** Permite reactivar aprendices o instructores que regresan, sin crear duplicados.
+
+### Mensajes y visualización
+- Al deshabilitar: Modal de confirmación con mensaje "¿Está seguro de deshabilitar este usuario? El usuario no podrá iniciar sesión hasta que sea habilitado nuevamente."
+- Al habilitar: Mensaje de éxito "Usuario habilitado correctamente".
+- Badge de estado: "Deshabilitado" en gris, "Activo" en verde.
+
+### Relación con dispositivos
+- Los dispositivos asociados a un usuario deshabilitado **no se pierden** ni se reasignan.
+- El nombre del usuario sigue apareciendo en la tabla de dispositivos.
+- (Nota: Si se requiere, se puede mostrar visualmente que el usuario está deshabilitado en la tabla de dispositivos, agregando el campo `estado` en la consulta del backend).
+
+### Buenas prácticas
+- **Nunca borres usuarios físicamente si tienen relaciones importantes.**
+- Usa siempre el campo `estado` para mantener el histórico y la integridad de los datos.
+- Informa claramente al usuario/admin sobre el estado y las acciones disponibles. 
+
+## Alternancia ENTRADA/SALIDA por RFID (Frontend)
+
+El frontend refleja la lógica de alternancia ENTRADA/SALIDA implementada en el backend:
+
+- Al pasar la tarjeta RFID de un dispositivo:
+  - Si el dispositivo no tiene una ENTRADA abierta, se muestra como "ENTRADA registrada".
+  - Si ya tenía una ENTRADA abierta, el siguiente pase se interpreta como "SALIDA registrada".
+- El historial de movimientos siempre muestra pares de ENTRADA/SALIDA, evitando duplicidad de registros abiertos.
+- Esto garantiza que el usuario siempre vea el estado real del dispositivo y evita confusiones en la interfaz.
+
+**Nota:**  
+La lógica de alternancia es gestionada completamente por el backend; el frontend solo consume el resultado y actualiza la UI en consecuencia. 
+
+## QR dinámico y adaptable según entorno
+
+El QR que se muestra en el carnet digital se genera automáticamente usando la IP, dominio y puerto desde donde se abrió la app:
+
+```js
+value={`http://${window.location.hostname}:${window.location.port}/usuario/${data.usuario.documento}`}
+```
+
+Esto garantiza que:
+- Si abres la app en localhost, el QR apunta a localhost.
+- Si abres la app con la IP local, el QR apunta a esa IP.
+- Si abres la app en producción, el QR apunta al dominio real.
+
+**Ventajas:**
+- El QR siempre es funcional, sin importar el entorno.
+- No es necesario modificar el código para cambiar de entorno.
+- Permite pruebas profesionales desde cualquier dispositivo.
+
+**Recomendación:**
+- Cambia la variable `VITE_API_URL` en el `.env` del frontend según el entorno donde vayas a probar.
+- El backend debe aceptar los orígenes correctos en CORS.
+
+**Resultado:**
+- El sistema es flexible, profesional y listo para desarrollo, pruebas y producción sin errores de acceso ni QR. 

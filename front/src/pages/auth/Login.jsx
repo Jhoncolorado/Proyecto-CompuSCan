@@ -190,7 +190,13 @@ const Login = () => {
     try {
       await login(loginData);
     } catch (err) {
-      setErrors({ general: 'Correo o contraseña incorrectos. Por favor, verifica tus datos e inténtalo de nuevo.' });
+      if (err.response && err.response.status === 403) {
+        setErrors({ general: 'Usuario deshabilitado, acceso denegado' });
+      } else if (err.response && err.response.status === 401) {
+        setErrors({ general: 'Correo o contraseña incorrectos. Por favor, verifica tus datos e inténtalo de nuevo.' });
+      } else {
+        setErrors({ general: 'Error inesperado al iniciar sesión. Intenta de nuevo.' });
+      }
     } finally {
       setLoading(false);
     }

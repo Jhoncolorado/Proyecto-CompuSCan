@@ -109,13 +109,20 @@ const usuarioController = {
             const { 
                 nombre, correo, documento, tipo_documento, 
                 contrasena, rol, telefono1, telefono2, 
-                rh, ficha, observacion, foto 
+                rh, ficha, observacion, foto, programa, id_programa
             } = req.body;
 
             // Validar campos obligatorios
             if (!nombre || !correo || !documento || !tipo_documento || !contrasena || !rol) {
                 return res.status(400).json({ error: 'Faltan campos obligatorios' });
             }
+
+            // --- Validación de fuerza de contraseña ---
+            const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/;
+            if (!strongPassword.test(contrasena)) {
+                return res.status(400).json({ error: 'La contraseña debe tener mínimo 8 caracteres, incluir mayúscula, minúscula, número y símbolo.' });
+            }
+            // -----------------------------------------
 
             // Verificar si el correo ya existe
             const usuarioExistente = await usuarioModel.getUsuarioByEmail(correo);
@@ -148,7 +155,8 @@ const usuarioController = {
                 rh,
                 ficha,
                 observacion,
-                foto: fotoProcesada
+                foto: fotoProcesada,
+                id_programa: id_programa || programa || null
             });
 
             // Enviar correo de registro exitoso
@@ -213,14 +221,15 @@ const usuarioController = {
 
     deleteUsuario: async (req, res) => {
         try {
-            const deletedUsuario = await usuarioModel.deleteUsuario(req.params.id);
-            if (!deletedUsuario) {
+            // Cambiar estado a 'deshabilitado' en vez de borrar
+            const updated = await usuarioModel.updateUsuario(req.params.id, { estado: 'deshabilitado' });
+            if (!updated) {
                 return res.status(404).json({ error: 'Usuario no encontrado' });
             }
-            res.json({ message: 'Usuario eliminado correctamente' });
+            res.json({ message: 'Usuario deshabilitado correctamente' });
         } catch (error) {
             res.status(500).json({ 
-                error: 'Error al eliminar usuario',
+                error: 'Error al deshabilitar usuario',
                 details: error.message 
             });
         }
@@ -241,6 +250,12 @@ const usuarioController = {
             if (!usuario) {
                 return res.status(401).json({ error: 'Credenciales inválidas' });
             }
+
+            // --- VALIDACIÓN DE ESTADO DEL USUARIO ---
+            if (usuario.estado !== 'activo') {
+                return res.status(403).json({ error: 'Usuario deshabilitado, acceso denegado' });
+            }
+            // ----------------------------------------
 
             const contrasenaValida = await bcrypt.compare(contrasena, usuario.contrasena);
             console.log('Contraseña válida:', contrasenaValida); // Debug
@@ -460,6 +475,45 @@ const usuarioController = {
             res.json({ message: 'Contraseña restablecida exitosamente.' });
         } catch (error) {
             res.status(500).json({ error: 'Error al restablecer la contraseña', details: error.message });
+        }
+    },
+
+    habilitarUsuario: async (req, res) => {
+        try {
+            const updated = await usuarioModel.updateUsuario(req.params.id, { estado: 'activo' });
+            if (!updated) {
+                return res.status(404).json({ error: 'Usuario no encontrado' });
+            }
+            res.json({ message: 'Usuario habilitado correctamente', usuario: updated });
+        } catch (error) {
+            res.status(500).json({ 
+                error: 'Error al habilitar usuario',
+                details: error.message 
+            });
+        }
+    },
+
+    // Obtener usuario por documento (para QR y perfil público)
+    getUsuarioByDocument: async (req, res) => {
+        try {
+            const { documento } = req.params;
+            const usuario = await usuarioModel.getUsuarioByDocument(documento);
+            if (!usuario) {
+                return res.status(404).json({ error: 'Usuario no encontrado' });
+            }
+            // Manejo robusto de la foto para todos los casos
+            if (usuario.foto) {
+                if (typeof usuario.foto === 'string') {
+                    if (!usuario.foto.startsWith('data:image')) {
+                        usuario.foto = 'data:image/jpeg;base64,' + usuario.foto;
+                    }
+                } else if (Buffer.isBuffer(usuario.foto)) {
+                    usuario.foto = 'data:image/jpeg;base64,' + usuario.foto.toString('base64');
+                }
+            }
+            res.json(usuario);
+        } catch (error) {
+            res.status(500).json({ error: 'Error al obtener usuario por documento', details: error.message });
         }
     }
 };

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import { FaUser, FaHistory, FaMicrochip, FaFileExcel } from 'react-icons/fa';
+import api from '../../services/api';
 
 const tabs = [
   { key: 'users', label: 'Usuarios', icon: <FaUser /> },
@@ -37,9 +38,9 @@ const Reports = () => {
     setLoading(true);
     setError('');
     if (activeTab === 'users') {
-      fetch(`/api/usuarios?page=${usersPage}&limit=${usersLimit}`)
-        .then(res => res.json())
-        .then(data => {
+      api.get(`/api/usuarios?page=${usersPage}&limit=${usersLimit}`)
+        .then(res => {
+          const data = res.data;
           setUsers(Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : []);
           setUsersTotalPages(data.totalPages || 1);
           setUsersTotal(data.total || 0);
@@ -50,9 +51,9 @@ const Reports = () => {
           setLoading(false);
         });
     } else if (activeTab === 'history') {
-      fetch(`/api/historiales?page=${historyPage}&limit=${historyLimit}`)
-        .then(res => res.json())
-        .then(data => {
+      api.get(`/api/historiales?page=${historyPage}&limit=${historyLimit}`)
+        .then(res => {
+          const data = res.data;
           setHistory(Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : []);
           setHistoryTotalPages(data.totalPages || 1);
           setHistoryTotal(data.total || 0);
@@ -63,9 +64,9 @@ const Reports = () => {
           setLoading(false);
         });
     } else if (activeTab === 'devices') {
-      fetch(`/api/dispositivos?page=${devicesPage}&limit=${devicesLimit}`)
-        .then(res => res.json())
-        .then(data => {
+      api.get(`/api/dispositivos?page=${devicesPage}&limit=${devicesLimit}`)
+        .then(res => {
+          const data = res.data;
           setDevices(Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : []);
           setDevicesTotalPages(data.totalPages || 1);
           setDevicesTotal(data.total || 0);
@@ -204,8 +205,8 @@ const Reports = () => {
               <div>
                 <h2 className="reports-section-title">Usuarios</h2>
                 {loading ? <p className="reports-loading">Cargando usuarios...</p> : error ? <p className="reports-error">{error}</p> : (
-                  <div className="reports-table-wrapper" style={{ paddingLeft: 0, paddingTop: 0, background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
-                    <table className="reports-table" style={{ background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
+                  <div className="reports-table-wrapper">
+                    <table className="reports-table">
                       <thead>
                         <tr>
                           <th>Nombre</th>
@@ -221,9 +222,7 @@ const Reports = () => {
                             <td>{user.nombre}</td>
                             <td>{user.correo}</td>
                             <td>{user.rol}</td>
-                            <td>
-                              <span className="badge-estado">{user.estado || 'Activo'}</span>
-                            </td>
+                            <td><span className="badge-estado">{user.estado || 'Activo'}</span></td>
                             <td>{user.fecha_registro ? new Date(user.fecha_registro).toLocaleDateString() : ''}</td>
                           </tr>
                         ))}
@@ -250,27 +249,42 @@ const Reports = () => {
               <div>
                 <h2 className="reports-section-title">Historial</h2>
                 {loading ? <p className="reports-loading">Cargando historial...</p> : error ? <p className="reports-error">{error}</p> : (
-                  <div className="reports-table-wrapper" style={{ paddingLeft: 0, paddingTop: 0, background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
-                    <table className="reports-table" style={{ background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
+                  <div className="reports-table-wrapper">
+                    <table className="reports-table">
                       <thead>
                         <tr>
-                          <th>ID</th>
+                          <th>Fecha Entrada</th>
+                          <th>Fecha Salida</th>
+                          <th>Tipo</th>
+                          <th>Usuario</th>
+                          <th>Dispositivo</th>
+                          <th>Serial</th>
                           <th>Descripción</th>
-                          <th>Fecha</th>
-                          <th>ID Dispositivo</th>
-                          <th>ID Usuario</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {history.map(h => (
+                        {history.map(h => {
+                          // Parsear tipo y usuario desde la descripción
+                          let tipo = '';
+                          let usuario = '';
+                          if (h.descripcion) {
+                            if (h.descripcion.toLowerCase().includes('entrada')) tipo = 'ENTRADA';
+                            else if (h.descripcion.toLowerCase().includes('salida')) tipo = 'SALIDA';
+                            const match = h.descripcion.match(/Usuario: ([^\-]+)/);
+                            usuario = match ? match[1].trim() : '';
+                          }
+                          return (
                           <tr key={h.id_historial || h.id}>
-                            <td>{h.id_historial || h.id}</td>
+                              <td>{h.fecha_hora_entrada ? new Date(h.fecha_hora_entrada).toLocaleString() : ''}</td>
+                              <td>{h.fecha_hora_salida ? new Date(h.fecha_hora_salida).toLocaleString() : ''}</td>
+                              <td>{tipo}</td>
+                              <td>{usuario}</td>
+                              <td>{h.dispositivo_nombre || ''}</td>
+                              <td>{h.dispositivo_serial || ''}</td>
                             <td>{h.descripcion}</td>
-                            <td>{h.fecha_hora ? new Date(h.fecha_hora).toLocaleDateString() : ''}</td>
-                            <td>{h.id_dispositivo}</td>
-                            <td>{h.id_usuario || h.usuario_id || ''}</td>
                           </tr>
-                        ))}
+                          );
+                        })}
                       </tbody>
                     </table>
                     {historyTotalPages > 1 && (
@@ -294,11 +308,10 @@ const Reports = () => {
               <div>
                 <h2 className="reports-section-title">Dispositivos</h2>
                 {loading ? <p className="reports-loading">Cargando dispositivos...</p> : error ? <p className="reports-error">{error}</p> : (
-                  <div className="reports-table-wrapper" style={{ paddingLeft: 0, paddingTop: 0, background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
-                    <table className="reports-table" style={{ background: '#fff', boxShadow: 'none', borderRadius: 0 }}>
+                  <div className="reports-table-wrapper">
+                    <table className="reports-table">
                       <thead>
                         <tr>
-                          <th>ID</th>
                           <th>Nombre</th>
                           <th>Tipo</th>
                           <th>Serial</th>
@@ -310,7 +323,6 @@ const Reports = () => {
                       <tbody>
                         {devices.map(d => (
                           <tr key={d.id}>
-                            <td>{d.id}</td>
                             <td>{d.nombre}</td>
                             <td>{d.tipo}</td>
                             <td>{d.serial}</td>
