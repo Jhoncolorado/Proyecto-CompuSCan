@@ -53,6 +53,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  image-rendering: auto;
+  filter: none;
+  box-shadow: 0 2px 8px 0 rgba(44,62,80,0.18);
+  border: 2.5px solid #fff;
 }
 
 .welcome-text h2 {
@@ -217,14 +221,15 @@
   box-shadow: 0 10px 25px -5px rgba(0,0,0,0.07);
   position: relative;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s, box-shadow 0.3s;
   display: flex;
   flex-direction: column;
   border: 1px solid rgba(230, 235, 240, 0.6);
+  font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
 }
 
 .stat-card:hover {
-  transform: translateY(-3px) scale(1.005);
+  background: linear-gradient(145deg, #ffffff, #f3f7fa);
   box-shadow: 0 12px 22px -5px rgba(0,0,0,0.08);
 }
 
@@ -279,6 +284,13 @@
 .stat-card.activity .stat-icon {
   color: #10b981;
   background-color: rgba(16, 185, 129, 0.1);
+}
+
+.stat-card h3, .stat-card .stat-value, .stat-card p, .stat-card .stat-link {
+  transition: none !important;
+  font-weight: inherit;
+  color: inherit;
+  font-family: inherit;
 }
 
 .stat-content h3 {
@@ -895,5 +907,206 @@
   .activity-breakdown {
     flex-direction: column;
     gap: 0.8rem;
+  }
+} 
+
+/* --- SOLO MOBILE: Tarjeta de bienvenida tipo perfil --- */
+@media (max-width: 600px) {
+  .simple-welcome-panel {
+    border-radius: 14px;
+    margin-bottom: 1.1rem;
+    box-shadow: 0 4px 16px #0001;
+    padding: 0;
+    max-width: 99vw;
+    width: 100%;
+  }
+  .simple-welcome-header {
+    background: linear-gradient(90deg, #388e3c 80%, #43a047 100%);
+    padding: 1.1rem 0.7rem 0.7rem 0.7rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    border-radius: 14px 14px 0 0;
+    position: relative;
+  }
+  .simple-welcome-header img, .user-avatar img {
+    width: 68px !important;
+    height: 68px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.3rem;
+    box-shadow: 0 2px 8px #43a04722;
+    border: 2.5px solid #fff;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .simple-welcome-header h2 {
+    font-size: 1.25rem;
+    margin: 0.1rem 0 0.2rem 0;
+    word-break: break-word;
+    line-height: 1.2;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+  }
+  .simple-welcome-header .highlight-name {
+    font-size: 1.18rem;
+    font-weight: 900;
+    color: #ffe082;
+    display: block;
+    margin-top: 0.1rem;
+  }
+  .simple-welcome-header a {
+    display: block !important;
+    margin: 0.5rem auto 0 auto !important;
+    font-size: 1.08rem !important;
+    text-align: center !important;
+    background: #fff !important;
+    color: #43a047 !important;
+    border-radius: 10px !important;
+    padding: 0.7rem 1.2rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    box-shadow: 0 2px 8px #43a04722 !important;
+    border: none !important;
+    width: 90% !important;
+    transition: background 0.18s, color 0.18s;
+  }
+  .simple-welcome-header a:active, .simple-welcome-header a:focus {
+    background: #e8f5e9 !important;
+    color: #17632a !important;
+  }
+  .user-info-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    grid-template-columns: none !important;
+    padding: 0.7rem 0.2rem 1rem 0.2rem !important;
+    gap: 0.5rem !important;
+    background: #fff;
+    border-radius: 0 0 14px 14px;
+  }
+  .user-info-grid > div {
+    width: 98% !important;
+    max-width: 340px !important;
+    margin: 0.1rem auto !important;
+    background: #f8f9fa !important;
+    border-radius: 10px !important;
+    box-shadow: 0 1px 4px #0001 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.7rem !important;
+    padding: 0.7rem 1rem !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    font-size: 1.01rem !important;
+  }
+  .user-info-icon-circle {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    background: #e0f2f1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #43a047 !important;
+    font-size: 1.3rem !important;
+    flex-shrink: 0 !important;
+  }
+  .user-info-item h4 {
+    font-size: 1.01rem !important;
+    font-weight: 700 !important;
+    color: #17632a !important;
+    margin: 0 0 0.1rem 0 !important;
+  }
+  .user-info-item p {
+    font-size: 0.98rem !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    margin: 0 !important;
+  }
+  .dashboard-panels {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.1rem !important;
+    padding: 0 0.2rem !important;
+    margin-bottom: 1.1rem !important;
+  }
+  .dashboard-panel {
+    padding: 0.8rem 0.7rem !important;
+    border-radius: 12px !important;
+    min-width: 0 !important;
+    box-shadow: 0 2px 8px #0001 !important;
+  }
+  .panel-title {
+    font-size: 1rem !important;
+    margin-bottom: 0.7rem !important;
+    padding-bottom: 0.3rem !important;
+    padding-left: 0.2rem !important;
+  }
+  .status-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.7rem !important;
+    padding: 0 !important;
+  }
+  .status-item {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 0.7rem 0.6rem !important;
+    border-radius: 10px !important;
+    margin: 0 !important;
+    gap: 0.7rem !important;
+    min-width: 0 !important;
+  }
+  .status-icon {
+    font-size: 1.1rem !important;
+    width: 32px !important;
+    height: 32px !important;
+    margin-bottom: 0 !important;
+    margin-right: 0.7rem !important;
+  }
+  .status-count {
+    font-size: 1.2rem !important;
+    margin-bottom: 0 !important;
+    margin-right: 0.7rem !important;
+  }
+  .status-label {
+    font-size: 0.93rem !important;
+    margin: 0 !important;
+  }
+  .activity-list {
+    max-height: 220px !important;
+    gap: 0.4rem !important;
+    padding-right: 0 !important;
+  }
+  .activity-item-card {
+    padding: 0.7rem 0.6rem !important;
+    border-radius: 10px !important;
+    font-size: 0.97rem !important;
+    gap: 0.5rem !important;
+  }
+  .activity-type {
+    font-size: 1.1rem !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    margin-right: 0.7rem !important;
+  }
+  .activity-details {
+    font-size: 0.97rem !important;
+  }
+  .activity-time {
+    font-size: 0.93rem !important;
+    margin-left: 0.7rem !important;
+  }
+  .view-all-link {
+    font-size: 0.98rem !important;
+    margin-top: 0.7rem !important;
+    display: block !important;
+    text-align: right !important;
   }
 } 

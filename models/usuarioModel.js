@@ -30,7 +30,12 @@ const usuarioModel = {
     },
 
     getUsuarioByDocument: async (documento) => {
-        const query = 'SELECT * FROM usuario WHERE documento = $1';
+        const query = `
+            SELECT u.*, p.nombre_programa
+            FROM usuario u
+            LEFT JOIN programas p ON u.id_programa = p.id
+            WHERE u.documento = $1
+        `;
         const result = await pool.query(query, [documento]);
         return result.rows[0];
     },
@@ -38,7 +43,7 @@ const usuarioModel = {
     createUsuario: async ({ 
         nombre, correo, documento, tipo_documento, 
         contrasena, rol, telefono1, telefono2, 
-        rh, ficha, observacion, foto 
+        rh, ficha, observacion, foto, id_programa
     }) => {
         // Procesar foto base64
         let fotoBase64 = null;
@@ -54,26 +59,26 @@ const usuarioModel = {
                 INSERT INTO usuario (
                     nombre, correo, documento, tipo_documento, 
                     contrasena, rol, telefono1, telefono2, 
-                    rh, ficha, observacion, foto
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, decode($12, 'base64'))
-                RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro`;
+                    rh, ficha, observacion, foto, id_programa
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, decode($12, 'base64'), $13)
+                RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, id_programa`;
             values = [
                 nombre, correo, documento, tipo_documento,
                 contrasena, rol, telefono1, telefono2,
-                rh, ficha, observacion, fotoBase64
+                rh, ficha, observacion, fotoBase64, id_programa || null
             ];
         } else {
             query = `
                 INSERT INTO usuario (
                     nombre, correo, documento, tipo_documento, 
                     contrasena, rol, telefono1, telefono2, 
-                    rh, ficha, observacion, foto
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, null)
-                RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro`;
+                    rh, ficha, observacion, foto, id_programa
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, null, $12)
+                RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, id_programa`;
             values = [
                 nombre, correo, documento, tipo_documento,
                 contrasena, rol, telefono1, telefono2,
-                rh, ficha, observacion
+                rh, ficha, observacion, id_programa || null
             ];
         }
         const result = await pool.query(query, values);

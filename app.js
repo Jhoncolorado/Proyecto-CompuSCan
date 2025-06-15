@@ -19,6 +19,7 @@ const io = new Server(server, {
     credentials: true
   }
 });
+const rateLimit = require('express-rate-limit');
 
 // Mostrar las variables de entorno cargadas (solo para desarrollo)
 console.log('Variables de entorno:');
@@ -46,9 +47,20 @@ console.log('Ruta a index.html:', indexPath);
 const indexExists = fs.existsSync(indexPath);
 console.log('¿Existe el archivo index.html?', indexExists);
 
-// Configurar CORS - permitir todos los orígenes
+// --- CORS seguro: solo orígenes confiables ---
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://192.168.1.124:5173', 
+  'https://compuscan.com', // Cambia por tu dominio real de producción
+];
 app.use(cors({
-  origin: true, // Permitir cualquier origen
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('No permitido por CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin', 'X-Requested-With']
@@ -71,6 +83,14 @@ app.use((req, res, next) => {
   
   next();
 });
+
+// --- Rate limiting en login ---
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutos
+  max: 8, // máximo 8 intentos por IP
+  message: { error: 'Demasiados intentos de inicio de sesión. Intenta de nuevo en 15 minutos.' }
+});
+app.use('/api/usuarios/login', loginLimiter);
 
 // Configuración de Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
@@ -129,7 +149,11 @@ app.use('/js', express.static(path.join(publicPath, 'js')));
 // Manejo de errores
 app.use((err, req, res, next) => {
   console.error('Error en la aplicación:', err.stack);
-  res.status(500).send('¡Algo salió mal!');
+  if (process.env.NODE_ENV === 'production') {
+    res.status(500).send('Error interno del servidor.');
+  } else {
+    res.status(500).send('¡Algo salió mal!\n' + err.stack);
+  }
 });
 
 // Iniciar servidor

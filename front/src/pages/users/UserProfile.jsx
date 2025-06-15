@@ -32,7 +32,7 @@ export default function UserProfile() {
       <div><b>RH:</b> {usuario.rh || '-'}</div>
       <div><b>Regional:</b> Quindío</div>
       <div><b>Centro:</b> Centro de Comercio y Turismo</div>
-      <div><b>Programa:</b> Tecnólogo Análisis y Desarrollo de Software</div>
+      <div><b>Programa:</b> {usuario.nombre_programa || 'Programa de formación no registrado'}</div>
       <div><b>Grupo:</b> {usuario.ficha}</div>
     </div>
   );

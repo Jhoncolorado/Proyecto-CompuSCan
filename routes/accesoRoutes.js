@@ -21,41 +21,37 @@ router.get('/rfid/:rfid', async (req, res) => {
     const usuario = await require('../models/usuarioModel').getUsuarioById(dispositivo.id_usuario);
     console.log('[ACCESO] Usuario encontrado:', usuario.nombre);
 
-    // Obtener el último evento del dispositivo para determinar si es entrada o salida
-    const ultimoEvento = await pool.query(
-      'SELECT descripcion FROM historial_dispositivo WHERE id_dispositivo = $1 ORDER BY fecha_hora DESC LIMIT 1',
+    // Buscar si hay registro abierto (sin salida) para este usuario/dispositivo
+    const registroAbierto = await pool.query(
+      'SELECT * FROM historial_dispositivo WHERE id_dispositivo = $1 AND fecha_hora_salida IS NULL ORDER BY id_historial DESC LIMIT 1',
       [dispositivo.id]
     );
 
     let tipoEvento = 'ENTRADA';
-    if (ultimoEvento.rows.length > 0) {
-      const ultimaDescripcion = ultimoEvento.rows[0].descripcion;
-      if (ultimaDescripcion.includes('Acceso autorizado: ENTRADA')) tipoEvento = 'SALIDA';
-      else if (ultimaDescripcion.includes('Acceso autorizado: SALIDA')) tipoEvento = 'ENTRADA';
-      // Si no contiene ninguna, por defecto será ENTRADA
-    }
-
-    const descripcion = `Acceso autorizado: ${tipoEvento} - RFID: ${rfid} - Usuario: ${usuario.nombre}`;
-
-    // Registrar el evento en el historial directamente con pool
-    try {
-      const result = await pool.query(
-        'INSERT INTO historial_dispositivo (descripcion, id_dispositivo) VALUES ($1, $2) RETURNING *',
-        [descripcion, dispositivo.id]
+    let mensaje = '';
+    if (registroAbierto.rows.length === 0) {
+      // No hay entrada abierta, registrar ENTRADA
+      await pool.query(
+        'INSERT INTO historial_dispositivo (id_dispositivo, fecha_hora_entrada, fecha_hora_salida, descripcion) VALUES ($1, NOW(), NULL, $2)',
+        [dispositivo.id, `Acceso autorizado: ENTRADA - RFID: ${rfid} - Usuario: ${usuario.nombre}`]
       );
-      console.log(`[HISTORIAL] ${descripcion}`);
-    } catch (historialError) {
-      console.error('[HISTORIAL] Error al registrar evento:', historialError);
+      tipoEvento = 'ENTRADA';
+      mensaje = 'Entrada registrada';
+    } else {
+      // Hay entrada abierta, registrar SALIDA
+      await pool.query(
+        'UPDATE historial_dispositivo SET fecha_hora_salida = NOW(), descripcion = $1 WHERE id_historial = $2',
+        [`Acceso autorizado: SALIDA - RFID: ${rfid} - Usuario: ${usuario.nombre}`, registroAbierto.rows[0].id_historial]
+      );
+      tipoEvento = 'SALIDA';
+      mensaje = 'Salida registrada';
     }
 
-    // Log de acceso autorizado
-    console.log(`[ACCESO] ${descripcion} - Dispositivo: ${dispositivo.nombre}`);
-    
     res.json({ 
       usuario, 
       dispositivo,
       tipoEvento,
-      mensaje: `Acceso autorizado: ${tipoEvento}`
+      mensaje
     });
   } catch (error) {
     console.error('[ERROR] Error en acceso RFID:', error);

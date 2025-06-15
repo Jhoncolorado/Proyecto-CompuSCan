@@ -22,6 +22,7 @@ const Devices = () => {
   const [limit, setLimit] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchDevices = async () => {
@@ -63,6 +64,17 @@ const Devices = () => {
 
   const canRegisterDevice = user && (user.rol === 'aprendiz' || user.rol === 'instructor');
 
+  const filteredDevices = devices.filter(device => {
+    const search = searchTerm.toLowerCase();
+    return (
+      (device.nombre || '').toLowerCase().includes(search) ||
+      (device.serial || '').toLowerCase().includes(search) ||
+      (device.nombre_usuario || '').toLowerCase().includes(search) ||
+      (device.tipo || '').toLowerCase().includes(search) ||
+      (device.estado_validacion || '').toLowerCase().includes(search)
+    );
+  });
+
   return (
     <div className="devices-bg">
       <div className="devices-panel">
@@ -70,16 +82,28 @@ const Devices = () => {
           <h1 style={{ fontSize: '1.8rem', fontWeight: 700, color: '#1b5e20', margin: 0, letterSpacing: 0.5 }}>
               Gestión de Dispositivos
           </h1>
-          {canRegisterDevice && (
-            <div className="devices-controls-wrapper">
-              <button 
-                className="register-device-button"
-                onClick={handleToggleRegistrationForm}
-              >
-                {showRegistrationForm ? 'Cancelar' : <><FaPlus style={{marginRight: '8px'}} /> Registrar Dispositivo</>}
-              </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 18, flex: 1, justifyContent: 'flex-end' }}>
+            <div className="search-bar">
+              <FaCheckCircle className="search-icon" style={{ color: '#256029' }} />
+              <input
+                type="text"
+                placeholder="Buscar dispositivo..."
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+                style={{ minWidth: 220 }}
+              />
             </div>
-          )}
+            {canRegisterDevice && (
+              <div className="devices-controls-wrapper">
+                <button 
+                  className="register-device-button"
+                  onClick={handleToggleRegistrationForm}
+                >
+                  {showRegistrationForm ? 'Cancelar' : <><FaPlus style={{marginRight: '8px'}} /> Registrar Dispositivo</>}
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {showRegistrationForm ? (
@@ -96,7 +120,7 @@ const Devices = () => {
                 <FaExclamationCircle style={{marginRight:8, color:'#c62828', fontSize:22}}/>
                 <span>{error}</span>
               </div>
-            ) : devices.length === 0 ? (
+            ) : filteredDevices.length === 0 ? (
               <div className="devices-info">
                 <FaExclamationCircle style={{marginRight:8, color:'#1976d2', fontSize:22}}/>
                 {canRegisterDevice ? (
@@ -123,7 +147,7 @@ const Devices = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {devices.map(device => (
+                    {filteredDevices.map(device => (
                       <tr key={device.id}>
                         <td>
                           {Array.isArray(device.foto) && device.foto.length > 0 ? (

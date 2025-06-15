@@ -17,6 +17,8 @@
 14. [Gestión de imágenes múltiples por dispositivo](#gestión-de-imágenes-múltiples-por-dispositivo)
 15. [Actualización en tiempo real del dashboard admin (socket.io)](#actualización-en-tiempo-real-del-dashboard-admin-socketio)
 16. [Integración de WebSockets con Socket.IO en el Backend](#integración-de-websockets-con-socketio-en-el-backend)
+17. [Gestión de usuarios: Deshabilitar y habilitar (histórico y trazabilidad)](#gestión-de-usuarios-deshabilitar-y-habilitar-histórico-y-trazabilidad)
+18. [Alternancia ENTRADA/SALIDA por RFID (Backend)](#alternancia-entrada-salida-por-rfid-backend)
 
 ---
 
@@ -382,6 +384,105 @@ const authorize = (roles = []) => {
 
 module.exports = { authenticate, authorize };
 ```
+
+---
+
+## 🟢 Master Class: JWT en Backend - Cómo funciona, mejores prácticas y tips PRO
+
+### ¿Qué es un JWT?
+- Un **JSON Web Token** es un string seguro que representa la identidad de un usuario.
+- Se usa para **autenticación sin estado**: el backend no guarda sesiones, solo verifica el token en cada petición.
+
+### ¿Cómo es el flujo típico?
+
+1. **Login:**
+   - El usuario envía su correo y contraseña al backend (`POST /api/usuarios/login`).
+   - El backend valida las credenciales y, si son correctas, genera un JWT con la info del usuario (id, correo, rol, etc.).
+   - El backend responde con el token y los datos básicos del usuario.
+
+2. **Uso del token:**
+   - El frontend guarda el token (usualmente en localStorage).
+   - En cada petición protegida, el frontend envía el token en el header:
+     ```http
+     Authorization: Bearer <token>
+     ```
+   - El backend valida el token en cada endpoint protegido usando el middleware `authenticate`.
+
+3. **Validación:**
+   - Si el token es válido y no ha expirado, el backend permite la acción y adjunta los datos del usuario a `req.user`.
+   - Si el token es inválido o expiró, responde 401 y el frontend debe pedir login de nuevo.
+
+---
+
+### ¿Qué contiene un JWT?
+- **Header:** Algoritmo y tipo de token (ej: HS256, JWT)
+- **Payload:** Datos del usuario (id, correo, rol, etc.)
+- **Signature:** Firma digital usando la clave secreta del backend
+
+**Ejemplo de payload:**
+```json
+{
+  "id": 47,
+  "correo": "usuario@correo.com",
+  "rol": "aprendiz",
+  "iat": 1710000000,
+  "exp": 1710086400
+}
+```
+
+**Ejemplo de un JWT real:**
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDcsImNvcnJlbyI6InVzZXJpby5AZW1haWwuY29tIiwicm9sIjoiYXByZW5kaXoiLCJpYXQiOjE3MTAwMDAwMDAsImV4cCI6MTcxMDA4NjQwMH0.abc123DEF456ghi789JKL
+```
+
+Puedes decodificarlo en [jwt.io](https://jwt.io/).
+
+---
+
+### Tips PRO y Buenas Prácticas
+
+- **Nunca pongas datos sensibles (contraseña, etc.) en el payload del JWT.**
+- Usa una clave secreta fuerte y guárdala en variables de entorno (`JWT_SECRET`).
+- Define un tiempo de expiración razonable (`expiresIn: '24h'` o menos para apps críticas).
+- Siempre valida el token en TODOS los endpoints protegidos.
+- Si cambias la contraseña del usuario, considera invalidar los tokens previos (rotación de clave).
+- En producción, usa HTTPS para evitar robo de tokens por sniffing.
+- Si el usuario es deshabilitado, el backend debe rechazar el token aunque sea válido (verifica el estado en la BD).
+- Si el token expira, responde 401 y fuerza logout en el frontend.
+- No guardes el token en cookies sin `HttpOnly` y `Secure` en apps públicas.
+
+---
+
+### Troubleshooting y Preguntas Frecuentes
+
+- **¿Por qué recibo 401 aunque el token parece válido?**
+  - El token expiró (`exp`).
+  - El token fue firmado con otra clave (`JWT_SECRET` cambió).
+  - El usuario fue deshabilitado o borrado.
+  - El token no se está enviando en el header Authorization.
+
+- **¿Cómo invalidar todos los tokens de un usuario?**
+  - Cambia la clave secreta global (invalidas todos los tokens del sistema).
+  - O lleva un campo `tokenVersion` en la BD y verifica en el payload.
+
+- **¿Puedo usar JWT para roles y permisos?**
+  - Sí, incluye el rol en el payload y usa el middleware `authorize(['rol1','rol2'])`.
+
+- **¿Qué pasa si el token es robado?**
+  - El atacante puede hacer peticiones hasta que expire. Por eso, usa HTTPS y expira tokens rápido.
+
+---
+
+### Resumen visual del flujo
+
+```
+[Usuario] --login--> [Backend] --genera JWT--> [Frontend]
+[Frontend] --petición protegida + token--> [Backend] --valida JWT--> [OK]
+```
+
+---
+
+¡Con esto tienes una visión PRO y práctica de JWT en backend Node.js! 🚀
 
 ---
 
@@ -1045,6 +1146,10 @@ El backend implementa **socket.io** para permitir la actualización en tiempo re
 - Si el correo no se envía, el registro no se interrumpe y se muestra el error en consola para depuración.
 - El código relevante está en `controllers/usuarioController.js` (función `sendRegistroExitosoEmail`). 
 
+## Nota sobre Modal de Acceso y Visualización Profesional (Frontend)
+
+La lógica del **modal de acceso profesional**, cierre por tecla y visualización alineada de tarjetas (aprendiz y equipo) es implementada completamente en el frontend. El backend solo entrega los datos necesarios y nunca expone el RFID ni el serial en la UI, cumpliendo con las mejores prácticas de seguridad y privacidad.
+
 # Integración de WebSockets con Socket.IO en el Backend
 
 ## ¿Qué es Socket.IO y por qué se eligió?
@@ -1095,3 +1200,117 @@ El backend implementa **socket.io** para permitir la actualización en tiempo re
 - Permite monitoreo en vivo y reacción inmediata ante eventos críticos.
 - La arquitectura es escalable y puede adaptarse a otros eventos o módulos.
 - El código es limpio, desacoplado y fácil de mantener. 
+
+## Gestión de usuarios: Deshabilitar y habilitar (histórico y trazabilidad)
+
+### Flujo de backend
+- Cuando se "elimina" un usuario, el endpoint `/api/usuarios/:id` (PUT) actualiza el campo `estado` a `"deshabilitado"` en vez de borrar el registro.
+- El usuario deshabilitado no puede autenticarse ni operar en la app, pero su información y relaciones (dispositivos, historial) se mantienen.
+- Para reactivar, el endpoint `/api/usuarios/:id/habilitar` cambia el estado a `"activo"`.
+
+### Importancia institucional
+- **Histórico y trazabilidad:** Se conserva el registro de todos los usuarios, incluso los inactivos.
+- **Integridad referencial:** Los dispositivos asociados siguen apuntando al usuario, evitando datos huérfanos.
+- **Auditoría:** Permite saber quién registró o usó un dispositivo en el pasado.
+
+### Ejemplo de endpoints
+- Deshabilitar usuario:
+  - `PUT /api/usuarios/47` con body `{ estado: "deshabilitado" }`
+  - Respuesta: `{ message: "Usuario deshabilitado correctamente" }`
+- Habilitar usuario:
+  - `PUT /api/usuarios/47/habilitar`
+  - Respuesta: `{ message: "Usuario habilitado correctamente", usuario: { ... } }`
+
+### Relación con dispositivos
+- Los dispositivos asociados a un usuario deshabilitado **no se pierden** ni se reasignan.
+- El nombre del usuario sigue apareciendo en la consulta de dispositivos.
+- (Opcional: Si se requiere, se puede incluir el campo `estado` del usuario en la consulta de dispositivos para mostrarlo en el frontend).
+
+### Buenas prácticas
+- **Nunca borres usuarios físicamente si tienen relaciones importantes.**
+- Usa siempre el campo `estado` para mantener el histórico y la integridad de los datos.
+- Documenta claramente el flujo para otros desarrolladores y auditores. 
+
+## Alternancia ENTRADA/SALIDA por RFID (Backend)
+
+### Descripción
+
+Para evitar registros duplicados de ENTRADA, el sistema implementa una lógica de alternancia en el endpoint de acceso por RFID.  
+Esto asegura que para cada dispositivo solo pueda existir un registro abierto (sin salida) en la tabla `historial_dispositivo`.
+
+### Lógica de funcionamiento
+
+1. **Al pasar la tarjeta RFID:**
+   - Se busca si existe un registro abierto (`fecha_hora_salida IS NULL`) para el dispositivo.
+   - Si **NO existe**: se crea un nuevo registro de ENTRADA.
+   - Si **SÍ existe**: se actualiza ese registro, registrando la SALIDA.
+
+2. **Tabla involucrada:**  
+   - `historial_dispositivo`
+     - `id_historial` (PK)
+     - `id_dispositivo` (FK)
+     - `fecha_hora_entrada` (timestamp)
+     - `fecha_hora_salida` (timestamp, puede ser NULL)
+     - `descripcion` (texto)
+
+### Fragmento de código relevante
+
+```js
+// Alternancia ENTRADA/SALIDA
+const registroAbiertoRes = await pool.query(
+  'SELECT * FROM historial_dispositivo WHERE id_dispositivo = $1 AND fecha_hora_salida IS NULL ORDER BY id_historial DESC LIMIT 1',
+  [dispositivo.id]
+);
+if (registroAbiertoRes.rows.length === 0) {
+  // Registrar ENTRADA
+  await pool.query(
+    'INSERT INTO historial_dispositivo (id_dispositivo, fecha_hora_entrada, fecha_hora_salida, descripcion) VALUES ($1, NOW(), NULL, $2)',
+    [dispositivo.id, descripcion]
+  );
+} else {
+  // Registrar SALIDA
+  await pool.query(
+    'UPDATE historial_dispositivo SET fecha_hora_salida = NOW(), descripcion = $1 WHERE id_historial = $2',
+    [descripcion, registroAbiertoRes.rows[0].id_historial]
+  );
+}
+```
+
+### Ejemplo de flujo
+
+- **Primer pase de tarjeta:**  
+  → Se registra ENTRADA (nuevo registro, salida en NULL).
+- **Segundo pase de tarjeta:**  
+  → Se registra SALIDA (se actualiza el registro abierto).
+
+### Beneficios
+
+- Integridad de datos: nunca hay dos ENTRADAS abiertas.
+- Trazabilidad clara de movimientos.
+- Evita inconsistencias en el historial. 
+
+## Configuración de CORS y allowedOrigins
+
+El backend utiliza un array `allowedOrigins` para definir qué dominios y IPs pueden hacer peticiones:
+
+```js
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://192.168.1.124:5173',
+  'https://compuscan.com',
+];
+```
+
+- **localhost:** Para desarrollo en el PC.
+- **IP local:** Para pruebas desde otros dispositivos en la red (celular, tablet, etc.).
+- **Dominio:** Para producción.
+
+**¿Por qué es importante?**
+- Permite pruebas y desarrollo sin errores de CORS.
+- Facilita el despliegue y la transición entre entornos.
+
+**¿Qué hacer al desplegar?**
+- Agregar el dominio real de producción.
+- Mantener localhost e IP local si se harán pruebas internas.
+
+**Nota:** Si la IP local cambia, actualiza el array para evitar bloqueos de CORS. 

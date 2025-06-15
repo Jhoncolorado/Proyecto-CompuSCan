@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
+const { authenticate, authorize } = require('../middleware/auth');
 
 /**
  * @swagger
@@ -212,7 +213,7 @@ router.post('/', usuarioController.createUsuario);
  *       401:
  *         description: No autorizado
  */
-router.get('/', usuarioController.getAllUsuarios);
+router.get('/', authenticate, authorize(['administrador','validador']), usuarioController.getAllUsuarios);
 
 /**
  * @swagger
@@ -237,7 +238,16 @@ router.get('/', usuarioController.getAllUsuarios);
  *       401:
  *         description: No autorizado
  */
-router.get('/:id', usuarioController.getUsuarioById);
+router.get('/:id', authenticate, (req, res, next) => {
+  if (
+    req.user.rol === 'administrador' ||
+    req.user.rol === 'validador' ||
+    parseInt(req.params.id) === req.user.id
+  ) {
+    return usuarioController.getUsuarioById(req, res, next);
+  }
+  return res.status(403).json({ error: 'No tienes permisos para esta acción' });
+});
 
 /**
  * @swagger
@@ -327,7 +337,7 @@ router.put('/:id/password', usuarioController.changePassword);
  *       401:
  *         description: No autorizado
  */
-router.put('/:id', usuarioController.updateUsuario);
+router.put('/:id', authenticate, authorize(['administrador','validador']), usuarioController.updateUsuario);
 
 /**
  * @swagger
@@ -352,10 +362,40 @@ router.put('/:id', usuarioController.updateUsuario);
  *       401:
  *         description: No autorizado
  */
-router.delete('/:id', usuarioController.deleteUsuario);
+router.delete('/:id', authenticate, authorize(['administrador','validador']), usuarioController.deleteUsuario);
 
 // Registro en dos pasos
 router.post('/register-step1', usuarioController.registerStep1);
 router.put('/register-step2/:id', usuarioController.registerStep2);
+
+/**
+ * @swagger
+ * /api/usuarios/{id}/habilitar:
+ *   put:
+ *     summary: Habilitar un usuario
+ *     tags: [Usuarios]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario habilitado exitosamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       400:
+ *         description: Datos inválidos
+ *       401:
+ *         description: No autorizado
+ */
+router.put('/:id/habilitar', authenticate, authorize(['administrador','validador']), usuarioController.habilitarUsuario);
+
+// Obtener usuario por documento (para QR y perfil público)
+router.get('/documento/:documento', usuarioController.getUsuarioByDocument);
 
 module.exports = router;

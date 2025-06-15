@@ -5,13 +5,14 @@ const historialDispositivoModel = {
         const query = `
             SELECT 
                 h.id_historial,
-                h.fecha_hora,
+                h.fecha_hora_entrada,
+                h.fecha_hora_salida,
                 h.descripcion,
                 d.nombre as dispositivo_nombre,
                 d.serial as dispositivo_serial
             FROM historial_dispositivo h
             LEFT JOIN dispositivo d ON h.id_dispositivo = d.id
-            ORDER BY h.fecha_hora DESC`;
+            ORDER BY h.fecha_hora_entrada DESC`;
         const result = await pool.query(query);
         return result.rows;
     },
@@ -19,7 +20,10 @@ const historialDispositivoModel = {
     getHistorialById: async (id) => {
         const query = `
             SELECT 
-                h.*,
+                h.id_historial,
+                h.fecha_hora_entrada,
+                h.fecha_hora_salida,
+                h.descripcion,
                 d.nombre as dispositivo_nombre,
                 d.serial as dispositivo_serial
             FROM historial_dispositivo h
@@ -67,13 +71,16 @@ const historialDispositivoModel = {
     getHistorialesByDispositivo: async (dispositivo_id) => {
         const query = `
             SELECT 
-                h.*,
+                h.id_historial,
+                h.fecha_hora_entrada,
+                h.fecha_hora_salida,
+                h.descripcion,
                 d.nombre as dispositivo_nombre,
                 d.serial as dispositivo_serial
             FROM historial_dispositivo h
             LEFT JOIN dispositivo d ON h.id_dispositivo = d.id
             WHERE h.id_dispositivo = $1
-            ORDER BY h.fecha_hora DESC`;
+            ORDER BY h.fecha_hora_entrada DESC`;
         const result = await pool.query(query, [dispositivo_id]);
         return result.rows;
     },
@@ -85,7 +92,7 @@ const historialDispositivoModel = {
                 SUM(CASE WHEN descripcion ILIKE '%salida%' THEN 1 ELSE 0 END) AS salidas,
                 COUNT(*) AS total
             FROM historial_dispositivo
-            WHERE DATE(fecha_hora) = CURRENT_DATE
+            WHERE DATE(fecha_hora_entrada) = CURRENT_DATE
         `;
         const result = await pool.query(query);
         return {
@@ -99,13 +106,14 @@ const historialDispositivoModel = {
         const query = `
             SELECT 
                 h.id_historial,
-                h.fecha_hora,
+                h.fecha_hora_entrada,
+                h.fecha_hora_salida,
                 h.descripcion,
                 d.nombre as dispositivo_nombre,
                 d.serial as dispositivo_serial
             FROM historial_dispositivo h
             LEFT JOIN dispositivo d ON h.id_dispositivo = d.id
-            ORDER BY h.fecha_hora DESC
+            ORDER BY h.fecha_hora_entrada DESC
             LIMIT 5
         `;
         const result = await pool.query(query);
@@ -116,13 +124,14 @@ const historialDispositivoModel = {
         const query = `
             SELECT 
                 h.id_historial,
-                h.fecha_hora,
+                h.fecha_hora_entrada,
+                h.fecha_hora_salida,
                 h.descripcion,
                 d.nombre as dispositivo_nombre,
                 d.serial as dispositivo_serial
             FROM historial_dispositivo h
             LEFT JOIN dispositivo d ON h.id_dispositivo = d.id
-            ORDER BY h.fecha_hora DESC
+            ORDER BY h.fecha_hora_entrada DESC
             LIMIT $1 OFFSET $2`;
         const result = await pool.query(query, [limit, offset]);
         return result.rows;

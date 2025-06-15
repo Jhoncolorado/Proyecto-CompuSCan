@@ -25,6 +25,7 @@ import './home.css';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/CompuSCan2025.jfif';
 import { io as socketIOClient } from 'socket.io-client';
+import api from '../../services/api';
 
 // Componente para mostrar la fecha actual
 const CurrentDateDisplay = () => {
@@ -61,6 +62,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showQuickAccess, setShowQuickAccess] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 600);
   
   const formatDate = (date) =>
     new Intl.DateTimeFormat('es-ES', {
@@ -109,6 +111,12 @@ const Home = () => {
     window.scrollTo({ top: 0, behavior: 'auto' });
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 600);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   if (loading) {
     return (
       <div className="dashboard-container">
@@ -137,6 +145,113 @@ const Home = () => {
 
   return (
     <div className="dashboard-container" style={{ position: 'relative', minHeight: '90vh' }}>
+      {/* --- ESTILOS RESPONSIVE SOLO PARA ESTA PANTALLA --- */}
+      <style>{`
+        @media (max-width: 600px) {
+          .dashboard-welcome-header {
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 1.2rem 0.5rem 0.7rem 0.5rem !important;
+            gap: 0.7rem !important;
+            text-align: center !important;
+          }
+          .dashboard-welcome-header > div:first-child {
+            width: 80px !important;
+            height: 80px !important;
+            margin: 0 auto 0.7rem auto !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 50% !important;
+            overflow: hidden !important;
+            background: #fff !important;
+            box-shadow: 0 2px 8px #43a04722 !important;
+          }
+          .dashboard-welcome-header img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            border-radius: 50% !important;
+          }
+          .dashboard-welcome-header h2 {
+            font-size: 1.25rem !important;
+            text-align: center !important;
+            margin: 0 0 0.5rem 0 !important;
+            word-break: break-word;
+            color: #fff !important;
+          }
+          .dashboard-welcome-header a {
+            display: block !important;
+            margin: 0.5rem auto 0 auto !important;
+            font-size: 1.05rem !important;
+            text-align: center !important;
+            background: #fff !important;
+            color: #43a047 !important;
+            border-radius: 8px !important;
+            padding: 0.7rem 1.2rem !important;
+            font-weight: 700 !important;
+            text-decoration: none !important;
+            box-shadow: 0 2px 8px #43a04722 !important;
+            border: none !important;
+            width: 90% !important;
+            transition: background 0.18s, color 0.18s;
+          }
+          .dashboard-welcome-header a:active, .dashboard-welcome-header a:focus {
+            background: #e8f5e9 !important;
+            color: #17632a !important;
+          }
+          /* Datos de usuario apilados */
+          .user-info-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            grid-template-columns: none !important;
+            padding: 0.7rem 0.2rem !important;
+            gap: 0.7rem !important;
+          }
+          .user-info-grid > div {
+            width: 95% !important;
+            max-width: 340px !important;
+            margin: 0 auto !important;
+            background: #f8f9fa !important;
+            border-radius: 10px !important;
+            box-shadow: 0 1px 4px #0001 !important;
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.7rem !important;
+            padding: 0.7rem 1rem !important;
+            text-align: left !important;
+            justify-content: flex-start !important;
+          }
+          .user-info-grid .user-info-icon-circle {
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            background: #e0f2f1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #43a047 !important;
+            font-size: 1.3rem !important;
+            flex-shrink: 0 !important;
+          }
+          .user-info-grid h4 {
+            font-size: 1.01rem !important;
+            font-weight: 700 !important;
+            color: #17632a !important;
+            margin: 0 0 0.1rem 0 !important;
+          }
+          .user-info-grid p {
+            font-size: 0.98rem !important;
+            font-weight: 600 !important;
+            color: #333 !important;
+            margin: 0 !important;
+          }
+        }
+      `}</style>
+      {/* --- FIN ESTILOS RESPONSIVE --- */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 8 }}>
         {/* Botón de accesos rápidos solo para admin/validador */}
         {(user && (user.rol === 'administrador' || user.rol === 'validador')) && (
@@ -190,7 +305,53 @@ const Home = () => {
         )}
       <h1 className="dashboard-title">Panel de Control</h1>
       </div>
-      {/* Panel de Bienvenida con estilos directos */}
+      {/* Panel de Bienvenida */}
+      {isMobile ? (
+        <div className="simple-welcome-panel">
+          <div className="simple-welcome-header">
+            {user?.foto ? (
+              <img src={user.foto} alt="Avatar" />
+            ) : (
+              <FaUserCircle style={{ color: '#71c585', fontSize: '3.2rem', marginBottom: 8 }} />
+            )}
+            <h2>
+              ¡Bienvenido,<br />
+              <span className="highlight-name">{user?.nombre || 'Administrador'}</span>!
+            </h2>
+            <a href="/profile">Ir a mi perfil</a>
+          </div>
+          <div className="user-info-grid">
+            <div className="user-info-item">
+              <span className="user-info-icon-circle"><FaIdCard /></span>
+              <div>
+                <h4>Usuario</h4>
+                <p>{user?.usuario || user?.email || 'admin'}</p>
+              </div>
+            </div>
+            <div className="user-info-item">
+              <span className="user-info-icon-circle"><FaCrown /></span>
+              <div>
+                <h4>Rol</h4>
+                <p>{user?.rol || 'administrador'}</p>
+              </div>
+            </div>
+            <div className="user-info-item">
+              <span className="user-info-icon-circle"><FaRegClock /></span>
+              <div>
+                <h4>Último acceso</h4>
+                <p>{user?.ultimoAcceso ? formatDate(new Date(user.ultimoAcceso)) : '17 de mayo de 2025, 20:24'}</p>
+              </div>
+            </div>
+            <div className="user-info-item">
+              <span className="user-info-icon-circle"><FaBriefcase /></span>
+              <div>
+                <h4>Sesión activa desde</h4>
+                <p>{formatDate(new Date())}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
       <div style={{
         background: '#fff',
         borderRadius: '16px',
@@ -403,6 +564,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      )}
       
       {/* Main Stats Cards */}
       <div className="stats-overview">
@@ -530,24 +692,20 @@ export const HomeUser = () => {
         setLoading(true);
         // Obtener dispositivos del usuario
         if (user?.id) {
-          const devRes = await fetch(`/api/dispositivos/usuario/${user.id}`);
-          if (devRes.ok) {
-            const devices = await devRes.json();
+          const devRes = await api.get(`/api/dispositivos/usuario/${user.id}`);
+          const devices = devRes.data;
             setDeviceCount(devices.length);
             setUserDevices(devices); // Guardar los dispositivos del usuario
-          }
           
           // Obtener historial reciente
-          const historyRes = await fetch(`/api/historiales`);
-          if (historyRes.ok) {
-            const historyRaw = await historyRes.json();
+          const historyRes = await api.get(`/api/historiales`);
+          const historyRaw = historyRes.data;
             const history = Array.isArray(historyRaw) ? historyRaw : (Array.isArray(historyRaw.data) ? historyRaw.data : []);
             // Filtrar solo los eventos relacionados con este usuario
             const userEvents = history.filter(ev => 
               ev.descripcion && ev.descripcion.includes(user.nombre)
             ).slice(0, 5); // Solo los 5 más recientes
             setRecentActivity(userEvents);
-          }
         }
       } catch (err) {
         console.error("Error al cargar datos del usuario:", err);

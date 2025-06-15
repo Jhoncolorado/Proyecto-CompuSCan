@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './History.css';
 import { FaHistory, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
+import api from '../../services/api';
 
 const History = () => {
   const [historial, setHistorial] = useState([]);
@@ -17,9 +18,8 @@ const History = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch(`/api/historiales?page=${page}&limit=${limit}`);
-        if (!response.ok) throw new Error('Error al cargar el historial');
-        const data = await response.json();
+        const response = await api.get(`/api/historiales?page=${page}&limit=${limit}`);
+        const data = response.data;
         setHistorial(Array.isArray(data.data) ? data.data : []);
         setTotalPages(data.totalPages || 1);
         setTotal(data.total || 0);
@@ -89,7 +89,9 @@ const History = () => {
             <table className="history-table">
               <thead>
                 <tr>
-                  <th>Fecha y Hora</th>
+                  <th>Entrada</th>
+                  <th>Salida</th>
+                  <th>Estado</th>
                   <th>Descripción</th>
                   <th>Dispositivo</th>
                   <th>Serial</th>
@@ -100,7 +102,14 @@ const History = () => {
                   const [tipo, ...resto] = registro.descripcion.split(' - ');
                   return (
                     <tr key={registro.id_historial}>
-                      <td>{new Date(registro.fecha_hora).toLocaleString()}</td>
+                      <td>{registro.fecha_hora_entrada ? new Date(registro.fecha_hora_entrada).toLocaleString() : ''}</td>
+                      <td>{registro.fecha_hora_salida ? new Date(registro.fecha_hora_salida).toLocaleString() : <span style={{color:'green'}}>Adentro</span>}</td>
+                      <td>
+                        {registro.fecha_hora_salida
+                          ? <span style={{color:'red', fontWeight:600}}>Salida</span>
+                          : <span style={{color:'green', fontWeight:600}}>Adentro</span>
+                        }
+                      </td>
                       <td>
                         {getAccessBadge(registro.descripcion)}
                         <span>{resto.length > 0 ? ` - ${resto.join(' - ')}` : ''}</span>
@@ -224,7 +233,9 @@ export const UserHistory = () => {
             <table className="history-table">
               <thead>
                 <tr>
-                  <th>Fecha y Hora</th>
+                  <th>Entrada</th>
+                  <th>Salida</th>
+                  <th>Estado</th>
                   <th>Descripción</th>
                   <th>Dispositivo</th>
                   <th>Serial</th>
@@ -235,7 +246,14 @@ export const UserHistory = () => {
                   const [tipo, ...resto] = registro.descripcion.split(' - ');
                   return (
                     <tr key={registro.id_historial}>
-                      <td>{new Date(registro.fecha_hora).toLocaleString()}</td>
+                      <td>{registro.fecha_hora_entrada ? new Date(registro.fecha_hora_entrada).toLocaleString() : ''}</td>
+                      <td>{registro.fecha_hora_salida ? new Date(registro.fecha_hora_salida).toLocaleString() : <span style={{color:'green'}}>Adentro</span>}</td>
+                      <td>
+                        {registro.fecha_hora_salida
+                          ? <span style={{color:'red', fontWeight:600}}>Salida</span>
+                          : <span style={{color:'green', fontWeight:600}}>Adentro</span>
+                        }
+                      </td>
                       <td>
                         {getAccessBadge(registro.descripcion)}
                         <span>{resto.length > 0 ? ` - ${resto.join(' - ')}` : ''}</span>

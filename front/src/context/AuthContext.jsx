@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { login, logout, getCurrentUser } from '../services/auth';
 import axios from 'axios';
 import api from '../services/api';
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext(null);
 
@@ -25,6 +26,25 @@ export const AuthProvider = ({ children }) => {
 
     initAuth();
   }, []);
+
+  useEffect(() => {
+    // Interceptor global para manejar 401 y cerrar sesión
+    const interceptor = api.interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response && error.response.status === 401) {
+          logout();
+          setUser(null);
+          toast.error('Tu sesión ha expirado. Por favor inicia sesión de nuevo.');
+          navigate('/login');
+        }
+        return Promise.reject(error);
+      }
+    );
+    return () => {
+      api.interceptors.response.eject(interceptor);
+    };
+  }, [navigate]);
 
   const loginUser = async (credentials) => {
     try {

@@ -49,3 +49,9 @@ body {
 .read-the-docs {
   color: #888;
 }
+
+/* Quitar el borde azul (outline) en los enlaces del menú lateral al hacer focus */
+.nav-link:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
