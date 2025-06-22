@@ -8,7 +8,7 @@ import { changePassword } from '../../services/auth';
 const Profile = () => {
   const { user, updateUserInContext } = useAuth();
   const [formData, setFormData] = useState({
-    nombre: '', correo: '', documento: '', tipo_documento: '', telefono1: '', telefono2: '', rh: '', ficha: '', observacion: '', foto: '', rol: '', fecha_registro: ''
+    nombre: '', correo: '', documento: '', tipo_documento: '', telefono1: '', telefono2: '', rh: '', ficha: '', observacion: '', foto: '', rol: '', fecha_registro: '', programa: '',
   });
   const [avatarPreview, setAvatarPreview] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,11 +38,12 @@ const Profile = () => {
           telefono1: fullUser.telefono1 || '',
           telefono2: fullUser.telefono2 || '',
           rh: fullUser.rh || '',
-          ficha: fullUser.ficha || '',
+          ficha: fullUser.ficha || fullUser.id_ficha || '',
           observacion: fullUser.observacion || '',
           foto: fullUser.foto || '',
           rol: fullUser.rol || '',
-          fecha_registro: fullUser.fecha_registro || ''
+          fecha_registro: fullUser.fecha_registro || '',
+          programa: fullUser.nombre_programa || fullUser.programa || fullUser.id_programa || '',
         });
         setAvatarPreview(fullUser.foto || '');
         // Obtener el primer dispositivo y su foto
@@ -238,6 +239,10 @@ const Profile = () => {
           <div className="profile-field">
             <span className="profile-label">Fecha de registro:</span>
             <span className="profile-value">{formData.fecha_registro ? new Date(formData.fecha_registro).toLocaleDateString() : '-'}</span>
+          </div>
+          <div className="profile-field">
+            <span className="profile-label">Programa:</span>
+            <span className="profile-value">{formData.programa || '-'}</span>
           </div>
         <div className="profile-actions">
             <button className="btn btn-success" type="button" onClick={() => setShowPasswordModal(true)}>Cambiar Contraseña</button>

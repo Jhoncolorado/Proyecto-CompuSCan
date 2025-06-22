@@ -171,3 +171,96 @@ INSERT INTO programas (nombre_programa, fecha_creacion, fecha_actualizacion)
 VALUES 
 ('Tecnología en Análisis y Desarrollo de Sistemas de Información', CURRENT_DATE, CURRENT_DATE),
 ('Técnico en Programación de Software', CURRENT_DATE, CURRENT_DATE); 
+
+
+
+-- -- Tipo ENUM
+-- CREATE TYPE public.tipo_reporte_type AS ENUM (
+--     'Robo',
+--     'Pérdida',
+--     'Dañado',
+--     'Otro'
+-- );
+
+-- -- Tablas y secuencias
+-- CREATE SEQUENCE public.carnet_id_seq START 1;
+-- CREATE TABLE public.carnet (
+--     id integer NOT NULL DEFAULT nextval('public.carnet_id_seq'),
+--     id_usuario integer NOT NULL,
+--     id_programa integer NOT NULL,
+--     numero_carnet character varying(50) NOT NULL,
+--     observacion text,
+--     fecha_emision date NOT NULL,
+--     fecha_vencimiento date NOT NULL,
+--     activo boolean NOT NULL
+-- );
+
+-- CREATE SEQUENCE public.caso_id_caso_seq START 1;
+-- CREATE TABLE public.caso (
+--     id_caso integer NOT NULL DEFAULT nextval('public.caso_id_caso_seq'),
+--     fecha_hora timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+--     tipo_reporte public.tipo_reporte_type NOT NULL,
+--     id_historial integer NOT NULL,
+--     estado character varying(20) DEFAULT 'Abierto' NOT NULL,
+--     CONSTRAINT chk_estado CHECK (estado IN ('Abierto', 'En proceso', 'Cerrado', 'Archivado'))
+-- );
+
+-- CREATE SEQUENCE public.dispositivo_id_seq START 1;
+-- CREATE TABLE public.dispositivo (
+--     id integer NOT NULL DEFAULT nextval('public.dispositivo_id_seq'),
+--     nombre character varying(100) NOT NULL,
+--     tipo character varying(50) NOT NULL,
+--     serial character varying(100),
+--     rfid character varying(30),
+--     foto text,
+--     id_usuario integer NOT NULL,
+--     fecha_registro timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+--     estado_validacion character varying(20) DEFAULT 'pendiente',
+--     mime_type character varying(50)
+-- );
+
+-- CREATE SEQUENCE public.historial_alertas_id_seq START 1;
+-- CREATE TABLE public.historial_alertas (
+--     id integer NOT NULL DEFAULT nextval('public.historial_alertas_id_seq'),
+--     id_dispositivo integer NOT NULL,
+--     fecha_hora timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+--     tipo_alerta character varying(50) NOT NULL,
+--     observacion text
+-- );
+
+-- CREATE SEQUENCE public.historial_dispositivo_id_historial_seq START 1;
+-- CREATE TABLE public.historial_dispositivo (
+--     id_historial integer NOT NULL DEFAULT nextval('public.historial_dispositivo_id_historial_seq'),
+--     descripcion text NOT NULL,
+--     id_dispositivo integer NOT NULL,
+--     fecha_hora_entrada timestamp without time zone,
+--     fecha_hora_salida timestamp without time zone
+-- );
+
+-- CREATE SEQUENCE public.programas_id_seq START 1;
+-- CREATE TABLE public.programas (
+--     id integer NOT NULL DEFAULT nextval('public.programas_id_seq'),
+--     nombre_programa character varying(100) NOT NULL,
+--     fecha_creacion date NOT NULL,
+--     fecha_actualizacion date NOT NULL
+-- );
+
+-- CREATE SEQUENCE public.usuario_id_seq START 1;
+-- CREATE TABLE public.usuario (
+--     id integer NOT NULL DEFAULT nextval('public.usuario_id_seq'),
+--     nombre character varying(100) NOT NULL,
+--     correo character varying(100) NOT NULL,
+--     documento character varying(50) NOT NULL,
+--     tipo_documento character varying(50) NOT NULL,
+--     contrasena character varying(255) NOT NULL,
+--     rol character varying(50) NOT NULL,
+--     telefono1 character varying(20),
+--     telefono2 character varying(20),
+--     rh character varying(10),
+--     ficha character varying(50),
+--     observacion text,
+--     foto bytea,
+--     fecha_registro timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+--     estado character varying(20) DEFAULT 'activo' NOT NULL,
+--     id_programa integer
+-- );

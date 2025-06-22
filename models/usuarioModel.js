@@ -2,7 +2,7 @@ const pool = require('../config/database');
 
 const usuarioModel = {
     getAllUsuarios: async () => {
-        const query = 'SELECT id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, estado FROM usuario';
+        const query = 'SELECT id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, id_ficha, observacion, foto, fecha_registro, estado FROM usuario';
         const result = await pool.query(query);
         // Convertir foto BYTEA a base64 con prefijo
         return result.rows.map(user => {
@@ -14,7 +14,13 @@ const usuarioModel = {
     },
 
     getUsuarioById: async (id) => {
-        const query = 'SELECT id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, estado FROM usuario WHERE id = $1';
+        const query = `
+            SELECT u.id, u.nombre, u.correo, u.documento, u.tipo_documento, u.rol, u.telefono1, u.telefono2, u.rh, u.id_ficha, u.observacion, u.foto, u.fecha_registro, u.estado, u.id_programa, p.nombre_programa, f.codigo AS ficha_codigo, f.nombre AS ficha_nombre
+            FROM usuario u
+            LEFT JOIN programas p ON u.id_programa = p.id_programa
+            LEFT JOIN ficha f ON u.id_ficha = f.id_ficha
+            WHERE u.id = $1
+        `;
         const result = await pool.query(query, [id]);
         const user = result.rows[0];
         if (user && user.foto) {
@@ -33,7 +39,7 @@ const usuarioModel = {
         const query = `
             SELECT u.*, p.nombre_programa
             FROM usuario u
-            LEFT JOIN programas p ON u.id_programa = p.id
+            LEFT JOIN programas p ON u.id_programa = p.id_programa
             WHERE u.documento = $1
         `;
         const result = await pool.query(query, [documento]);
@@ -43,7 +49,7 @@ const usuarioModel = {
     createUsuario: async ({ 
         nombre, correo, documento, tipo_documento, 
         contrasena, rol, telefono1, telefono2, 
-        rh, ficha, observacion, foto, id_programa
+        rh, id_ficha, observacion, foto, id_programa, estado
     }) => {
         // Procesar foto base64
         let fotoBase64 = null;
@@ -59,26 +65,26 @@ const usuarioModel = {
                 INSERT INTO usuario (
                     nombre, correo, documento, tipo_documento, 
                     contrasena, rol, telefono1, telefono2, 
-                    rh, ficha, observacion, foto, id_programa
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, decode($12, 'base64'), $13)
-                RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, id_programa`;
+                    rh, id_ficha, observacion, foto, id_programa, estado
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, decode($12, 'base64'), $13, $14)
+                RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, id_ficha, observacion, foto, fecha_registro, id_programa, estado`;
             values = [
                 nombre, correo, documento, tipo_documento,
                 contrasena, rol, telefono1, telefono2,
-                rh, ficha, observacion, fotoBase64, id_programa || null
+                rh, id_ficha, observacion, fotoBase64, id_programa || null, estado || 'activo'
             ];
         } else {
             query = `
                 INSERT INTO usuario (
                     nombre, correo, documento, tipo_documento, 
                     contrasena, rol, telefono1, telefono2, 
-                    rh, ficha, observacion, foto, id_programa
-                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, null, $12)
-                RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, id_programa`;
+                    rh, id_ficha, observacion, foto, id_programa, estado
+                ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, null, $12, $13)
+                RETURNING id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, id_ficha, observacion, foto, fecha_registro, id_programa, estado`;
             values = [
                 nombre, correo, documento, tipo_documento,
                 contrasena, rol, telefono1, telefono2,
-                rh, ficha, observacion, id_programa || null
+                rh, id_ficha, observacion, id_programa || null, estado || 'activo'
             ];
         }
         const result = await pool.query(query, values);
@@ -87,7 +93,7 @@ const usuarioModel = {
 
     updateUsuario: async (id, { 
         nombre, correo, telefono1, telefono2, 
-        rh, ficha, observacion, foto, rol, estado, contrasena
+        rh, id_ficha, observacion, foto, rol, estado, contrasena
     }) => {
         // Procesar foto base64
         let fotoBase64 = null;
@@ -108,7 +114,7 @@ const usuarioModel = {
                         telefono1 = COALESCE($3, telefono1),
                         telefono2 = COALESCE($4, telefono2),
                         rh = COALESCE($5, rh),
-                        ficha = COALESCE($6, ficha),
+                        id_ficha = COALESCE($6, id_ficha),
                         observacion = COALESCE($7, observacion),
                         foto = decode($8, 'base64'),
                         rol = COALESCE($9, rol),
@@ -118,7 +124,7 @@ const usuarioModel = {
                     RETURNING *`;
                 values = [
                     nombre, correo, telefono1, telefono2,
-                    rh, ficha, observacion, fotoBase64, rol, estado, contrasena, id
+                    rh, id_ficha, observacion, fotoBase64, rol, estado, contrasena, id
                 ];
             } else if (contrasena) {
                 query = `
@@ -129,7 +135,7 @@ const usuarioModel = {
                         telefono1 = COALESCE($3, telefono1),
                         telefono2 = COALESCE($4, telefono2),
                         rh = COALESCE($5, rh),
-                        ficha = COALESCE($6, ficha),
+                        id_ficha = COALESCE($6, id_ficha),
                         observacion = COALESCE($7, observacion),
                         rol = COALESCE($8, rol),
                         estado = COALESCE($9, estado),
@@ -138,7 +144,7 @@ const usuarioModel = {
                     RETURNING *`;
                 values = [
                     nombre, correo, telefono1, telefono2,
-                    rh, ficha, observacion, rol, estado, contrasena, id
+                    rh, id_ficha, observacion, rol, estado, contrasena, id
                 ];
             } else if (fotoBase64 && fotoBase64.length > 10) {
                 query = `
@@ -149,7 +155,7 @@ const usuarioModel = {
                         telefono1 = COALESCE($3, telefono1),
                         telefono2 = COALESCE($4, telefono2),
                         rh = COALESCE($5, rh),
-                        ficha = COALESCE($6, ficha),
+                        id_ficha = COALESCE($6, id_ficha),
                         observacion = COALESCE($7, observacion),
                         foto = decode($8, 'base64'),
                         rol = COALESCE($9, rol),
@@ -158,7 +164,7 @@ const usuarioModel = {
                     RETURNING *`;
                 values = [
                     nombre, correo, telefono1, telefono2,
-                    rh, ficha, observacion, fotoBase64, rol, estado, id
+                    rh, id_ficha, observacion, fotoBase64, rol, estado, id
                 ];
             } else {
                 query = `
@@ -169,7 +175,7 @@ const usuarioModel = {
                         telefono1 = COALESCE($3, telefono1),
                         telefono2 = COALESCE($4, telefono2),
                         rh = COALESCE($5, rh),
-                        ficha = COALESCE($6, ficha),
+                        id_ficha = COALESCE($6, id_ficha),
                         observacion = COALESCE($7, observacion),
                         rol = COALESCE($8, rol),
                         estado = COALESCE($9, estado)
@@ -177,7 +183,7 @@ const usuarioModel = {
                     RETURNING *`;
                 values = [
                     nombre, correo, telefono1, telefono2,
-                    rh, ficha, observacion, rol, estado, id
+                    rh, id_ficha, observacion, rol, estado, id
                 ];
             }
             const result = await pool.query(query, values);
@@ -204,7 +210,19 @@ const usuarioModel = {
     },
 
     getUsuariosPaginados: async (limit, offset) => {
-        const query = 'SELECT id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, ficha, observacion, foto, fecha_registro, estado FROM usuario ORDER BY id DESC LIMIT $1 OFFSET $2';
+        const query = `
+            SELECT 
+                u.id, u.nombre, u.correo, u.documento, u.tipo_documento, u.rol, 
+                u.telefono1, u.telefono2, u.rh, u.id_ficha, u.observacion, u.foto, 
+                u.fecha_registro, u.estado,
+                f.nombre AS ficha_nombre,
+                p.nombre_programa AS programa_nombre
+            FROM usuario u
+            LEFT JOIN ficha f ON u.id_ficha = f.id_ficha
+            LEFT JOIN programas p ON u.id_programa = p.id_programa
+            ORDER BY u.id DESC
+            LIMIT $1 OFFSET $2
+        `;
         const result = await pool.query(query, [limit, offset]);
         return result.rows.map(user => {
             if (user.foto) {

@@ -5,6 +5,7 @@ import { FaSignOutAlt, FaUsers, FaDesktop, FaHistory, FaClipboardList, FaPlus } 
 import logo from '../../assets/CompuSCan2025.jfif';
 import './Header.css';
 import api from '../../services/api';
+import { usePendientes } from '../../context/PendientesContext';
 
 const menuItems = [
   { path: '/dashboard', label: 'Inicio' },
@@ -17,13 +18,13 @@ const menuItems = [
 
 const Header = () => {
   const { user, logout } = useAuth();
+  const { pendientes, setPendientes } = usePendientes();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isHistory = location.pathname.startsWith('/history');
   const navigate = useNavigate();
   const [showQuickAccess, setShowQuickAccess] = useState(false);
-  const [pendientes, setPendientes] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
   // Determinar a dónde debe llevar el logo
@@ -60,8 +61,8 @@ const Header = () => {
 
   useEffect(() => {
     if (!user) return; // Solo si hay usuario autenticado
-    // Solo admin o validador deben consultar el endpoint
-    if (!['administrador', 'validador'].includes((user.rol || '').toLowerCase())) return;
+    // Solo admin, administrador o validador deben consultar el endpoint
+    if (!['administrador', 'validador', 'admin'].includes((user.rol || '').toLowerCase())) return;
     api.get('/api/dispositivos/pendientes/count')
       .then(res => setPendientes(res.data.pendientes))
       .catch(err => {
@@ -213,6 +214,8 @@ const Header = () => {
     return () => { document.head.removeChild(style); };
   }, []);
 
+  const isAdmin = user && (['admin', 'administrador'].includes((user.rol || '').toLowerCase()) || (user.rol || '').toLowerCase() === 'validador');
+
   return (
     <>
       {/* --- ESTILOS RESPONSIVE Y MENÚ HAMBURGUESA --- */}
@@ -347,7 +350,7 @@ const Header = () => {
           {/* CENTRO: Menú de navegación (oculto en móvil) */}
           <nav className="header-nav" role="navigation" aria-label="Menú principal" style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: 0, padding: '0 16px', overflow: 'hidden', maxWidth: 850, marginRight: '10px' }}>
             <ul style={{ display: 'flex', flex: 1, gap: 0, margin: 0, padding: 0, listStyle: 'none', flexWrap: 'nowrap', minWidth: 0, width: '100%', justifyContent: 'center', whiteSpace: 'nowrap', overflow: 'visible' }}>
-              {user && (user.rol === 'administrador' || user.rol === 'validador') ? (
+              {isAdmin ? (
                 menuItems.map((item) => (
                   <li key={item.path} style={{ flex: 1, minWidth: 0, textAlign: 'center', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', minHeight: 48, height: 48, padding: 0, maxWidth: item.label === 'Validación de Dispositivos' ? '180px' : '130px', position: 'relative', overflow: 'visible' }}>
                     <NavLink to={item.path} className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end={item.path === '/home'} style={{ fontSize: item.label === 'Validación de Dispositivos' ? 13 : 15, color: '#222', fontWeight: 500, padding: 0, margin: 0, display: 'inline-block', whiteSpace: item.label === 'Validación de Dispositivos' ? 'normal' : 'nowrap', width: '100%', lineHeight: 1.15, height: 'auto', minHeight: 24 }} aria-label={item.label}>
@@ -374,6 +377,11 @@ const Header = () => {
                   <li className="header-menu-item" style={{ flex: 1, minWidth: 0, textAlign: 'center', maxWidth: '130px', margin: '0 12px' }}>
                     <NavLink to="/my-history" className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end style={{ fontSize: 15, color: '#222', fontWeight: 500, padding: '4px 0', display: 'inline-block', whiteSpace: 'nowrap', width: '100%' }} aria-label="Mi Historial">Mi Historial</NavLink>
                   </li>
+                  {user && user.rol === 'instructor' ? (
+                    <li className="header-menu-item" style={{ flex: 1, minWidth: 0, textAlign: 'center', maxWidth: '140px', margin: '0 12px' }}>
+                      <NavLink to="/asistencia" className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end style={{ fontSize: 15, color: '#222', fontWeight: 500, padding: '4px 0', display: 'inline-block', whiteSpace: 'nowrap', width: '100%' }} aria-label="Asistencia">Asistencia</NavLink>
+                    </li>
+                  ) : null}
                 </>
               )}
             </ul>
@@ -381,7 +389,7 @@ const Header = () => {
           {/* MENÚ HAMBURGUESA VERTICAL SOLO EN MÓVIL */}
           <div className="mobile-menu">
             <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
-              {user && (user.rol === 'administrador' || user.rol === 'validador') ? (
+              {isAdmin ? (
                 menuItems.map((item) => (
                   <li key={item.path}>
                     <NavLink to={item.path} className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end={item.path === '/home'} onClick={() => setMenuOpen(false)}>
@@ -408,6 +416,11 @@ const Header = () => {
                   <li>
                     <NavLink to="/my-history" className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end onClick={() => setMenuOpen(false)}>Mi Historial</NavLink>
                   </li>
+                  {user && user.rol === 'instructor' ? (
+                    <li>
+                      <NavLink to="/asistencia" className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end onClick={() => setMenuOpen(false)}>Asistencia</NavLink>
+                    </li>
+                  ) : null}
                 </>
               )}
             </ul>

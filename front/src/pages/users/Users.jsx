@@ -37,6 +37,7 @@ const Users = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
+  const [fichas, setFichas] = useState([]);
   const [formData, setFormData] = useState({
     nombre: '',
     correo: '',
@@ -44,7 +45,7 @@ const Users = () => {
     telefono1: '',
     telefono2: '',
     rh: '',
-    ficha: '',
+    id_ficha: '',
     observacion: '',
     estado: 'activo',
     documento: '',
@@ -64,6 +65,7 @@ const Users = () => {
   const [total, setTotal] = useState(0);
   const [showDisabled, setShowDisabled] = useState(false);
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 600 : false);
+  const [activeSection, setActiveSection] = useState(0);
 
   useEffect(() => {
     fetchUsers();
@@ -71,14 +73,22 @@ const Users = () => {
 
   useEffect(() => {
     if (showModal && editingUser && editingUser.id) {
-      api.get(`/api/dispositivos/usuario/${editingUser.id}`)
-        .then(devRes => {
+      (async () => {
+        try {
+          const devRes = await api.get(`/api/dispositivos/usuario/${editingUser.id}`);
           if (Array.isArray(devRes.data) && devRes.data.length > 0 && devRes.data[0].foto) {
             setDeviceImage(devRes.data[0].foto);
           } else {
             setDeviceImage('');
           }
-        });
+        } catch (err) {
+          if (err.response && err.response.status === 403) {
+            setDeviceImage('');
+          } else {
+            setDeviceImage('');
+          }
+        }
+      })();
     }
   }, [showModal, editingUser]);
 
@@ -115,6 +125,12 @@ const Users = () => {
     handleResize(); // Asegura el valor correcto al cargar
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    api.get('/api/fichas')
+      .then(res => setFichas(Array.isArray(res.data) ? res.data : []))
+      .catch(() => setFichas([]));
   }, []);
 
   const fetchUsers = async () => {
@@ -162,7 +178,6 @@ const Users = () => {
     });
 
   const handleEdit = (user) => {
-    console.log('EDITAR USUARIO:', user);
     setEditingUser(user);
     setFormData({
       nombre: user.nombre || '',
@@ -171,7 +186,7 @@ const Users = () => {
       telefono1: user.telefono1 || '',
       telefono2: user.telefono2 || '',
       rh: user.rh || '',
-      ficha: user.ficha || '',
+      id_ficha: user.id_ficha ? String(user.id_ficha) : (user.ficha ? String(user.ficha) : ''),
       observacion: user.observacion || '',
       estado: user.estado || 'activo',
       documento: user.documento || '',
@@ -251,7 +266,7 @@ const Users = () => {
         telefono1: formData.telefono1,
         telefono2: formData.telefono2,
         rh: formData.rh,
-        ficha: formData.ficha,
+        id_ficha: formData.id_ficha ? Number(formData.id_ficha) : null,
         observacion: formData.observacion,
         estado: formData.estado,
         documento: formData.documento,
@@ -274,7 +289,7 @@ const Users = () => {
         telefono1: '',
         telefono2: '',
         rh: '',
-        ficha: '',
+        id_ficha: '',
         observacion: '',
         estado: 'activo',
         documento: '',
@@ -307,7 +322,7 @@ const Users = () => {
       telefono1: '',
       telefono2: '',
       rh: '',
-      ficha: '',
+      id_ficha: '',
       observacion: '',
       estado: 'activo',
       documento: '',
@@ -523,28 +538,38 @@ const Users = () => {
               }} onClick={handleCloseModal} title="Cerrar">
                 <FaTimes />
               </button>
-              <div style={{
-                width: '100%',
-                boxSizing: 'border-box',
-                padding: '0 1.2rem 1rem 1.2rem',
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                flex: 1,
-                height: 300,
-                gap: 0,
-                overflow: 'visible',
-                position: 'relative',
-              }}>
-                <AccordionUserForm
-                  formData={formData}
-                  handleChange={handleChange}
-                  formError={formError}
-                  submitting={submitting}
-                  handleCloseModal={handleCloseModal}
-                  editingUser={editingUser}
-                />
-              </div>
+              <form id="user-accordion-form" autoComplete="off" style={{ width: '100%', maxWidth: 600, minWidth: 380, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'transparent', boxShadow: 'none', padding: 0 }} onSubmit={handleSubmit}>
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 8 }}>
+                  {formData.foto ? (
+                    <img src={formData.foto} alt="Avatar" className="user-avatar-large" style={{ width: 90, height: 90, borderRadius: '50%', border: '3px solid #43a047', objectFit: 'cover', background: '#fff', marginBottom: 8 }} />
+                  ) : (
+                    <div className="user-avatar-placeholder-large" style={{ width: 90, height: 90, borderRadius: '50%', border: '3px solid #43a047', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bdbdbd', fontSize: '2.7rem', marginBottom: 8 }}>
+                      <i className="fas fa-user"></i>
+                    </div>
+                  )}
+                  <div style={{ fontWeight: 700, fontSize: '1.13rem', color: '#256029', marginTop: 2, textAlign: 'center' }}>{editingUser?.nombre || 'Nuevo Usuario'}</div>
+                  <div style={{ fontWeight: 800, fontSize: '1.18rem', color: '#256029', marginTop: 2, marginBottom: 0, textAlign: 'center' }}>Editar Usuario</div>
+                </div>
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: 32, minHeight: 260, maxHeight: 280 }}>
+                  <AccordionUserForm
+                    formData={formData}
+                    handleChange={handleChange}
+                    formError={formError}
+                    submitting={submitting}
+                    handleCloseModal={handleCloseModal}
+                    editingUser={editingUser}
+                    fichas={fichas}
+                    activeSection={activeSection}
+                    setActiveSection={setActiveSection}
+                  />
+                </div>
+                <div className="modal-actions form-control-full" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '1.2rem 0 0.5rem 0', width: '100%' }}>
+                  <button type="button" className="btn btn-secondary" onClick={handleCloseModal} disabled={submitting} style={{padding:'0.9rem 2.2rem',fontSize:'1.13rem',borderRadius:12, minWidth:200, height:56, margin:0}}>Cancelar</button>
+                  <button type="submit" form="user-accordion-form" className="btn btn-primary" disabled={submitting} style={{padding:'0.9rem 2.2rem',fontSize:'1.13rem',borderRadius:12, minWidth:200, height:56, margin:0}}>
+                    {submitting ? 'Procesando...' : editingUser ? 'Guardar Cambios' : 'Crear Usuario'}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
@@ -651,8 +676,7 @@ function AccordionSection({ title, icon, open, onClick, children }) {
   );
 }
 
-function AccordionUserForm({ formData, handleChange, formError, submitting, handleCloseModal, editingUser }) {
-  const [activeSection, setActiveSection] = useState(0);
+function AccordionUserForm({ formData, handleChange, formError, submitting, handleCloseModal, editingUser, fichas, activeSection, setActiveSection }) {
   const sections = [
     {
       title: 'Datos personales',
@@ -685,6 +709,28 @@ function AccordionUserForm({ formData, handleChange, formError, submitting, hand
             <label className="label">Número de documento</label>
             <input type="text" name="documento" value={formData.documento} onChange={handleChange} disabled={submitting} className="input input-bordered" autoComplete="off" />
           </div>
+          <div className="form-control">
+            <label className="label">Foto de perfil</label>
+            {formData.foto && (
+              <img src={formData.foto} alt="Foto usuario" style={{width: 80, height: 80, objectFit: 'cover', borderRadius: '50%', border: '2px solid #43a047', marginBottom: 8}} />
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              disabled={submitting}
+              onChange={e => {
+                const file = e.target.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    handleChange({ target: { name: 'foto', value: reader.result } });
+                  };
+                  reader.readAsDataURL(file);
+                }
+              }}
+              style={{marginTop: 8}}
+            />
+          </div>
         </div>
       )
     },
@@ -715,7 +761,14 @@ function AccordionUserForm({ formData, handleChange, formError, submitting, hand
           </div>
           <div className="form-control">
             <label className="label">Ficha</label>
-            <input type="text" name="ficha" value={formData.ficha} onChange={handleChange} disabled={submitting} className="input input-bordered" autoComplete="off" />
+            <select name="id_ficha" value={String(formData.id_ficha || '')} onChange={handleChange} disabled={submitting} className="select select-bordered">
+              <option value="">Seleccionar ficha</option>
+              {Array.isArray(fichas) && fichas.map(f => (
+                <option key={f.id_ficha} value={String(f.id_ficha)}>
+                  {f.nombre || f.codigo || `Ficha ${f.id_ficha}`}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-control">
             <label className="label">Observación</label>
@@ -735,50 +788,36 @@ function AccordionUserForm({ formData, handleChange, formError, submitting, hand
   ];
 
   return (
-    <form id="user-accordion-form" autoComplete="off" style={{ width: '100%', maxWidth: 600, minWidth: 380, margin: '0 auto', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'transparent', boxShadow: 'none', padding: 0 }}>
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 8 }}>
-        {formData.foto ? (
-          <img src={formData.foto} alt="Avatar" className="user-avatar-large" style={{ width: 90, height: 90, borderRadius: '50%', border: '3px solid #43a047', objectFit: 'cover', background: '#fff', marginBottom: 8 }} />
-        ) : (
-          <div className="user-avatar-placeholder-large" style={{ width: 90, height: 90, borderRadius: '50%', border: '3px solid #43a047', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#bdbdbd', fontSize: '2.7rem', marginBottom: 8 }}>
-            <i className="fas fa-user"></i>
+    <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: 32, minHeight: 260, maxHeight: 280 }}>
+      <div style={{ minWidth: 200, maxWidth: 240, width: 240, height: 220, display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 16, justifyContent: 'center', position: 'relative', marginLeft: '0', marginTop: 10 }}>
+        {sections.map((section, idx) => (
+          <button key={section.title} type="button" onClick={() => setActiveSection(idx)} style={{
+            display: 'flex', alignItems: 'center', gap: 10, padding: '1.1rem 1.2rem', borderRadius: 18, border: activeSection === idx ? '2.5px solid #43a047' : '1.5px solid #e5e7eb', background: '#fff', color: '#388e3c', fontWeight: 900, fontSize: '1.18rem', cursor: 'pointer', boxShadow: activeSection === idx ? '0 2px 12px 0 rgba(67,160,71,0.08)' : 'none', transition: 'all 0.18s', marginBottom: 2, outline: 'none', borderLeft: activeSection === idx ? '4px solid #43a047' : '1.5px solid #e5e7eb', minHeight: 64, maxHeight: 64, width: '100%', maxWidth: 240, flex: 1, position: 'relative', zIndex: 1, fontFamily: 'Montserrat Alternates, Montserrat, Arial, sans-serif', letterSpacing: 0.2
+          }}>
+            {section.icon} {section.title}
+          </button>
+        ))}
+      </div>
+      <div style={{ flex: 1, minWidth: 420, maxWidth: 620, background: '#fff', borderRadius: 18, border: '2.5px solid #43a047', boxShadow: '0 2px 12px 0 rgba(44,62,80,0.08)', padding: 0, display: 'flex', flexDirection: 'column', alignItems: 'stretch', transition: 'all 0.25s cubic-bezier(.4,1.3,.6,1)', boxSizing: 'border-box', height: '100%', minHeight: 120, maxHeight: 260, overflow: 'hidden', position: 'relative' }}>
+        {sections.map((section, idx) => (
+          <div
+            key={idx}
+            className={`accordion-section-content-anim${activeSection === idx ? ' active' : ''}`}
+            style={{ 
+              display: activeSection === idx ? 'block' : 'none',
+              overflowY: 'auto',
+              maxHeight: 220,
+              paddingRight: 8
+            }}
+          >
+            {section.content}
+            {formError && (
+              <div className="alert alert-error shadow-lg form-control-full" style={{ marginTop: 10 }}>{formError}</div>
+            )}
           </div>
-        )}
-        <div style={{ fontWeight: 700, fontSize: '1.13rem', color: '#256029', marginTop: 2, textAlign: 'center' }}>{editingUser?.nombre || 'Nuevo Usuario'}</div>
-        <div style={{ fontWeight: 800, fontSize: '1.18rem', color: '#256029', marginTop: 2, marginBottom: 0, textAlign: 'center' }}>Editar Usuario</div>
+        ))}
       </div>
-      <div style={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'center', gap: 32, minHeight: 260, maxHeight: 280 }}>
-        <div style={{ minWidth: 200, maxWidth: 240, width: 240, height: 220, display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 16, justifyContent: 'center', position: 'relative', marginLeft: '0', marginTop: 10 }}>
-          {sections.map((section, idx) => (
-            <button key={section.title} type="button" onClick={() => setActiveSection(idx)} style={{
-              display: 'flex', alignItems: 'center', gap: 10, padding: '1.1rem 1.2rem', borderRadius: 18, border: activeSection === idx ? '2.5px solid #43a047' : '1.5px solid #e5e7eb', background: '#fff', color: '#388e3c', fontWeight: 900, fontSize: '1.18rem', cursor: 'pointer', boxShadow: activeSection === idx ? '0 2px 12px 0 rgba(67,160,71,0.08)' : 'none', transition: 'all 0.18s', marginBottom: 2, outline: 'none', borderLeft: activeSection === idx ? '4px solid #43a047' : '1.5px solid #e5e7eb', minHeight: 64, maxHeight: 64, width: '100%', maxWidth: 240, flex: 1, position: 'relative', zIndex: 1, fontFamily: 'Montserrat Alternates, Montserrat, Arial, sans-serif', letterSpacing: 0.2
-            }}>
-              {section.icon} {section.title}
-            </button>
-          ))}
-        </div>
-        <div style={{ flex: 1, minWidth: 420, maxWidth: 620, background: '#fff', borderRadius: 18, border: '2.5px solid #43a047', boxShadow: '0 2px 12px 0 rgba(44,62,80,0.08)', padding: 0, display: 'flex', flexDirection: 'column', alignItems: 'stretch', transition: 'all 0.25s cubic-bezier(.4,1.3,.6,1)', boxSizing: 'border-box', height: '100%', minHeight: 120, maxHeight: 260, overflow: 'hidden', position: 'relative' }}>
-          {sections.map((section, idx) => (
-            <div
-              key={idx}
-              className={`accordion-section-content-anim${activeSection === idx ? ' active' : ''}`}
-              style={{ display: activeSection === idx ? 'block' : 'none' }}
-            >
-              {section.content}
-              {formError && (
-                <div className="alert alert-error shadow-lg form-control-full" style={{ marginTop: 10 }}>{formError}</div>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="modal-actions form-control-full" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '1.2rem 0 0.5rem 0', width: '100%' }}>
-        <button type="button" className="btn btn-secondary" onClick={handleCloseModal} disabled={submitting} style={{padding:'0.9rem 2.2rem',fontSize:'1.13rem',borderRadius:12, minWidth:200, height:56, margin:0}}>Cancelar</button>
-        <button type="submit" form="user-accordion-form" className="btn btn-primary" disabled={submitting} style={{padding:'0.9rem 2.2rem',fontSize:'1.13rem',borderRadius:12, minWidth:200, height:56, margin:0}}>
-          {submitting ? 'Procesando...' : editingUser ? 'Guardar Cambios' : 'Crear Usuario'}
-        </button>
-      </div>
-    </form>
+    </div>
   );
 }
 

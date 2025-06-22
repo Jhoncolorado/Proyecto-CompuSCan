@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { 
   FaUsers, 
   FaDesktop, 
@@ -17,15 +17,16 @@ import {
   FaBriefcase,
   FaHistory,
   FaClipboardList,
-  FaPlus,
   FaClipboardCheck
 } from 'react-icons/fa';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { useAuth } from '../../context/AuthContext';
 import './home.css';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/CompuSCan2025.jfif';
 import { io as socketIOClient } from 'socket.io-client';
 import api from '../../services/api';
+import ReactDOM from 'react-dom';
 
 // Componente para mostrar la fecha actual
 const CurrentDateDisplay = () => {
@@ -55,6 +56,41 @@ const CurrentDateDisplay = () => {
     </div>
   );
 };
+
+// QuickAccessMenuPortal: renderiza el menú en el body usando portal
+function QuickAccessMenuPortal({ anchorRef, show, onClose, children }) {
+  const [pos, setPos] = useState({ top: 0, left: 0 });
+  useEffect(() => {
+    if (show && anchorRef.current) {
+      const rect = anchorRef.current.getBoundingClientRect();
+      setPos({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX
+      });
+    }
+  }, [show, anchorRef]);
+  if (!show) return null;
+  return ReactDOM.createPortal(
+    <div style={{
+      position: 'absolute',
+      top: pos.top,
+      left: pos.left,
+      background: '#fff',
+      borderRadius: 8,
+      boxShadow: '0 2px 8px 0 rgba(44,62,80,0.13)',
+      padding: '2px 0',
+      minWidth: 140,
+      zIndex: 2147483647,
+      display: 'flex',
+      flexDirection: 'column',
+      gap: 0,
+      overflow: 'visible'
+    }}>
+      {children}
+    </div>,
+    document.body
+  );
+}
 
 const Home = () => {
   const { user } = useAuth();
@@ -116,6 +152,11 @@ const Home = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  const isAdmin = user && ['admin', 'administrador', 'validador'].includes((user.rol || '').toLowerCase());
+  const quickAccessBtnRef = useRef(null);
+
+  const handleQuickAccessClick = () => setShowQuickAccess(false);
 
   if (loading) {
     return (
@@ -252,58 +293,44 @@ const Home = () => {
         }
       `}</style>
       {/* --- FIN ESTILOS RESPONSIVE --- */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 18, marginBottom: 8 }}>
-        {/* Botón de accesos rápidos solo para admin/validador */}
-        {(user && (user.rol === 'administrador' || user.rol === 'validador')) && (
-          <div style={{ position: 'relative' }}>
-            <button
-              aria-label="Accesos rápidos"
-              onClick={() => setShowQuickAccess(v => !v)}
-              style={{
-                background: '#fff',
-                border: 'none',
-                borderRadius: '50%',
-                width: 44,
-                height: 44,
-                boxShadow: '0 4px 16px 0 rgba(67,160,71,0.18)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                transition: 'box-shadow 0.18s',
-                outline: showQuickAccess ? '2.5px solid #43a047' : 'none',
-                zIndex: 1200
-              }}
-            >
-              <FaPlus style={{ color: '#43a047', fontSize: 22, transform: showQuickAccess ? 'rotate(45deg)' : 'none', transition: 'transform 0.18s' }} />
-            </button>
-            {/* Speed dial */}
-            {showQuickAccess && (
-              <div style={{
-                position: 'absolute',
-                top: 54,
-                left: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 10,
-                background: 'rgba(255,255,255,0.98)',
-                borderRadius: 14,
-                boxShadow: '0 8px 32px 0 rgba(44,62,80,0.18)',
-                padding: '14px 10px',
-                minWidth: 170,
-                zIndex: 1201,
-                animation: 'fadeInQuickAccess 0.18s'
-              }}>
-                <Link to="/users" style={quickAccessStyle}><FaUsers style={iconStyle}/> Usuarios</Link>
-                <Link to="/devices" style={quickAccessStyle}><FaDesktop style={iconStyle}/> Dispositivos</Link>
-                <Link to="/history" style={quickAccessStyle}><FaHistory style={iconStyle}/> Historial</Link>
-                <Link to="/reports" style={quickAccessStyle}><FaClipboardList style={iconStyle}/> Reportes</Link>
-                <Link to="/device-validation" style={quickAccessStyle}><FaClipboardCheck style={iconStyle}/> Validación de Equipos</Link>
-              </div>
-            )}
-          </div>
-        )}
-      <h1 className="dashboard-title">Panel de Control</h1>
+      <div className="dashboard-header" style={{display:'flex',alignItems:'center',gap:16,position:'relative',background:'transparent',boxShadow:'none',border:'none'}}>
+        <div style={{display:'flex',alignItems:'center',gap:10,position:'relative'}}>
+          {isAdmin && (
+            <>
+              <button
+                ref={quickAccessBtnRef}
+                title="Acceso rápido"
+                style={{
+                  background: '#43a047',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: 44,
+                  height: 44,
+                  boxShadow: '0 4px 16px 0 rgba(67,160,71,0.18)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  transition: 'box-shadow 0.18s, transform 0.25s',
+                  outline: showQuickAccess ? '2.5px solid #388e3c' : 'none',
+                  zIndex: 1200,
+                  transform: showQuickAccess ? 'rotate(135deg)' : 'none'
+                }}
+                onClick={() => setShowQuickAccess(v => !v)}
+              >
+                <AiOutlinePlus style={{ color: '#111', fontSize: 26, transition: 'transform 0.25s' }} />
+              </button>
+              <QuickAccessMenuPortal anchorRef={quickAccessBtnRef} show={showQuickAccess} onClose={handleQuickAccessClick}>
+                <Link to="/users" className="quick-link" style={{display:'flex',alignItems:'center',gap:6,padding:'7px 16px',color:'#222',fontWeight:500,fontSize:13,textDecoration:'none',borderRadius:0,border:'none',background:'transparent'}} onClick={handleQuickAccessClick}><FaUsers style={{fontSize:15,color:'#43a047'}}/> Usuarios</Link>
+                <Link to="/devices" className="quick-link" style={{display:'flex',alignItems:'center',gap:6,padding:'7px 16px',color:'#222',fontWeight:500,fontSize:13,textDecoration:'none',borderRadius:0,border:'none',background:'transparent'}} onClick={handleQuickAccessClick}><FaDesktop style={{fontSize:15,color:'#43a047'}}/> Dispositivos</Link>
+                <Link to="/reports" className="quick-link" style={{display:'flex',alignItems:'center',gap:6,padding:'7px 16px',color:'#222',fontWeight:500,fontSize:13,textDecoration:'none',borderRadius:0,border:'none',background:'transparent'}} onClick={handleQuickAccessClick}><FaClipboardList style={{fontSize:15,color:'#43a047'}}/> Reportes</Link>
+                <Link to="/history" className="quick-link" style={{display:'flex',alignItems:'center',gap:6,padding:'7px 16px',color:'#222',fontWeight:500,fontSize:13,textDecoration:'none',borderRadius:0,border:'none',background:'transparent'}} onClick={handleQuickAccessClick}><FaHistory style={{fontSize:15,color:'#43a047'}}/> Historial</Link>
+                <Link to="/device-validation" className="quick-link" style={{display:'flex',alignItems:'center',gap:6,padding:'7px 16px',color:'#222',fontWeight:500,fontSize:13,textDecoration:'none',borderRadius:0,border:'none',background:'transparent'}} onClick={handleQuickAccessClick}><FaClipboardCheck style={{fontSize:15,color:'#43a047'}}/> Validación</Link>
+              </QuickAccessMenuPortal>
+            </>
+          )}
+          <h1 className="dashboard-title" style={{marginBottom:0}}>Panel de Control</h1>
+        </div>
       </div>
       {/* Panel de Bienvenida */}
       {isMobile ? (
@@ -660,7 +687,13 @@ const Home = () => {
                       <div className="activity-user">{activity.descripcion}</div>
                       <div className="activity-device">{activity.dispositivo_nombre}</div>
                     </div>
-                    <div className="activity-time">{activity.fecha_hora}</div>
+                    <div className="activity-time">
+                      {activity.fecha_hora_salida
+                        ? formatDate(new Date(activity.fecha_hora_salida))
+                        : activity.fecha_hora_entrada
+                          ? formatDate(new Date(activity.fecha_hora_entrada))
+                          : 'Fecha desconocida'}
+                    </div>
                   </div>
                 );
               })
@@ -900,7 +933,7 @@ export const HomeUser = () => {
             {user?.rol === 'aprendiz' && (
               <div style={{ marginBottom: '1rem' }}>
                 <p style={{ margin: '0 0 0.3rem', color: '#666', fontSize: '0.9rem' }}>Ficha</p>
-                <p style={{ margin: 0, fontWeight: '600' }}>{user?.ficha || 'No disponible'}</p>
+                <p style={{ margin: 0, fontWeight: '600' }}>{user?.ficha_codigo || user?.ficha_nombre || 'No disponible'}</p>
               </div>
             )}
           </div>
@@ -1065,7 +1098,11 @@ export const HomeUser = () => {
                   color: '#666',
                   whiteSpace: 'nowrap'
                 }}>
-                  {activity.fecha_hora ? formatDate(new Date(activity.fecha_hora)) : 'Fecha desconocida'}
+                  {activity.fecha_hora_salida
+                    ? formatDate(new Date(activity.fecha_hora_salida))
+                    : activity.fecha_hora_entrada
+                      ? formatDate(new Date(activity.fecha_hora_entrada))
+                      : 'Fecha desconocida'}
                 </div>
               </div>
             ))}

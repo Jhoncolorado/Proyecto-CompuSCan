@@ -25,6 +25,7 @@ import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
 import UserProfile from './pages/users/UserProfile';
 import LandingPage from './pages/LandingPage';
+import Asistencia from './pages/Asistencia';
 
 // Componente de carga para Suspense
 const LoadingFallback = () => (
@@ -107,6 +108,7 @@ function App() {
               <Route path="home-user" element={<HomeUser />} />
               <Route path="my-devices" element={<UserDevicesPage />} />
               <Route path="my-history" element={<UserHistory />} />
+              <Route path="asistencia" element={<Asistencia />} />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>

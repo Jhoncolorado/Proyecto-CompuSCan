@@ -32,6 +32,7 @@ CompuSCan es una plataforma web desarrollada para el **SENA - Centro de Comercio
 23. [Gestión institucional de usuarios: deshabilitar y habilitar](#gestión-institucional-de-usuarios-deshabilitar-y-habilitar)
 24. [Control de Acceso por RFID: Alternancia ENTRADA/SALIDA](#control-de-acceso-por-rfid-alternancia-entrada-salida)
 25. [Configuración de dominios, IPs, CORS y QR dinámico](#configuración-de-dominios-ips-cors-y-qr-dinámico)
+26. [Gestión de Asistencia: Implementación y Aprendizajes](#gestión-de-asistencia-implementación-y-aprendizajes)
 
 ---
 
@@ -590,3 +591,49 @@ En el archivo `.env` del frontend, la variable `VITE_API_URL` debe apuntar al ba
 
 ### 5. Beneficio
 Este sistema permite un desarrollo, pruebas y despliegue profesional, flexible y sin errores de acceso ni QR, tanto en local como en red o producción. 
+
+## Gestión de Asistencia: Implementación y Aprendizajes
+
+### ¿Cómo fue implementada la asistencia en CompuSCan?
+
+La funcionalidad de asistencia en CompuSCan fue diseñada para ser **ágil, segura y trazable**, integrando hardware RFID y lógica de negocio robusta. El flujo y los puntos clave son:
+
+1. **Registro de asistencia con RFID:**
+   - El usuario pasa su tarjeta RFID por el lector conectado al computador.
+   - El frontend detecta automáticamente el código RFID y lo envía al backend.
+   - El backend valida el usuario y registra la asistencia en la base de datos, asociando usuario, ficha, fecha, tipo (manual o RFID), motivo y observación si aplica.
+   - Se previene el registro duplicado de asistencia para el mismo usuario y fecha.
+
+2. **Visualización y gestión de historial:**
+   - Los usuarios y administradores pueden consultar el historial de asistencias desde el frontend, filtrando por ficha, fecha o usuario.
+   - El historial muestra entradas, salidas, estado y detalles relevantes.
+
+3. **Roles y permisos:**
+   - Solo usuarios autenticados pueden registrar o consultar asistencias.
+   - Los roles controlan el acceso a reportes y edición de registros.
+
+4. **Soporte para justificaciones:**
+   - Si un usuario falta o llega tarde, se puede registrar un motivo y observación.
+
+5. **Integración con dispositivos:**
+   - El pase de asistencia puede estar vinculado a un dispositivo específico, permitiendo trazabilidad total.
+
+6. **Prevención de errores y robustez:**
+   - El backend valida todos los datos recibidos y maneja los errores de forma amigable.
+   - El frontend muestra mensajes claros y permite la recuperación ante microcortes de red.
+
+### Tips y aprendizajes para la empresa y futuros desarrolladores
+
+- **Valida siempre los datos en backend y frontend:** Nunca confíes solo en el frontend para validar datos críticos.
+- **Usa roles y permisos estrictos:** Limita el acceso a funciones sensibles solo a quienes lo necesitan.
+- **Hashea las contraseñas y nunca las guardes en texto plano.**
+- **Maneja los errores de forma amigable y sin exponer información sensible.**
+- **Documenta bien los endpoints y flujos críticos:** Así cualquier nuevo desarrollador puede entender y mantener el sistema.
+- **Haz backups regulares de la base de datos.**
+- **No subas archivos .env ni secretos al repositorio.**
+- **Prueba el sistema con usuarios reales antes de ponerlo en producción.**
+- **Mantén las dependencias actualizadas y revisa vulnerabilidades con `npm audit`.**
+- **Escucha a los usuarios finales:** Sus sugerencias pueden ayudarte a mejorar la experiencia y detectar errores que no ves como desarrollador.
+- **Automatiza pruebas de los flujos críticos:** Así evitas regresiones y mejoras la calidad del software.
+
+--- 

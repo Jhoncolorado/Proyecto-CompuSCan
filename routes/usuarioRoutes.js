@@ -213,7 +213,7 @@ router.post('/', usuarioController.createUsuario);
  *       401:
  *         description: No autorizado
  */
-router.get('/', authenticate, authorize(['administrador','validador']), usuarioController.getAllUsuarios);
+router.get('/', authenticate, authorize(['administrador','admin','validador']), usuarioController.getAllUsuarios);
 
 /**
  * @swagger
@@ -337,7 +337,7 @@ router.put('/:id/password', usuarioController.changePassword);
  *       401:
  *         description: No autorizado
  */
-router.put('/:id', authenticate, authorize(['administrador','validador']), usuarioController.updateUsuario);
+router.put('/:id', authenticate, authorize(['administrador','admin','validador']), usuarioController.updateUsuario);
 
 /**
  * @swagger
@@ -362,7 +362,7 @@ router.put('/:id', authenticate, authorize(['administrador','validador']), usuar
  *       401:
  *         description: No autorizado
  */
-router.delete('/:id', authenticate, authorize(['administrador','validador']), usuarioController.deleteUsuario);
+router.delete('/:id', authenticate, authorize(['administrador','admin','validador']), usuarioController.deleteUsuario);
 
 // Registro en dos pasos
 router.post('/register-step1', usuarioController.registerStep1);
@@ -393,7 +393,7 @@ router.put('/register-step2/:id', usuarioController.registerStep2);
  *       401:
  *         description: No autorizado
  */
-router.put('/:id/habilitar', authenticate, authorize(['administrador','validador']), usuarioController.habilitarUsuario);
+router.put('/:id/habilitar', authenticate, authorize(['administrador','admin','validador']), usuarioController.habilitarUsuario);
 
 // Obtener usuario por documento (para QR y perfil público)
 router.get('/documento/:documento', usuarioController.getUsuarioByDocument);

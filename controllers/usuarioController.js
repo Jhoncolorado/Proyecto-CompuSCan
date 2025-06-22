@@ -77,6 +77,7 @@ const usuarioController = {
                 limit
             });
         } catch (error) {
+            console.error('Error en getAllUsuarios:', error);
             res.status(500).json({ 
                 error: 'Error al obtener usuarios',
                 details: error.message 
@@ -97,6 +98,7 @@ const usuarioController = {
             }
             res.json(usuario);
         } catch (error) {
+            console.error('Error en getUsuarioById:', error);
             res.status(500).json({ 
                 error: 'Error al obtener usuario',
                 details: error.message 
@@ -106,10 +108,10 @@ const usuarioController = {
 
     createUsuario: async (req, res) => {
         try {
-            const { 
+            let { 
                 nombre, correo, documento, tipo_documento, 
                 contrasena, rol, telefono1, telefono2, 
-                rh, ficha, observacion, foto, programa, id_programa
+                rh, ficha, id_ficha, observacion, foto, programa, id_programa, estado
             } = req.body;
 
             // Validar campos obligatorios
@@ -143,6 +145,12 @@ const usuarioController = {
             // Preparar la foto para guardar en la DB si es base64
             const fotoProcesada = prepareImageForDB(foto);
 
+            // Mapeo robusto de ficha/programa
+            let idFichaFinal = id_ficha || ficha || null;
+            let idProgramaFinal = id_programa || programa || null;
+            if (idFichaFinal !== null && idFichaFinal !== undefined) idFichaFinal = parseInt(idFichaFinal, 10);
+            if (idProgramaFinal !== null && idProgramaFinal !== undefined) idProgramaFinal = parseInt(idProgramaFinal, 10);
+
             const newUsuario = await usuarioModel.createUsuario({
                 nombre,
                 correo,
@@ -153,10 +161,11 @@ const usuarioController = {
                 telefono1,
                 telefono2,
                 rh,
-                ficha,
+                id_ficha: idFichaFinal,
                 observacion,
                 foto: fotoProcesada,
-                id_programa: id_programa || programa || null
+                id_programa: idProgramaFinal,
+                estado: estado || 'activo'
             });
 
             // Enviar correo de registro exitoso
@@ -164,7 +173,6 @@ const usuarioController = {
               await sendRegistroExitosoEmail(newUsuario.correo, newUsuario.nombre);
             } catch (mailError) {
               console.error('Error enviando correo de registro:', mailError);
-              // No interrumpe el registro si falla el correo
             }
 
             res.status(201).json({
@@ -177,6 +185,7 @@ const usuarioController = {
                 }
             });
         } catch (error) {
+            console.error('Error en createUsuario:', error);
             res.status(500).json({ 
                 error: 'Error al crear usuario',
                 details: error.message 
@@ -212,6 +221,7 @@ const usuarioController = {
                 usuario: usuarioActualizado
             });
         } catch (error) {
+            console.error('Error en updateUsuario:', error);
             res.status(500).json({ 
                 error: 'Error al actualizar usuario',
                 details: error.message
@@ -228,6 +238,7 @@ const usuarioController = {
             }
             res.json({ message: 'Usuario deshabilitado correctamente' });
         } catch (error) {
+            console.error('Error en deleteUsuario:', error);
             res.status(500).json({ 
                 error: 'Error al deshabilitar usuario',
                 details: error.message 

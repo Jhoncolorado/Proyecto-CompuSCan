@@ -12,7 +12,7 @@ const authenticate = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
-    logger.info(`Usuario autenticado: ${decoded.id}`);
+    // logger.info(`Usuario autenticado: ${decoded.id}`); // Evitar spam en consola
     next();
   } catch (err) {
     logger.warn(`Token inválido: ${token}`);

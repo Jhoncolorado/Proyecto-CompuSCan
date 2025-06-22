@@ -1,6 +1,8 @@
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
+const isAdminOrValidador = (rol) => ['admin', 'administrador', 'validador'].includes((rol || '').toLowerCase());
+
 const PrivateRoute = ({ children, requiredRole, allowedRoles }) => {
   const { isAuthenticated, loading, user } = useAuth();
   const location = useLocation();
@@ -14,23 +16,22 @@ const PrivateRoute = ({ children, requiredRole, allowedRoles }) => {
   }
 
   if (requiredRole) {
-    if (requiredRole === 'administrador' || requiredRole === 'validador') {
-      if (user.rol !== 'administrador' && user.rol !== 'validador') {
+    if (['administrador', 'admin', 'validador'].includes(requiredRole)) {
+      if (!isAdminOrValidador(user.rol)) {
         return <Navigate to="/" replace />;
       }
-    } else if (user.rol !== requiredRole) {
+    } else if ((user.rol || '').toLowerCase() !== requiredRole.toLowerCase()) {
       return <Navigate to="/" replace />;
     }
   }
 
   if (allowedRoles && allowedRoles.length > 0) {
-    const adminOrValidadorAllowed = allowedRoles.includes('administrador') || allowedRoles.includes('validador');
-    
+    const adminOrValidadorAllowed = allowedRoles.some(r => ['administrador', 'admin', 'validador'].includes(r));
     if (adminOrValidadorAllowed) {
-      if (user.rol !== 'administrador' && user.rol !== 'validador') {
+      if (!isAdminOrValidador(user.rol)) {
         return <Navigate to="/" replace />;
       }
-    } else if (!allowedRoles.includes(user.rol)) {
+    } else if (!allowedRoles.map(r => r.toLowerCase()).includes((user.rol || '').toLowerCase())) {
       return <Navigate to="/" replace />;
     }
   }

@@ -1314,3 +1314,30 @@ const allowedOrigins = [
 - Mantener localhost e IP local si se harán pruebas internas.
 
 **Nota:** Si la IP local cambia, actualiza el array para evitar bloqueos de CORS. 
+
+## Implementación de Asistencia en el Backend
+
+La lógica de asistencia en el backend de CompuSCan se implementó de la siguiente manera:
+
+- **Modelo y Controlador:**
+  - Se creó un modelo (`asistenciaModel.js`) y un controlador (`asistenciaController.js`) dedicados a la gestión de asistencias.
+  - El modelo maneja el registro, actualización y consulta de asistencias, asegurando que no se dupliquen registros para el mismo usuario y fecha.
+  - El controlador expone endpoints REST para registrar asistencia, consultar por ficha, fecha o usuario, y obtener aprendices por instructor.
+
+- **Endpoints principales:**
+  - `POST /api/asistencias`: Registra una nueva asistencia (requiere autenticación y datos validados).
+  - `GET /api/asistencias?ficha=...&fecha=...`: Consulta asistencias por ficha y fecha.
+  - Otros endpoints permiten consultar historial y aprendices asociados a un instructor.
+
+- **Validaciones y seguridad:**
+  - Se valida que el usuario exista y tenga permisos para registrar o consultar asistencia.
+  - Se previene el registro duplicado y se permite justificar inasistencias o retardos.
+  - Todos los endpoints están protegidos por middleware de autenticación y roles.
+
+- **Integración con RFID:**
+  - El backend recibe el código RFID desde el frontend, identifica al usuario/dispositivo y registra la asistencia automáticamente.
+
+- **Manejo de errores:**
+  - Se responde con mensajes claros y nunca se expone información sensible.
+
+--- 

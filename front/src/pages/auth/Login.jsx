@@ -319,32 +319,24 @@ const Login = () => {
         telefono1: registerData.telefono1 || null,
         telefono2: registerData.telefono2 || null,
         rh: registerData.rh || null,
-        ficha: registerData.ficha || null,
         observacion: registerData.observacion || null,
-        programa: registerData.programa || null,
         estado: 'activo',
         foto: registerData.foto || null
       };
+      // Si es aprendiz, agregar id_ficha y id_programa como enteros
+      if (registerData.rol === 'aprendiz') {
+        userData.id_ficha = registerData.ficha ? parseInt(registerData.ficha, 10) : null;
+        userData.id_programa = registerData.programa ? parseInt(registerData.programa, 10) : null;
+      } else if (registerData.rol === 'instructor') {
+        userData.id_programa = registerData.programa ? parseInt(registerData.programa, 10) : null;
+      }
 
       console.log('Enviando datos de registro:', userData); // Para debugging
 
-      const response = await fetch('/api/usuarios', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify(userData)
-      });
-
-      const data = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(data.message || 'Error al registrar usuario');
-      }
+      const response = await api.post('/api/usuarios', userData);
+      const data = response.data;
 
       setSuccess('Usuario registrado correctamente');
-      
       // Login automático después del registro
       await login({ 
         email: registerData.correo, 
@@ -352,7 +344,8 @@ const Login = () => {
       });
     } catch (err) {
       console.error('Error en registro:', err);
-      setErrors({ general: err.message || 'Error al registrar usuario' });
+      let msg = err.response?.data?.error || err.message || 'Error al registrar usuario';
+      setErrors({ general: msg });
     } finally {
       setLoading(false);
     }

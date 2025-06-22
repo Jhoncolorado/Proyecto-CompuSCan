@@ -11,10 +11,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { HomeUser } from './pages/home/Home.jsx';
 import { UserDevicesPage } from './pages/devices/Devices.jsx';
+import { PendientesProvider } from './context/PendientesContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <App />
+    <PendientesProvider>
+      <App />
+    </PendientesProvider>
     <ToastContainer position="top-right" autoClose={3000} />
   </React.StrictMode>
 );

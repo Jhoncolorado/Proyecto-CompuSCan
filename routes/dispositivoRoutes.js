@@ -41,7 +41,7 @@ const { authenticate, authorize } = require('../middleware/auth');
  *       400:
  *         description: Datos inválidos o dispositivo ya existe
  */
-router.post('/', authenticate, authorize(['administrador','validador']), upload.array('foto', 3), dispositivoController.createDispositivo);
+router.post('/', authenticate, authorize(['administrador','admin','validador','aprendiz']), upload.array('foto', 3), dispositivoController.createDispositivo);
 
 /**
  * @swagger
@@ -81,7 +81,7 @@ router.post('/', authenticate, authorize(['administrador','validador']), upload.
  *                 limit:
  *                   type: integer
  */
-router.get('/', authenticate, authorize(['administrador','validador']), dispositivoController.getAllDispositivos);
+router.get('/', authenticate, authorize(['administrador','admin','validador']), dispositivoController.getAllDispositivos);
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ router.get('/', authenticate, authorize(['administrador','validador']), disposit
  *       500:
  *         description: Error del servidor
  */
-router.get('/pendientes', authenticate, authorize(['administrador','validador']), dispositivoController.getDispositivosPendientes);
+router.get('/pendientes', authenticate, authorize(['administrador','admin','validador']), dispositivoController.getDispositivosPendientes);
 
 /**
  * @swagger
@@ -109,7 +109,7 @@ router.get('/pendientes', authenticate, authorize(['administrador','validador'])
  *       500:
  *         description: Error del servidor
  */
-router.get('/pendientes/count', authenticate, authorize(['administrador','validador']), async (req, res) => {
+router.get('/pendientes/count', authenticate, authorize(['administrador','admin','validador']), async (req, res) => {
   try {
     const result = await pool.query('SELECT COUNT(*) FROM dispositivo WHERE rfid IS NULL');
     res.json({ pendientes: parseInt(result.rows[0].count, 10) });
@@ -137,7 +137,7 @@ router.get('/pendientes/count', authenticate, authorize(['administrador','valida
  *       404:
  *         description: Dispositivo no encontrado
  */
-router.get('/:id', authenticate, authorize(['administrador','validador']), dispositivoController.getDispositivoById);
+router.get('/:id', authenticate, authorize(['administrador','admin','validador']), dispositivoController.getDispositivoById);
 
 /**
  * @swagger
@@ -176,7 +176,7 @@ router.get('/:id', authenticate, authorize(['administrador','validador']), dispo
  *       400:
  *         description: Datos inválidos
  */
-router.put('/:id', authenticate, authorize(['administrador','validador']), upload.array('foto', 3), dispositivoController.updateDispositivo);
+router.put('/:id', authenticate, authorize(['administrador','admin','validador']), upload.array('foto', 3), dispositivoController.updateDispositivo);
 
 /**
  * @swagger
@@ -197,7 +197,7 @@ router.put('/:id', authenticate, authorize(['administrador','validador']), uploa
  *       404:
  *         description: Dispositivo no encontrado
  */
-router.delete('/:id', authenticate, authorize(['administrador','validador']), dispositivoController.deleteDispositivo);
+router.delete('/:id', authenticate, authorize(['administrador','admin','validador']), dispositivoController.deleteDispositivo);
 
 /**
  * @swagger
@@ -221,6 +221,7 @@ router.delete('/:id', authenticate, authorize(['administrador','validador']), di
 router.get('/usuario/:usuarioId', authenticate, (req, res, next) => {
   if (
     req.user.rol === 'administrador' ||
+    req.user.rol === 'admin' ||
     req.user.rol === 'validador' ||
     parseInt(req.params.usuarioId) === req.user.id
   ) {
@@ -254,7 +255,7 @@ router.post('/acceso-rfid', async (req, res) => {
     // Buscar el nombre del programa usando usuario.id_programa
     let nombrePrograma = null;
     if (usuario && usuario.id_programa) {
-      const programaRes = await pool.query('SELECT nombre_programa FROM programas WHERE id = $1', [usuario.id_programa]);
+      const programaRes = await pool.query('SELECT nombre_programa FROM programas WHERE id_programa = $1', [usuario.id_programa]);
       if (programaRes.rows.length > 0) {
         nombrePrograma = programaRes.rows[0].nombre_programa;
       }
@@ -294,6 +295,24 @@ router.post('/acceso-rfid', async (req, res) => {
         'INSERT INTO historial_dispositivo (id_dispositivo, fecha_hora_entrada, fecha_hora_salida, descripcion) VALUES ($1, NOW(), NULL, $2)',
         [dispositivo.id, descripcion]
       );
+      // --- REGISTRO DE ASISTENCIA AUTOMÁTICA CON HORA DE ENTRADA ---
+      if (usuario.id_ficha) {
+        const hoy = new Date().toISOString().slice(0, 10);
+        const ahora = new Date();
+        // Evitar duplicados: solo si no existe ya asistencia para hoy
+        const existe = await pool.query(
+          'SELECT 1 FROM asistencia WHERE id_usuario = $1 AND fecha = $2',
+          [usuario.id, hoy]
+        );
+        if (existe.rows.length === 0) {
+          await pool.query(
+            'INSERT INTO asistencia (id_usuario, id_ficha, fecha, hora_entrada, estado, tipo) VALUES ($1, $2, $3, $4, $5, $6)',
+            [usuario.id, usuario.id_ficha, hoy, ahora, 'presente', 'rfid']
+          );
+          console.log('[ACCESO] Asistencia automática registrada para usuario:', usuario.id, 'hora_entrada:', ahora);
+        }
+      }
+      // --- FIN REGISTRO DE ASISTENCIA ---
     } else {
       // Hay entrada abierta, registrar SALIDA
       tipoEvento = 'SALIDA';
@@ -302,6 +321,24 @@ router.post('/acceso-rfid', async (req, res) => {
         'UPDATE historial_dispositivo SET fecha_hora_salida = NOW(), descripcion = $1 WHERE id_historial = $2',
         [descripcion, registroAbiertoRes.rows[0].id_historial]
       );
+      // --- ACTUALIZAR HORA DE SALIDA EN ASISTENCIA SI EXISTE ---
+      if (usuario.id_ficha) {
+        const hoy = new Date().toISOString().slice(0, 10);
+        const ahora = new Date();
+        // Solo si existe asistencia para hoy y no tiene hora_salida
+        const asistenciaHoy = await pool.query(
+          'SELECT id FROM asistencia WHERE id_usuario = $1 AND fecha = $2 AND hora_salida IS NULL',
+          [usuario.id, hoy]
+        );
+        if (asistenciaHoy.rows.length > 0) {
+          await pool.query(
+            'UPDATE asistencia SET hora_salida = $1 WHERE id = $2',
+            [ahora, asistenciaHoy.rows[0].id]
+          );
+          console.log('[ACCESO] Hora de salida registrada en asistencia para usuario:', usuario.id, 'hora_salida:', ahora);
+        }
+      }
+      // --- FIN ACTUALIZACIÓN HORA DE SALIDA ---
     }
 
     // Emitir evento de actualización de actividad para el dashboard
@@ -355,7 +392,7 @@ router.get('/acceso/rfid/:rfid', async (req, res) => {
     let nombrePrograma = null;
     if (usuario && usuario.id_programa) {
       // NOTA: Aquí usamos pool directamente para obtener el nombre del programa
-      const programaRes = await pool.query('SELECT nombre_programa FROM programas WHERE id = $1', [usuario.id_programa]);
+      const programaRes = await pool.query('SELECT nombre_programa FROM programas WHERE id_programa = $1', [usuario.id_programa]);
       if (programaRes.rows.length > 0) {
         nombrePrograma = programaRes.rows[0].nombre_programa;
       }
