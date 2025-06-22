@@ -362,4 +362,11 @@
   font-size: 0.98rem;
   color: #333;
   margin-left: 2px;
+}
+
+@media (min-width: 768px) {
+  .search-bar {
+    flex: 0 1 320px;
+    margin-right: 1px !important;
+  }
 } 

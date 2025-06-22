@@ -51,6 +51,7 @@ console.log('¿Existe el archivo index.html?', indexExists);
 const allowedOrigins = [
   'http://localhost:5173',
   'http://192.168.1.124:5173', 
+  'http://10.5.156.104:5173',
   'https://compuscan.com', // Cambia por tu dominio real de producción
 ];
 app.use(cors({
@@ -111,6 +112,8 @@ app.use('/api/carnets', require('./routes/carnetRoutes'));
 app.use('/api/casos', require('./routes/casoRoutes'));
 app.use('/api/historial-alertas', require('./routes/historialAlertaRoutes'));
 app.use('/api/dashboard/stats', dashboardController.getDashboardStats);
+app.use('/api/fichas', require('./routes/fichaRoutes'));
+app.use('/api/asistencia', require('./routes/asistenciaRoutes'));
 
 // Ruta de prueba para verificar CORS
 app.get('/api/test-cors', (req, res) => {

@@ -1030,3 +1030,29 @@ Esto garantiza que:
 
 **Resultado:**
 - El sistema es flexible, profesional y listo para desarrollo, pruebas y producción sin errores de acceso ni QR. 
+
+---
+
+## Implementación de Asistencia en el Frontend
+
+La gestión de asistencia en el frontend de CompuSCan se implementó así:
+
+- **Pantalla de asistencia:**
+  - Se creó una página dedicada donde el usuario puede pasar su tarjeta RFID.
+  - El frontend detecta automáticamente el código RFID usando un input invisible (el lector actúa como teclado).
+  - Al detectar el código, se envía una petición al backend para registrar la asistencia.
+
+- **Visualización de historial:**
+  - Los usuarios pueden ver su historial de asistencias, filtrando por fecha, ficha o estado.
+  - Los administradores pueden ver el historial de todos los usuarios y descargar reportes.
+
+- **UX y validaciones:**
+  - Se muestran mensajes claros de éxito o error al registrar la asistencia.
+  - El frontend previene acciones duplicadas y permite justificar inasistencias.
+  - Se actualiza el historial en tiempo real tras cada registro.
+
+- **Seguridad:**
+  - Solo usuarios autenticados pueden acceder a la funcionalidad de asistencia.
+  - El token de autenticación se envía en cada petición.
+
+--- 

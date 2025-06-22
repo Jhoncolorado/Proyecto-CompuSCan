@@ -3,7 +3,7 @@ const db = require('../config/database');
 const programaModel = {
     getAllProgramas: async () => {
         const query = `
-            SELECT id, nombre_programa, fecha_creacion, fecha_actualizacion
+            SELECT id_programa AS id, nombre_programa, fecha_creacion, fecha_actualizacion
             FROM programas
             ORDER BY nombre_programa ASC
         `;
@@ -17,9 +17,9 @@ const programaModel = {
 
     getProgramaById: async (id) => {
         const query = `
-            SELECT id, nombre_programa, fecha_creacion, fecha_actualizacion
+            SELECT id_programa AS id, nombre_programa, fecha_creacion, fecha_actualizacion
             FROM programas
-            WHERE id = $1
+            WHERE id_programa = $1
         `;
         try {
             const { rows } = await db.query(query, [id]);
@@ -34,7 +34,7 @@ const programaModel = {
         const query = `
             INSERT INTO programas (nombre_programa, fecha_creacion, fecha_actualizacion)
             VALUES ($1, CURRENT_DATE, CURRENT_DATE)
-            RETURNING id, nombre_programa, fecha_creacion, fecha_actualizacion
+            RETURNING id_programa AS id, nombre_programa, fecha_creacion, fecha_actualizacion
         `;
         try {
             const { rows } = await db.query(query, [nombre_programa]);
@@ -50,8 +50,8 @@ const programaModel = {
             UPDATE programas
             SET nombre_programa = COALESCE($1, nombre_programa),
                 fecha_actualizacion = CURRENT_DATE
-            WHERE id = $2
-            RETURNING id, nombre_programa, fecha_creacion, fecha_actualizacion
+            WHERE id_programa = $2
+            RETURNING id_programa AS id, nombre_programa, fecha_creacion, fecha_actualizacion
         `;
         try {
             const { rows } = await db.query(query, [nombre_programa, id]);
@@ -64,8 +64,8 @@ const programaModel = {
     deletePrograma: async (id) => {
         const query = `
             DELETE FROM programas
-            WHERE id = $1
-            RETURNING id
+            WHERE id_programa = $1
+            RETURNING id_programa AS id
         `;
         try {
             const { rows } = await db.query(query, [id]);
