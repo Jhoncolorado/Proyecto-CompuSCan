@@ -37,6 +37,45 @@ const handleExport = async () => {
 
 - El backend solo entrega los datos en JSON; toda la lógica de exportación ocurre en el frontend.
 
+## Gestión de Asistencia: Flujo y Conexión
+
+### ¿Cómo funciona la asistencia en CompuSCan?
+
+- **Conexión Frontend-Backend:**  
+  El frontend (React) se conecta al backend (Node.js/Express) mediante Axios y JWT. Todas las acciones de asistencia (marcar, justificar, consultar, exportar) se hacen a través de endpoints REST protegidos.
+
+- **Flujo completo:**
+  1. El instructor selecciona la ficha y ve la lista de aprendices.
+  2. Marca la asistencia de cada aprendiz (presente/ausente) o justifica inasistencias.
+  3. El backend valida, registra y actualiza el estado en la base de datos.
+  4. El frontend muestra estadísticas y feedback inmediato.
+  5. El historial es consultable y exportable a Excel.
+  6. El aprendiz puede ver su propio historial y justificar inasistencias.
+
+- **Integración RFID:**  
+  El sistema permite registrar asistencia pasando la tarjeta RFID. El backend alterna entre ENTRADA y SALIDA automáticamente.
+
+- **Exportación de reportes:**  
+  El frontend transforma los datos obtenidos de la API en archivos Excel descargables, sin lógica especial en el backend.
+
+- **Seguridad:**  
+  Todo el flujo está protegido por autenticación JWT y control de roles.  
+  Solo usuarios autorizados pueden registrar, justificar o consultar asistencia.
+
+### ¿Por qué es robusto y profesional?
+- El flujo es claro, seguro y auditable.
+- Cada acción queda registrada y es trazable.
+- El sistema es escalable y fácil de mantener.
+- La experiencia de usuario es moderna y profesional.
+
+### Referencias de Código
+- `front/src/pages/Asistencia.jsx` (pantalla y lógica de asistencia)
+- `front/src/pages/history/History.jsx` (historial)
+- `front/src/services/api.js` (llamadas a la API)
+- `controllers/asistenciaController.js` (backend)
+- `models/asistenciaModel.js` (backend)
+- `routes/asistenciaRoutes.js` (backend)
+
 ## Visualización de Imágenes de Dispositivos
 
 - El frontend espera que el campo `foto` de cada dispositivo sea un **array de strings**.

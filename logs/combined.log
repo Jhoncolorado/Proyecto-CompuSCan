@@ -1765,3 +1765,55 @@
 2025-06-21 15:30:15 [[32minfo[39m]: Login exitoso para usuario: 92
 2025-06-21 16:20:20 [[32minfo[39m]: Login exitoso para usuario: 50
 2025-06-21 16:21:11 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-24 06:26:46 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA1NDA4NzEsImV4cCI6MTc1MDU2OTY3MX0.LSgW0-FEqIvxGJwRX9hLQulzAVlEnj-sd7i0VFnOyQM
+2025-06-24 06:26:46 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA1NDA4NzEsImV4cCI6MTc1MDU2OTY3MX0.LSgW0-FEqIvxGJwRX9hLQulzAVlEnj-sd7i0VFnOyQM
+2025-06-24 06:27:09 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-24 09:35:59 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-24 09:57:27 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-24 09:58:26 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-24 18:26:28 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA3NzcxMDYsImV4cCI6MTc1MDgwNTkwNn0.s0PL43bN26RIwtQAeTBvmkgVEWmdS0b7qHzItOn71Bs
+2025-06-24 18:26:28 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA3NzcxMDYsImV4cCI6MTc1MDgwNTkwNn0.s0PL43bN26RIwtQAeTBvmkgVEWmdS0b7qHzItOn71Bs
+2025-06-24 19:09:47 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-24 19:11:28 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-24 19:15:54 [[32minfo[39m]: Login exitoso para usuario: 88
+2025-06-25 06:50:04 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODgsInJvbCI6ImFwcmVuZGl6IiwiaWF0IjoxNzUwODEwNTU0LCJleHAiOjE3NTA4MzkzNTR9.n3-nyan_XRqsrlFriBc1bQNVSCcKAtlcQ7RWzZSwDZI
+2025-06-25 06:50:04 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ODgsInJvbCI6ImFwcmVuZGl6IiwiaWF0IjoxNzUwODEwNTU0LCJleHAiOjE3NTA4MzkzNTR9.n3-nyan_XRqsrlFriBc1bQNVSCcKAtlcQ7RWzZSwDZI
+2025-06-25 06:50:14 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-25 14:53:18 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA4NTIyMTQsImV4cCI6MTc1MDg4MTAxNH0.QR9AE_86-kdrXWo_r1zrmu0dvK4eZpL7quXvqB82Ry0
+2025-06-25 14:53:18 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA4NTIyMTQsImV4cCI6MTc1MDg4MTAxNH0.QR9AE_86-kdrXWo_r1zrmu0dvK4eZpL7quXvqB82Ry0
+2025-06-25 14:53:48 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-25 17:30:11 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-25 18:08:29 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-25 19:00:29 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 07:38:18 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA4OTYwMjksImV4cCI6MTc1MDkyNDgyOX0.wdDCQQAskFr2OtClaWByDH_Dx3LXBLHmxJD6ksVJIpw
+2025-06-26 07:38:18 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA4OTYwMjksImV4cCI6MTc1MDkyNDgyOX0.wdDCQQAskFr2OtClaWByDH_Dx3LXBLHmxJD6ksVJIpw
+2025-06-26 07:38:32 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 07:50:59 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 16:38:35 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA5NDIyNTksImV4cCI6MTc1MDk3MTA1OX0.AbZ1RKkXzTtgmDzB15TfKhxuJweKaJiurv1Frzh6tas
+2025-06-26 16:38:35 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTA5NDIyNTksImV4cCI6MTc1MDk3MTA1OX0.AbZ1RKkXzTtgmDzB15TfKhxuJweKaJiurv1Frzh6tas
+2025-06-26 16:41:00 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 16:45:45 [[32minfo[39m]: Login exitoso para usuario: 88
+2025-06-26 16:46:41 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-26 16:47:00 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 16:47:48 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 16:50:44 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 16:54:10 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 16:54:43 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 17:05:34 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 17:10:52 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 17:42:51 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 17:44:35 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 18:54:11 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 18:54:36 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-26 19:10:28 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 19:10:36 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 19:13:33 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-26 19:13:46 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-26 19:25:07 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 19:40:29 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-26 19:41:44 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-26 19:42:38 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-26 19:42:45 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-26 19:47:42 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-26 19:48:25 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
+2025-06-26 19:53:26 [[32minfo[39m]: Login exitoso para usuario: 50

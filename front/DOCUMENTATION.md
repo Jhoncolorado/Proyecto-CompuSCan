@@ -1033,26 +1033,38 @@ Esto garantiza que:
 
 ---
 
-## Implementación de Asistencia en el Frontend
+## Implementación de Asistencia y Historial en el Frontend
 
-La gestión de asistencia en el frontend de CompuSCan se implementó así:
+### Visión General
+El módulo de asistencia permite a instructores registrar, justificar y visualizar la asistencia de sus aprendices, y a los aprendices consultar su propio historial. Todo el flujo es intuitivo, seguro y profesional.
 
-- **Pantalla de asistencia:**
-  - Se creó una página dedicada donde el usuario puede pasar su tarjeta RFID.
-  - El frontend detecta automáticamente el código RFID usando un input invisible (el lector actúa como teclado).
-  - Al detectar el código, se envía una petición al backend para registrar la asistencia.
+### Flujo de Usuario
+1. Selección de ficha: El instructor elige la ficha asignada.
+2. Visualización de aprendices: Se muestra la lista de aprendices con su estado de asistencia.
+3. Registro de asistencia: El instructor marca "Presente" o "Ausente" con botones grandes y alineados.
+4. Justificación: Si un aprendiz está ausente, el instructor puede justificar la inasistencia, seleccionando motivo, agregando observación y evidencia.
+5. Estadísticas: Se muestran tarjetas con presentes, ausentes, justificados, total, % asistencia, RFID y manual.
+6. Historial: El instructor y el aprendiz pueden consultar el historial filtrando por ficha, fecha y estado.
+7. Exportación: El historial es exportable a Excel con un clic.
 
-- **Visualización de historial:**
-  - Los usuarios pueden ver su historial de asistencias, filtrando por fecha, ficha o estado.
-  - Los administradores pueden ver el historial de todos los usuarios y descargar reportes.
+### Componentes y UX
+- Botones de acción: Alineados, del mismo ancho, con colores institucionales y feedback visual.
+- Modal de justificación: Compacto, con validación de campos y carga de evidencia.
+- Tablas y tarjetas: Responsivas, con filtros y scroll horizontal en móvil.
+- Feedback: Mensajes claros de éxito/error tras cada acción.
 
-- **UX y validaciones:**
-  - Se muestran mensajes claros de éxito o error al registrar la asistencia.
-  - El frontend previene acciones duplicadas y permite justificar inasistencias.
-  - Se actualiza el historial en tiempo real tras cada registro.
+### Seguridad y Validaciones
+- Solo usuarios autenticados pueden acceder.
+- El token JWT se envía en cada petición.
+- Validación de campos en tiempo real y feedback visual.
 
-- **Seguridad:**
-  - Solo usuarios autenticados pueden acceder a la funcionalidad de asistencia.
-  - El token de autenticación se envía en cada petición.
+### Exportación de Reportes
+- Utiliza la librería `xlsx` para transformar los datos en archivos Excel descargables.
+- El backend solo entrega datos en JSON; la exportación es 100% frontend.
+
+### Código relevante
+- `front/src/pages/Asistencia.jsx` (pantalla y lógica de asistencia)
+- `front/src/pages/history/History.jsx` (historial)
+- `front/src/services/api.js` (llamadas a la API)
 
 --- 

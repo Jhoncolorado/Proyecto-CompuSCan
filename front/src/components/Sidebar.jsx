@@ -50,6 +50,9 @@ const Sidebar = () => {
           <NavLink to="/home-user" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaHome /> <span>Inicio</span></NavLink>
           <NavLink to="/profile" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaUserCog /> <span>Mi Perfil</span></NavLink>
           <NavLink to="/my-devices" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaDesktop /> <span>Mis Dispositivos</span></NavLink>
+          {user.rol === 'instructor' && (
+            <NavLink to="/historial-asistencia" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}><FaHistory /> <span>Historial asistencia</span></NavLink>
+          )}
         </nav>
       </aside>
     );

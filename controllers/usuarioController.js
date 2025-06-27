@@ -60,22 +60,35 @@ async function sendRegistroExitosoEmail(email, nombre) {
 const usuarioController = {
     getAllUsuarios: async (req, res) => {
         try {
-            // Soporte de paginación
+            // Soporte de paginación y filtros
             const page = parseInt(req.query.page, 10) || 1;
             const limit = parseInt(req.query.limit, 10) || 10;
             const offset = (page - 1) * limit;
+            const { estado, todos } = req.query;
 
-            const total = await usuarioModel.countUsuarios();
-            const usuarios = await usuarioModel.getUsuariosPaginados(limit, offset);
-            const totalPages = Math.ceil(total / limit);
+            let usuarios = [];
+            let total = 0;
+            let totalPages = 1;
 
-            res.json({
-                data: usuarios,
-                total,
-                page,
-                totalPages,
-                limit
-            });
+            if (todos === 'true') {
+                // Traer todos los usuarios (activos y deshabilitados)
+                usuarios = await usuarioModel.getAllUsuarios();
+                total = usuarios.length;
+                totalPages = 1;
+                return res.json({ data: usuarios, total, page: 1, totalPages, limit: usuarios.length });
+            } else if (estado) {
+                // Traer solo usuarios por estado
+                usuarios = await usuarioModel.getUsuariosByEstado(estado, limit, offset);
+                total = await usuarioModel.countUsuariosByEstado(estado);
+                totalPages = Math.ceil(total / limit);
+                return res.json({ data: usuarios, total, page, totalPages, limit });
+            } else {
+                // Paginación normal (solo activos)
+                usuarios = await usuarioModel.getUsuariosPaginados(limit, offset);
+                total = await usuarioModel.countUsuarios();
+                totalPages = Math.ceil(total / limit);
+                return res.json({ data: usuarios, total, page, totalPages, limit });
+            }
         } catch (error) {
             console.error('Error en getAllUsuarios:', error);
             res.status(500).json({ 

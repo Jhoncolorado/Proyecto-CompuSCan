@@ -230,6 +230,28 @@ const usuarioModel = {
             }
             return user;
         });
+    },
+
+    getUsuariosByEstado: async (estado, limit, offset) => {
+        const query = `
+            SELECT id, nombre, correo, documento, tipo_documento, rol, telefono1, telefono2, rh, id_ficha, observacion, foto, fecha_registro, estado
+            FROM usuario
+            WHERE estado = $1
+            ORDER BY id DESC
+            LIMIT $2 OFFSET $3
+        `;
+        const result = await pool.query(query, [estado, limit, offset]);
+        return result.rows.map(user => {
+            if (user.foto) {
+                user.foto = 'data:image/jpeg;base64,' + Buffer.from(user.foto).toString('base64');
+            }
+            return user;
+        });
+    },
+
+    countUsuariosByEstado: async (estado) => {
+        const result = await pool.query('SELECT COUNT(*) FROM usuario WHERE estado = $1', [estado]);
+        return parseInt(result.rows[0].count, 10);
     }
 };
 
