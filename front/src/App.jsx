@@ -7,7 +7,7 @@ import Home from './pages/home/Home';
 import Devices from './pages/devices/Devices';
 import Users from './pages/users/Users';
 import Reports from './pages/alerts/Alerts';
-import History from './pages/history/History';
+import History, { UserHistory } from './pages/history/History';
 import Programs from './pages/programs/Programs';
 import Cards from './pages/cards/Cards';
 import Cases from './pages/cases/Cases';
@@ -19,7 +19,6 @@ import { HomeUser } from './pages/home/Home';
 import { UserDevicesPage } from './pages/devices/Devices';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserHistory } from './pages/history/History';
 import './styles/PageTransition.css';
 import ForgotPassword from './pages/auth/ForgotPassword';
 import ResetPassword from './pages/auth/ResetPassword';
@@ -92,7 +91,11 @@ function App() {
                 } 
               />
               <Route path="reports" element={<Reports />} />
-              <Route path="history" element={<History />} />
+              <Route path="history" element={
+                <PrivateRoute>
+                  <HistoryOrUserHistory />
+                </PrivateRoute>
+              } />
               <Route path="programs" element={<Programs />} />
               <Route path="cards" element={<Cards />} />
               <Route path="cases" element={<Cases />} />
@@ -109,6 +112,14 @@ function App() {
               <Route path="my-devices" element={<UserDevicesPage />} />
               <Route path="my-history" element={<UserHistory />} />
               <Route path="asistencia" element={<Asistencia />} />
+              <Route 
+                path="historial-asistencia" 
+                element={
+                  <PrivateRoute requiredRole="instructor">
+                    <History />
+                  </PrivateRoute>
+                }
+              />
             </Route>
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
@@ -148,6 +159,16 @@ function LandingOrRedirect() {
     }
   }, [user, navigate]);
   return <LandingPage />;
+}
+
+// Componente para mostrar el historial adecuado según el rol
+function HistoryOrUserHistory() {
+  const { user } = useAuth();
+  if (!user) return null;
+  if (user.rol === 'administrador') return <UserHistory />;
+  if (user.rol === 'instructor') return <History />;
+  // Si es aprendiz u otro, puedes personalizar aquí
+  return <UserHistory />;
 }
 
 export default App;

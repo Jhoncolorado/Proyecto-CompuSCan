@@ -69,7 +69,7 @@ const Users = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [page, limit]);
+  }, [page, limit, showDisabled]);
 
   useEffect(() => {
     if (showModal && editingUser && editingUser.id) {
@@ -136,23 +136,25 @@ const Users = () => {
   const fetchUsers = async () => {
     setLoading(true);
     setError('');
-    
     try {
-      const response = await api.get(`/api/usuarios?page=${page}&limit=${limit}`);
-      
+      let url = `/api/usuarios?page=${page}&limit=${limit}`;
+      if (showDisabled) {
+        url = `/api/usuarios?estado=deshabilitado&page=${page}&limit=${limit}`;
+      } else {
+        url = `/api/usuarios?estado=activo&page=${page}&limit=${limit}`;
+      }
+      const response = await api.get(url);
       if (response.data && Array.isArray(response.data.data)) {
         setUsers(response.data.data);
         setTotalPages(response.data.totalPages);
         setTotal(response.data.total);
       } else {
-        console.error('Respuesta del servidor no es un array:', response.data);
         setError('Error al cargar usuarios: Formato de datos incorrecto');
         setUsers([]);
         setTotalPages(1);
         setTotal(0);
       }
     } catch (err) {
-      console.error('Error al cargar usuarios:', err);
       setError(`Error al cargar usuarios: ${err.response?.data?.message || err.message}`);
       setUsers([]);
       setTotalPages(1);

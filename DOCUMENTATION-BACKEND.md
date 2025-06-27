@@ -1315,29 +1315,44 @@ const allowedOrigins = [
 
 **Nota:** Si la IP local cambia, actualiza el array para evitar bloqueos de CORS. 
 
-## Implementación de Asistencia en el Backend
+## Implementación de Asistencia y Justificación en el Backend
 
-La lógica de asistencia en el backend de CompuSCan se implementó de la siguiente manera:
+### Arquitectura
+- Modelo: `asistenciaModel.js` gestiona el registro, actualización y consulta de asistencias.
+- Controlador: `asistenciaController.js` expone endpoints REST para registrar, consultar y justificar asistencias.
+- Rutas: `asistenciaRoutes.js` define los endpoints y protege con middleware de autenticación y roles.
 
-- **Modelo y Controlador:**
-  - Se creó un modelo (`asistenciaModel.js`) y un controlador (`asistenciaController.js`) dedicados a la gestión de asistencias.
-  - El modelo maneja el registro, actualización y consulta de asistencias, asegurando que no se dupliquen registros para el mismo usuario y fecha.
-  - El controlador expone endpoints REST para registrar asistencia, consultar por ficha, fecha o usuario, y obtener aprendices por instructor.
+### Endpoints Principales
+| Método | Endpoint | Descripción |
+|--------|----------|-------------|
+| POST   | /api/asistencia | Registrar o actualizar asistencia (manual o RFID) |
+| GET    | /api/asistencia/por-ficha-fecha | Consultar asistencias por ficha y fecha |
+| GET    | /api/asistencia/aprendices/ficha/:id | Listar aprendices por ficha |
+| GET    | /api/asistencia/estadisticas | Estadísticas de asistencia por ficha y fecha |
+| GET    | /api/asistencia/historial | Historial de asistencias (filtros por ficha, fecha, usuario) |
 
-- **Endpoints principales:**
-  - `POST /api/asistencias`: Registra una nueva asistencia (requiere autenticación y datos validados).
-  - `GET /api/asistencias?ficha=...&fecha=...`: Consulta asistencias por ficha y fecha.
-  - Otros endpoints permiten consultar historial y aprendices asociados a un instructor.
+### Flujo de Registro y Justificación
+1. El instructor o el sistema (por RFID) registra la asistencia.
+2. El backend valida que no haya duplicados para el mismo usuario y fecha.
+3. Permite justificar inasistencias con motivo, observación y evidencia.
+4. El backend actualiza el registro y lo marca como "justificado".
 
-- **Validaciones y seguridad:**
-  - Se valida que el usuario exista y tenga permisos para registrar o consultar asistencia.
-  - Se previene el registro duplicado y se permite justificar inasistencias o retardos.
-  - Todos los endpoints están protegidos por middleware de autenticación y roles.
+### Integración con RFID
+- El backend recibe el código RFID, identifica al usuario/dispositivo y registra la asistencia automáticamente.
+- Alternancia ENTRADA/SALIDA: Si ya existe una entrada abierta, el siguiente pase se interpreta como salida.
 
-- **Integración con RFID:**
-  - El backend recibe el código RFID desde el frontend, identifica al usuario/dispositivo y registra la asistencia automáticamente.
+### Historial y Estadísticas
+- Endpoints para consultar historial por ficha, usuario, fecha y estado.
+- Estadísticas de presentes, ausentes, justificados, % asistencia, RFID, manual.
 
-- **Manejo de errores:**
-  - Se responde con mensajes claros y nunca se expone información sensible.
+### Seguridad y Buenas Prácticas
+- Todos los endpoints protegidos por JWT y middleware de roles.
+- Validación de datos y manejo centralizado de errores.
+- No se exponen datos sensibles en las respuestas.
+
+### Código relevante
+- `controllers/asistenciaController.js`
+- `models/asistenciaModel.js`
+- `routes/asistenciaRoutes.js`
 
 --- 

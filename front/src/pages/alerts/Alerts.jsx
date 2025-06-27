@@ -85,7 +85,7 @@ const Reports = () => {
     let filename = '';
     let fields = [];
     if (activeTab === 'users') {
-      url = `/api/usuarios?page=1&limit=1000000`;
+      url = `/api/usuarios?todos=true`;
       filename = 'usuarios.xlsx';
       fields = [
         { label: 'Nombre', key: 'nombre' },
@@ -118,8 +118,8 @@ const Reports = () => {
       ];
     }
     try {
-      const res = await fetch(url);
-      const data = await res.json();
+      const res = await api.get(url);
+      const data = res.data;
       let rows = Array.isArray(data.data) ? data.data : Array.isArray(data) ? data : [];
       if (!rows.length) throw new Error('No hay datos para exportar');
       // Filtrar solo los campos esenciales

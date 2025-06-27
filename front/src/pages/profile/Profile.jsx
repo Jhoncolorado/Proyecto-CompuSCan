@@ -217,14 +217,6 @@ const Profile = () => {
             )}
           </div>
           <div className="profile-field">
-            <span className="profile-label">Ficha:</span>
-            {canEdit && editMode ? (
-              <input className="profile-input" type="text" name="ficha" value={formData.ficha} onChange={handleChange} />
-            ) : (
-              <span className="profile-value">{formData.ficha || '-'}</span>
-            )}
-          </div>
-          <div className="profile-field">
             <span className="profile-label">Observación:</span>
             {canEdit && editMode ? (
               <textarea className="profile-input" name="observacion" value={formData.observacion} onChange={handleChange} />
@@ -239,10 +231,6 @@ const Profile = () => {
           <div className="profile-field">
             <span className="profile-label">Fecha de registro:</span>
             <span className="profile-value">{formData.fecha_registro ? new Date(formData.fecha_registro).toLocaleDateString() : '-'}</span>
-          </div>
-          <div className="profile-field">
-            <span className="profile-label">Programa:</span>
-            <span className="profile-value">{formData.programa || '-'}</span>
           </div>
         <div className="profile-actions">
             <button className="btn btn-success" type="button" onClick={() => setShowPasswordModal(true)}>Cambiar Contraseña</button>

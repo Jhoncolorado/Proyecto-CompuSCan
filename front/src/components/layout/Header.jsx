@@ -382,6 +382,11 @@ const Header = () => {
                       <NavLink to="/asistencia" className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end style={{ fontSize: 15, color: '#222', fontWeight: 500, padding: '4px 0', display: 'inline-block', whiteSpace: 'nowrap', width: '100%' }} aria-label="Asistencia">Asistencia</NavLink>
                     </li>
                   ) : null}
+                  {user && user.rol === 'instructor' && (
+                    <li className="header-menu-item" style={{ flex: 1, minWidth: 0, textAlign: 'center', maxWidth: '140px', margin: '0 12px' }}>
+                      <NavLink to="/historial-asistencia" className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end style={{ fontSize: 15, color: '#222', fontWeight: 500, padding: '4px 0', display: 'inline-block', whiteSpace: 'nowrap', width: '100%' }} aria-label="Historial asistencia">Historial asistencia</NavLink>
+                    </li>
+                  )}
                 </>
               )}
             </ul>
@@ -421,6 +426,11 @@ const Header = () => {
                       <NavLink to="/asistencia" className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end onClick={() => setMenuOpen(false)}>Asistencia</NavLink>
                     </li>
                   ) : null}
+                  {user && user.rol === 'instructor' && (
+                    <li>
+                      <NavLink to="/historial-asistencia" className={({ isActive }) => `main-header-menu-link nav-link fw-semibold px-2 link-effect ${isActive ? 'active' : ''}`} end onClick={() => setMenuOpen(false)}>Historial asistencia</NavLink>
+                    </li>
+                  )}
                 </>
               )}
             </ul>
