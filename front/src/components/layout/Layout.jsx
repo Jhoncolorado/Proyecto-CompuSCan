@@ -3,9 +3,12 @@ import { Outlet, useLocation } from 'react-router-dom';
 import Header from './Header';
 import PageTransition from '../common/PageTransition';
 import '../../styles/PageTransition.css';
+import HeaderInstructor from './HeaderInstructor';
+import { useAuth } from '../../context/AuthContext';
 
 const Layout = () => {
   const location = useLocation();
+  const { user } = useAuth();
   const isDevices = location.pathname.startsWith('/devices') || location.pathname.startsWith('/my-devices');
   const isUsers = location.pathname.startsWith('/users');
   const isHistory = location.pathname.startsWith('/history') || location.pathname.startsWith('/my-history');
@@ -79,7 +82,7 @@ const Layout = () => {
 
   return (
     <div className={getMainContainerClass()}>
-      <Header />
+      {user && user.rol === 'instructor' ? <HeaderInstructor /> : <Header />}
       <div className="main-content" style={getMainContentStyles()}>
         <div className={getContainerClass()}>
           <div className="w-100" style={useFullWidth ? { maxWidth: '100%' } : { maxWidth: 900 }}>

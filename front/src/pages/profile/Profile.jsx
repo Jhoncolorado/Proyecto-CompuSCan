@@ -8,7 +8,7 @@ import { changePassword } from '../../services/auth';
 const Profile = () => {
   const { user, updateUserInContext } = useAuth();
   const [formData, setFormData] = useState({
-    nombre: '', correo: '', documento: '', tipo_documento: '', telefono1: '', telefono2: '', rh: '', ficha: '', observacion: '', foto: '', rol: '', fecha_registro: '', programa: '',
+    nombre: '', correo: '', documento: '', tipo_documento: '', telefono1: '', telefono2: '', rh: '', ficha: '', ficha_codigo: '', observacion: '', foto: '', rol: '', fecha_registro: '', programa: '',
   });
   const [avatarPreview, setAvatarPreview] = useState('');
   const [loading, setLoading] = useState(false);
@@ -39,6 +39,7 @@ const Profile = () => {
           telefono2: fullUser.telefono2 || '',
           rh: fullUser.rh || '',
           ficha: fullUser.ficha || fullUser.id_ficha || '',
+          ficha_codigo: fullUser.ficha_codigo || '',
           observacion: fullUser.observacion || '',
           foto: fullUser.foto || '',
           rol: fullUser.rol || '',
@@ -192,6 +193,19 @@ const Profile = () => {
             <span className="profile-label">Tipo de documento:</span>
             <span className="profile-value">{formData.tipo_documento || '-'}</span>
           </div>
+          {/* Mostrar programa y ficha solo si es aprendiz */}
+          {formData.rol === 'aprendiz' && (
+            <>
+              <div className="profile-field">
+                <span className="profile-label">Programa de formación:</span>
+                <span className="profile-value">{formData.programa || formData.nombre_programa || '-'}</span>
+              </div>
+              <div className="profile-field">
+                <span className="profile-label">Ficha:</span>
+                <span className="profile-value">{formData.ficha_codigo || '-'}</span>
+              </div>
+            </>
+          )}
           <div className="profile-field">
             <span className="profile-label">Teléfono principal:</span>
             {canEdit && editMode ? (

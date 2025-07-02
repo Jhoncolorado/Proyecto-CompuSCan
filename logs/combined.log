@@ -1817,3 +1817,54 @@
 2025-06-26 19:47:42 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
 2025-06-26 19:48:25 [[33mwarn[39m]: Intento de acceso no autorizado - Token no proporcionado
 2025-06-26 19:53:26 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-27 05:58:34 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAsInJvbCI6ImFkbWluIiwiaWF0IjoxNzUwOTg1NjA2LCJleHAiOjE3NTEwMTQ0MDZ9.UOAcr0d4sm2NKp-1w6qt0O21_BtPRAJw1i8Kkmz0lOo
+2025-06-27 05:58:34 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NTAsInJvbCI6ImFkbWluIiwiaWF0IjoxNzUwOTg1NjA2LCJleHAiOjE3NTEwMTQ0MDZ9.UOAcr0d4sm2NKp-1w6qt0O21_BtPRAJw1i8Kkmz0lOo
+2025-06-27 05:58:45 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-27 06:02:34 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-27 06:02:53 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 12:35:25 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTEwMjIxNzMsImV4cCI6MTc1MTA1MDk3M30.23TeBf-x8-ar9Ufz5zs0ClWBmuqlW3JoEZ3EYYaXU50
+2025-06-28 12:35:25 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTEwMjIxNzMsImV4cCI6MTc1MTA1MDk3M30.23TeBf-x8-ar9Ufz5zs0ClWBmuqlW3JoEZ3EYYaXU50
+2025-06-28 12:39:06 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 12:39:51 [[32minfo[39m]: Login exitoso para usuario: 88
+2025-06-28 12:40:19 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-28 12:41:24 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-28 12:48:00 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-28 12:50:37 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-28 13:09:44 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-28 13:12:44 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 13:24:36 [[32minfo[39m]: Login exitoso para usuario: 88
+2025-06-28 13:24:47 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 13:30:39 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 13:30:46 [[32minfo[39m]: Login exitoso para usuario: 88
+2025-06-28 13:30:55 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 13:31:36 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-28 13:31:50 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 13:36:07 [[32minfo[39m]: Login exitoso para usuario: 47
+2025-06-28 13:36:26 [[32minfo[39m]: Login exitoso para usuario: 88
+2025-06-28 13:36:54 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 13:43:17 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 13:46:31 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-28 13:47:02 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 13:50:22 [[32minfo[39m]: Login exitoso para usuario: 88
+2025-06-28 13:51:06 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-28 13:51:17 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 14:10:50 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 17:02:33 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-28 17:03:45 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-06-28 18:50:35 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-06-28 18:54:28 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-07-01 06:30:31 [[32minfo[39m]: Login exitoso para usuario: 50
+2025-07-01 06:38:27 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-07-01 08:11:08 [[32minfo[39m]: Login exitoso para usuario: 88
+2025-07-01 08:26:09 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-07-01 10:10:13 [[32minfo[39m]: Login exitoso para usuario: 92
+2025-07-01 19:04:00 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTEzODI2MTMsImV4cCI6MTc1MTQxMTQxM30.H8OH-3RH8OwEqBsq8WSg6bTB-iN-9DDZHQ6oCcYMQAA
+2025-07-01 19:04:00 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OTIsInJvbCI6Imluc3RydWN0b3IiLCJpYXQiOjE3NTEzODI2MTMsImV4cCI6MTc1MTQxMTQxM30.H8OH-3RH8OwEqBsq8WSg6bTB-iN-9DDZHQ6oCcYMQAA
+2025-07-01 19:04:08 [[33mwarn[39m]: Intento de login fallido - Correo no encontrado: stivenhenaoronaldo1187@gmail.com
+2025-07-01 19:52:21 [[33mwarn[39m]: Intento de login fallido - Contraseña incorrecta para usuario: 2
+2025-07-01 19:54:55 [[33mwarn[39m]: Intento de login fallido - Contraseña incorrecta para usuario: 2
+2025-07-01 19:55:43 [[33mwarn[39m]: Intento de login fallido - Contraseña incorrecta para usuario: 2
+2025-07-01 19:56:19 [[33mwarn[39m]: Intento de login fallido - Contraseña incorrecta para usuario: 2
+2025-07-01 20:00:15 [[32minfo[39m]: Login exitoso para usuario: 2
+2025-07-01 20:32:21 [[32minfo[39m]: Login exitoso para usuario: 6
+2025-07-01 20:44:56 [[32minfo[39m]: Login exitoso para usuario: 7

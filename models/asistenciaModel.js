@@ -51,7 +51,7 @@ const asistenciaModel = {
                 values = [id_usuario, id_ficha, estado, tipoRegistro, observacion || null, fechaHoy];
             }
             const result = await pool.query(query, values);
-            return result.rows[0];
+        return result.rows[0];
         }
     },
     getAsistenciasPorFicha: async (id_ficha, fecha) => {
