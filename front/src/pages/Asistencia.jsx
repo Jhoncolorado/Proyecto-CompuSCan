@@ -524,58 +524,6 @@ const Asistencia = () => {
                           </button>
                         </>
                       )}
-                      {estado === 'presente' && !asistencia?.hora_salida && (
-                        <button
-                          style={{
-                            background: '#388e3c',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '4px',
-                            padding: '10px 0',
-                            width: '100%',
-                            cursor: 'pointer',
-                            fontWeight: 600,
-                            fontSize: 16
-                          }}
-                          onClick={async () => {
-                            try {
-                              await api.post('/api/asistencia/marcar-salida', {
-                                id_usuario: aprendiz.id,
-                                id_ficha: idFicha,
-                                fecha: new Date().toISOString().slice(0, 10)
-                              });
-                              // Refresca la lista de asistencias
-                              const hoy = new Date().toISOString().slice(0, 10);
-                              const res = await api.get(`/api/asistencia/por-ficha-fecha?id_ficha=${idFicha}&fecha=${hoy}`);
-                              const map = {};
-                              res.data.forEach(a => { map[a.id_usuario] = a; });
-                              setAsistencias(map);
-                            } catch (err) {
-                              alert('Error al marcar salida');
-                            }
-                          }}
-                        >
-                          Marcar salida
-                        </button>
-                      )}
-                      {estado === 'presente' && asistencia?.hora_salida && (
-                        <div style={{
-                          background: '#e8f5e9',
-                          color: '#388e3c',
-                          borderRadius: '4px',
-                          padding: '10px 0',
-                          width: '100%',
-                          fontWeight: 700,
-                          fontSize: 16,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 8,
-                          border: '1.5px solid #43a047',
-                        }}>
-                          <span style={{fontSize: 20}}>✔️</span> Salida registrada
-                        </div>
-                      )}
                       {estado === 'ausente' && (
                         <button
                           style={{
