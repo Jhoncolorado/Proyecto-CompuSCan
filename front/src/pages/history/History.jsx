@@ -92,12 +92,20 @@ const History = () => {
       // Si reg.fecha es string tipo '2025-06-26T00:00:00.000Z' o Date, siempre extrae YYYY-MM-DD
       if (typeof reg.fecha === 'string' && reg.fecha.length >= 10) {
         fechaKey = reg.fecha.slice(0, 10);
-      } else {
+    } else {
         fechaKey = new Date(reg.fecha).toISOString().slice(0, 10);
-      }
+    }
     }
     asistenciaMap[`${reg.id_usuario}_${fechaKey}`] = reg;
   });
+
+  // Utilidad para formatear horas en 'Xh Ymin'
+  function formatHoras(horas) {
+    if (!horas || isNaN(horas) || horas <= 0) return '0h 0min';
+    const h = Math.floor(horas);
+    const m = Math.round((horas - h) * 60);
+    return `${h}h ${m}min`;
+  }
 
   return (
     <div style={{ padding: 32 }}>
@@ -165,7 +173,7 @@ const History = () => {
             }}
           />
         </label>
-      </div>
+          </div>
       {/* Leyenda de íconos */}
       <div style={{ margin: '12px 0 18px 0', display: 'flex', gap: 24, alignItems: 'center' }}>
         <span><span style={{color:'#43a047', fontWeight:700, fontSize:18}}>✔️</span> Presente</span>
@@ -181,41 +189,59 @@ const History = () => {
           <div style={{ fontSize: 48, color: '#bdbdbd', marginBottom: 12 }}>📋</div>
           <div style={{ fontSize: 22, color: '#256029', fontWeight: 600, marginBottom: 6 }}>No hay aprendices en la ficha seleccionada</div>
           <div style={{ fontSize: 16, color: '#888', maxWidth: 400, textAlign: 'center' }}>Selecciona otra ficha o ajusta el rango de fechas para ver el historial de asistencia.</div>
-        </div>
-      ) : (
+          </div>
+        ) : (
         <div style={{ overflowX: 'auto', marginTop: 24 }}>
           <table className="tabla-historial" style={{ minWidth: 900, borderCollapse: 'separate', borderSpacing: '0 2px' }}>
-            <thead>
-              <tr>
+              <thead>
+                <tr>
                 <th style={{ position: 'sticky', left: 0, background: '#e8f5e9', zIndex: 2, minWidth: 180, maxWidth: 220, padding: '8px 12px', textAlign: 'left', fontWeight: 700 }}>Nombre</th>
                 <th style={{ position: 'sticky', left: 180, background: '#f3e5f5', zIndex: 2, minWidth: 120, maxWidth: 160, padding: '8px 12px', textAlign: 'left', fontWeight: 700 }}>Documento</th>
                 {dias.map(dia => (
                   <th key={dia} style={{ minWidth: 54, fontWeight: 500, padding: '8px 0', background: '#f6fbf2', textAlign: 'center', borderLeft: '2px solid #fff' }}>{format(parseISO(dia), 'dd/MM')}</th>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {aprendices.map(aprendiz => (
-                <tr key={aprendiz.id_usuario || aprendiz.id || aprendiz.documento || aprendiz.nombre}>
-                  <td style={{ position: 'sticky', left: 0, background: '#fff', minWidth: 180, maxWidth: 220, padding: '8px 12px', fontWeight: 500, borderRight: '2px solid #e0e0e0' }}>{aprendiz.nombre}</td>
-                  <td style={{ position: 'sticky', left: 180, background: '#fff', minWidth: 120, maxWidth: 160, padding: '8px 12px', borderRight: '2px solid #e0e0e0' }}>{aprendiz.documento}</td>
-                  {dias.map(dia => {
-                    const reg = asistenciaMap[`${(aprendiz.id_usuario || aprendiz.id)}_${dia}`];
-                    let cell = '–';
-                    let color = '#888';
-                    if (reg) {
-                      if (reg.estado === 'presente') { cell = '✔️'; color = '#2e7d32'; }
-                      else if (reg.estado === 'ausente') { cell = '❌'; color = '#c62828'; }
-                      else if (reg.estado === 'justificado') { cell = '🟡'; color = '#f9a825'; }
-                    }
-                    return <td key={`${(aprendiz.id_usuario || aprendiz.id || aprendiz.documento || aprendiz.nombre)}_${dia}`} style={{ color, fontWeight: 600, textAlign: 'center', minWidth: 44, padding: '8px 0', background: '#fff', borderLeft: '2px solid #f6fbf2' }}>{cell}</td>;
-                  })}
+                <th style={{ minWidth: 80, fontWeight: 700, background: '#e8f5e9', textAlign: 'center' }}>Total horas</th>
+                <th style={{ minWidth: 80, fontWeight: 700, background: '#ffe0b2', textAlign: 'center' }}>Horas faltadas</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              </thead>
+              <tbody>
+              {aprendices.map(aprendiz => {
+                let totalHoras = 0;
+                let horasClase = 0;
+                dias.forEach(dia => {
+                  const reg = asistenciaMap[`${(aprendiz.id_usuario || aprendiz.id)}_${dia}`];
+                  if (reg && typeof reg.total_horas === 'number') {
+                    totalHoras += reg.total_horas;
+                    if (typeof reg.horas_clase === 'number') horasClase = reg.horas_clase;
+                  } else if (reg && typeof reg.horas_clase === 'number') {
+                    horasClase = reg.horas_clase;
+                  }
+                });
+                const horasFaltadas = horasClase > 0 ? Math.max(0, horasClase - totalHoras) : 0;
+                return (
+                  <tr key={aprendiz.id_usuario || aprendiz.id || aprendiz.documento || aprendiz.nombre}>
+                    <td style={{ position: 'sticky', left: 0, background: '#fff', minWidth: 180, maxWidth: 220, padding: '8px 12px', fontWeight: 500, borderRight: '2px solid #e0e0e0' }}>{aprendiz.nombre}</td>
+                    <td style={{ position: 'sticky', left: 180, background: '#fff', minWidth: 120, maxWidth: 160, padding: '8px 12px', borderRight: '2px solid #e0e0e0' }}>{aprendiz.documento}</td>
+                    {dias.map(dia => {
+                      const reg = asistenciaMap[`${(aprendiz.id_usuario || aprendiz.id)}_${dia}`];
+                      let cell = '–';
+                      let color = '#888';
+                      if (reg) {
+                        if (reg.estado === 'presente') { cell = '✔️'; color = '#2e7d32'; }
+                        else if (reg.estado === 'ausente') { cell = '❌'; color = '#c62828'; }
+                        else if (reg.estado === 'justificado') { cell = '🟡'; color = '#f9a825'; }
+                      }
+                      return <td key={`${(aprendiz.id_usuario || aprendiz.id || aprendiz.documento || aprendiz.nombre)}_${dia}`} style={{ color, fontWeight: 600, textAlign: 'center', minWidth: 44, padding: '8px 0', background: '#fff', borderLeft: '2px solid #f6fbf2' }}>{cell}</td>;
+                    })}
+                    <td style={{ fontWeight: 700, color: '#256029', textAlign: 'center', background: '#fff' }}>{formatHoras(totalHoras)}</td>
+                    <td style={{ fontWeight: 700, color: '#c62828', textAlign: 'center', background: '#fff' }}>{formatHoras(horasFaltadas)}</td>
+                  </tr>
+                );
+              })}
+              </tbody>
+            </table>
+          </div>
+        )}
     </div>
   );
 };
@@ -256,7 +282,7 @@ export const UserHistory = () => {
           setHistorial(eventos);
         } else {
           const userEvents = eventos.filter(ev => ev.descripcion && user.nombre && ev.descripcion.includes(user.nombre));
-          setHistorial(userEvents);
+        setHistorial(userEvents);
         }
       } catch (error) {
         setError(error.message);

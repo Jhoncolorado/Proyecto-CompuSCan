@@ -158,10 +158,37 @@ const usuarioController = {
             // Preparar la foto para guardar en la DB si es base64
             const fotoProcesada = prepareImageForDB(foto);
 
-            // Mapeo robusto de ficha/programa
-            let idFichaFinal = id_ficha || ficha || null;
+            // --- NUEVO: Buscar id_ficha incremental si se recibe número de ficha ---
+            const pool = require('../config/database');
+            let idFichaFinal = null;
+            if (id_ficha) {
+                // Si viene id_ficha, puede ser el número de ficha (codigo) o el id incremental
+                // Primero intentamos buscar por id_ficha como codigo
+                const result = await pool.query('SELECT id_ficha FROM ficha WHERE codigo = $1', [id_ficha]);
+                if (result.rows.length > 0) {
+                    idFichaFinal = result.rows[0].id_ficha;
+                } else {
+                    // Si no existe como codigo, intentamos usarlo como id incremental
+                    const result2 = await pool.query('SELECT id_ficha FROM ficha WHERE id_ficha = $1', [id_ficha]);
+                    if (result2.rows.length > 0) {
+                        idFichaFinal = id_ficha;
+                    } else {
+                        return res.status(400).json({ error: 'Ficha no encontrada' });
+                    }
+                }
+            } else if (ficha) {
+                // Si viene ficha (número), buscar el id_ficha correspondiente
+                const result = await pool.query('SELECT id_ficha FROM ficha WHERE codigo = $1', [ficha]);
+                if (result.rows.length > 0) {
+                    idFichaFinal = result.rows[0].id_ficha;
+                } else {
+                    return res.status(400).json({ error: 'Ficha no encontrada' });
+                }
+            }
+            // Si no se envía ficha, idFichaFinal queda null (permitido si el rol no es aprendiz)
+
+            // Mapeo robusto de programa
             let idProgramaFinal = id_programa || programa || null;
-            if (idFichaFinal !== null && idFichaFinal !== undefined) idFichaFinal = parseInt(idFichaFinal, 10);
             if (idProgramaFinal !== null && idProgramaFinal !== undefined) idProgramaFinal = parseInt(idProgramaFinal, 10);
 
             const newUsuario = await usuarioModel.createUsuario({

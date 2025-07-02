@@ -298,14 +298,22 @@
 @media (max-width: 576px) {
   .auth-bg-gradient {
     padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
   }
   
   .auth-container {
-    padding: 1.8rem;
+    padding: 2.2rem 1.2rem;
     max-width: 100%;
-    margin: 0.5rem;
+    margin: 0.7rem;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    min-height: 620px;
+    min-height: unset;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
   
   .auth-content {
@@ -324,17 +332,38 @@
   }
   
   .auth-form-group {
-    gap: 1rem;
-    padding: 0.6rem;
+    gap: 1.3rem;
+    padding: 0.9rem;
+    margin-bottom: 1.2rem;
   }
   
+  .form-group {
+    gap: 0.9rem;
+    margin-bottom: 1.1rem;
+  }
+  .form-group label {
+    font-size: 1.08rem;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 1.1rem 1.1rem;
+    font-size: 1.08rem;
+    border-radius: 10px;
+  }
+  .auth-tabs {
+    margin-bottom: 2.2rem;
+  }
   .auth-buttons {
     flex-direction: column;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
+    gap: 1rem;
   }
-  
   .auth-button {
-    margin-bottom: 10px;
+    margin-bottom: 0;
+    font-size: 1.15rem;
+    padding: 1.1rem 0.5rem;
+    border-radius: 10px;
   }
 }
 

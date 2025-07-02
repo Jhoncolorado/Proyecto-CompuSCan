@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { format, eachDayOfInterval, startOfMonth, endOfMonth } from 'date-fns';
@@ -49,6 +49,9 @@ const Asistencia = () => {
     };
   });
   const [loadingEstadisticas, setLoadingEstadisticas] = useState(true);
+  // Animación para los totales
+  const [animados, setAnimados] = useState({});
+  const prevEstadisticas = useRef({});
 
   // Estilo base para la imagen de evidencia (horizontal, ancha)
   const evidenciaImgStyle = {
@@ -128,21 +131,23 @@ const Asistencia = () => {
     fetchAsistencias();
   }, [idFicha]);
 
+  // --- ESTADÍSTICAS EN TIEMPO REAL ---
+  const fetchEstadisticas = async () => {
+    setLoadingEstadisticas(true);
+    if (!idFicha) return;
+    const hoy = new Date();
+    const fecha = hoy.toISOString().slice(0, 10);
+    try {
+      const res = await api.get(`/api/asistencia/estadisticas?id_ficha=${idFicha}&fecha_inicio=${fecha}`);
+      setEstadisticas(res.data);
+    } catch (err) {
+      setEstadisticas(null);
+    } finally {
+      setLoadingEstadisticas(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchEstadisticas = async () => {
-      setLoadingEstadisticas(true);
-      if (!idFicha) return;
-      const hoy = new Date();
-      const fecha = hoy.toISOString().slice(0, 10);
-      try {
-        const res = await api.get(`/api/asistencia/estadisticas?id_ficha=${idFicha}&fecha_inicio=${fecha}`);
-        setEstadisticas(res.data);
-      } catch (err) {
-        setEstadisticas(null);
-      } finally {
-        setLoadingEstadisticas(false);
-      }
-    };
     fetchEstadisticas();
   }, [idFicha]);
 
@@ -196,6 +201,7 @@ const Asistencia = () => {
       setAsistencias(map);
       setFeedback(f => ({ ...f, [aprendiz.id]: '¡Asistencia actualizada!' }));
       setEditando(null);
+      await fetchEstadisticas(); // Actualiza porcentajes en tiempo real
     } catch (err) {
       setFeedback(f => ({ ...f, [aprendiz.id]: 'Error al registrar asistencia' }));
     }
@@ -309,6 +315,7 @@ const Asistencia = () => {
       setEditando(null);
       setEditFile(null);
       setEditPreview(null);
+      await fetchEstadisticas(); // Actualiza porcentajes en tiempo real
     } catch (err) {
       alert('Error al editar asistencia');
     }
@@ -333,6 +340,38 @@ const Asistencia = () => {
     const fechaKey = reg.fecha ? new Date(reg.fecha).toISOString().slice(0, 10) : '';
     asistenciaMap[`${reg.id_usuario}_${fechaKey}`] = reg;
   });
+
+  useEffect(() => {
+    if (!estadisticas) return;
+    const nuevosAnimados = {};
+    ['presentes', 'ausentes', 'justificados', 'total', 'porcentaje', 'rfid', 'manual'].forEach(key => {
+      if (estadisticas[key] !== prevEstadisticas.current[key]) {
+        nuevosAnimados[key] = true;
+        setTimeout(() => setAnimados(a => ({ ...a, [key]: false })), 400);
+      }
+    });
+    setAnimados(a => ({ ...a, ...nuevosAnimados }));
+    prevEstadisticas.current = estadisticas;
+  }, [estadisticas]);
+
+  // Inyectar CSS de animación bump
+  useEffect(() => {
+    if (document.getElementById('bump-anim-css')) return;
+    const style = document.createElement('style');
+    style.id = 'bump-anim-css';
+    style.innerHTML = `
+      @keyframes bump {
+        0% { transform: scale(1); }
+        30% { transform: scale(1.15); }
+        60% { transform: scale(0.95); }
+        100% { transform: scale(1); }
+      }
+      .totales-animado {
+        animation: bump 0.4s;
+      }
+    `;
+    document.head.appendChild(style);
+  }, []);
 
   return (
     <div style={{
@@ -373,31 +412,31 @@ const Asistencia = () => {
       }}>
         <div style={{ background: '#e8f5e9', borderRadius: 16, padding: '20px 32px', minWidth: 120, textAlign: 'center', boxShadow: '0 1px 4px #0001' }}>
           <div style={{ fontSize: 16, color: '#256029', fontWeight: 700, marginBottom: 2 }}>Presentes</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#256029' }}>{estadisticas?.presentes ?? 0}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#256029' }} className={animados.presentes ? 'totales-animado' : ''}>{estadisticas?.presentes ?? 0}</div>
         </div>
         <div style={{ background: '#ffebee', borderRadius: 16, padding: '20px 32px', minWidth: 120, textAlign: 'center', boxShadow: '0 1px 4px #0001' }}>
           <div style={{ fontSize: 16, color: '#c62828', fontWeight: 700, marginBottom: 2 }}>Ausentes</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#c62828' }}>{estadisticas?.ausentes ?? 0}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#c62828' }} className={animados.ausentes ? 'totales-animado' : ''}>{estadisticas?.ausentes ?? 0}</div>
         </div>
         <div style={{ background: '#fffde7', borderRadius: 16, padding: '20px 32px', minWidth: 120, textAlign: 'center', boxShadow: '0 1px 4px #0001' }}>
           <div style={{ fontSize: 16, color: '#f9a825', fontWeight: 700, marginBottom: 2 }}>Justificados</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#f9a825' }}>{estadisticas?.justificados ?? 0}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#f9a825' }} className={animados.justificados ? 'totales-animado' : ''}>{estadisticas?.justificados ?? 0}</div>
         </div>
         <div style={{ background: '#e3f2fd', borderRadius: 16, padding: '20px 32px', minWidth: 120, textAlign: 'center', boxShadow: '0 1px 4px #0001' }}>
           <div style={{ fontSize: 16, color: '#1976d2', fontWeight: 700, marginBottom: 2 }}>Total</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#1976d2' }}>{estadisticas?.total ?? 0}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#1976d2' }} className={animados.total ? 'totales-animado' : ''}>{estadisticas?.total ?? 0}</div>
         </div>
         <div style={{ background: '#f3e5f5', borderRadius: 16, padding: '20px 32px', minWidth: 120, textAlign: 'center', boxShadow: '0 1px 4px #0001' }}>
           <div style={{ fontSize: 16, color: '#8e24aa', fontWeight: 700, marginBottom: 2 }}>% Asistencia</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#8e24aa' }}>{estadisticas?.porcentaje ?? 0}%</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#8e24aa' }} className={animados.porcentaje ? 'totales-animado' : ''}>{estadisticas?.porcentaje ?? 0}%</div>
         </div>
         <div style={{ background: '#f3e5f5', borderRadius: 16, padding: '20px 32px', minWidth: 120, textAlign: 'center', boxShadow: '0 1px 4px #0001' }}>
           <div style={{ fontSize: 16, color: '#8e24aa', fontWeight: 700, marginBottom: 2 }}>RFID</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#8e24aa' }}>{estadisticas?.rfid ?? 0}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#8e24aa' }} className={animados.rfid ? 'totales-animado' : ''}>{estadisticas?.rfid ?? 0}</div>
         </div>
         <div style={{ background: '#fff3e0', borderRadius: 16, padding: '20px 32px', minWidth: 120, textAlign: 'center', boxShadow: '0 1px 4px #0001' }}>
           <div style={{ fontSize: 16, color: '#f57c00', fontWeight: 700, marginBottom: 2 }}>Manual</div>
-          <div style={{ fontSize: 32, fontWeight: 800, color: '#f57c00' }}>{estadisticas?.manual ?? 0}</div>
+          <div style={{ fontSize: 32, fontWeight: 800, color: '#f57c00' }} className={animados.manual ? 'totales-animado' : ''}>{estadisticas?.manual ?? 0}</div>
         </div>
       </div>
       <div style={{ overflowX: 'auto', background: '#fafbfc', borderRadius: 12, boxShadow: '0 1px 4px #0001', padding: '0 0 18px 0' }}>
@@ -406,7 +445,6 @@ const Asistencia = () => {
             <tr style={{ background: '#f6fbf2' }}>
               <th style={{ border: '1px solid #e0e0e0', padding: '12px 8px', fontWeight: 700 }}>Nombre</th>
               <th style={{ border: '1px solid #e0e0e0', padding: '12px 8px', fontWeight: 700 }}>Documento</th>
-              <th style={{ border: '1px solid #e0e0e0', padding: '12px 8px', fontWeight: 700 }}>Ficha</th>
               <th style={{ border: '1px solid #e0e0e0', padding: '12px 8px', fontWeight: 700 }}>Estado</th>
               <th style={{ border: '1px solid #e0e0e0', padding: '12px 8px', fontWeight: 700 }}>Evidencia</th>
               <th style={{ border: '1px solid #e0e0e0', padding: '12px 8px', fontWeight: 700 }}>Acción</th>
@@ -420,7 +458,6 @@ const Asistencia = () => {
                 <tr key={aprendiz.id} style={{ background: '#fff', borderBottom: '1px solid #f0f0f0' }}>
                   <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px' }}>{aprendiz.nombre}</td>
                   <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px' }}>{aprendiz.documento}</td>
-                  <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px' }}>{aprendiz.id_ficha}</td>
                   <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px', fontWeight: 700 }}>
                     {estado === 'presente' && <span style={{ color: '#43a047' }}>✔️ Presente</span>}
                     {estado === 'ausente' && <span style={{ color: '#d32f2f' }}>❌ Ausente</span>}
@@ -450,12 +487,48 @@ const Asistencia = () => {
                     )}
                   </td>
                   <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px' }}>
-                    {!estado && (
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, alignItems: 'stretch' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center' }}>
+                      {!estado && (
+                        <>
+                          <button
+                            style={{
+                              background: '#43a047',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '4px',
+                              padding: '10px 18px',
+                              minWidth: 110,
+                              cursor: 'pointer',
+                              fontWeight: 600,
+                              fontSize: 15
+                            }}
+                            onClick={() => marcarAsistencia(aprendiz, 'presente')}
+                          >
+                            Marcar Presente
+                          </button>
+                          <button
+                            style={{
+                              background: '#d32f2f',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '4px',
+                              padding: '10px 18px',
+                              minWidth: 110,
+                              cursor: 'pointer',
+                              fontWeight: 600,
+                              fontSize: 15
+                            }}
+                            onClick={() => marcarAsistencia(aprendiz, 'ausente')}
+                          >
+                            Marcar Ausente
+                          </button>
+                        </>
+                      )}
+                      {estado === 'presente' && !asistencia?.hora_salida && (
                         <button
                           style={{
-                            background: '#43a047',
-                            color: 'white',
+                            background: '#388e3c',
+                            color: '#fff',
                             border: 'none',
                             borderRadius: '4px',
                             padding: '10px 0',
@@ -464,82 +537,106 @@ const Asistencia = () => {
                             fontWeight: 600,
                             fontSize: 16
                           }}
-                          onClick={() => marcarAsistencia(aprendiz, 'presente')}
-                        >
-                          Marcar Presente
-                        </button>
-                        <button
-                          style={{
-                            background: '#d32f2f',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            padding: '10px 0',
-                            width: '100%',
-                            cursor: 'pointer',
-                            fontWeight: 600,
-                            fontSize: 16
+                          onClick={async () => {
+                            try {
+                              await api.post('/api/asistencia/marcar-salida', {
+                                id_usuario: aprendiz.id,
+                                id_ficha: idFicha,
+                                fecha: new Date().toISOString().slice(0, 10)
+                              });
+                              // Refresca la lista de asistencias
+                              const hoy = new Date().toISOString().slice(0, 10);
+                              const res = await api.get(`/api/asistencia/por-ficha-fecha?id_ficha=${idFicha}&fecha=${hoy}`);
+                              const map = {};
+                              res.data.forEach(a => { map[a.id_usuario] = a; });
+                              setAsistencias(map);
+                            } catch (err) {
+                              alert('Error al marcar salida');
+                            }
                           }}
-                          onClick={() => marcarAsistencia(aprendiz, 'ausente')}
                         >
-                          Marcar Ausente
+                          Marcar salida
                         </button>
-                      </div>
-                    )}
-                    {estado === 'ausente' && (
-                      <button
-                        style={{
-                          background: '#1976d2',
-                          color: 'white',
-                          border: 'none',
+                      )}
+                      {estado === 'presente' && asistencia?.hora_salida && (
+                        <div style={{
+                          background: '#e8f5e9',
+                          color: '#388e3c',
                           borderRadius: '4px',
-                          padding: '7px 16px',
-                          marginRight: 8,
-                          cursor: 'pointer',
-                          fontWeight: 600,
-                          fontSize: 16
-                        }}
-                        onClick={() => justificarAsistencia(aprendiz)}
-                      >
-                        Justificar
-                      </button>
-                    )}
-                    {estado === 'justificado' && (
-                      <>
+                          padding: '10px 0',
+                          width: '100%',
+                          fontWeight: 700,
+                          fontSize: 16,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 8,
+                          border: '1.5px solid #43a047',
+                        }}>
+                          <span style={{fontSize: 20}}>✔️</span> Salida registrada
+                        </div>
+                      )}
+                      {estado === 'ausente' && (
                         <button
                           style={{
                             background: '#1976d2',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '4px',
-                            padding: '7px 16px',
-                            marginRight: 8,
+                            borderRadius: '6px',
+                            padding: '8px 14px',
+                            minWidth: 110,
                             cursor: 'pointer',
                             fontWeight: 600,
-                            fontSize: 16
+                            fontSize: 15,
+                            display: 'inline-block',
+                            boxSizing: 'border-box'
                           }}
-                          onClick={() => handleVerMotivo(asistencia)}
+                          onClick={() => justificarAsistencia(aprendiz)}
                         >
-                          Ver Motivo
+                          Justificar
                         </button>
-                        <button
-                          style={{
-                            background: '#ffa000',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '4px',
-                            padding: '7px 16px',
-                            marginRight: 8,
-                            cursor: 'pointer',
-                            fontWeight: 600,
-                            fontSize: 16
-                          }}
-                          onClick={() => handleEdit(aprendiz)}
-                        >
-                          Editar
-                        </button>
-                      </>
-                    )}
+                      )}
+                      {estado === 'justificado' && (
+                        <>
+                          <button
+                            style={{
+                              background: '#1976d2',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              padding: '8px 14px',
+                              minWidth: 110,
+                              cursor: 'pointer',
+                              fontWeight: 600,
+                              fontSize: 15,
+                              display: 'inline-block',
+                              boxSizing: 'border-box'
+                            }}
+                            onClick={() => handleVerMotivo(asistencia)}
+                          >
+                            Ver Motivo
+                          </button>
+                          <button
+                            style={{
+                              background: '#ffa000',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              padding: '8px 14px',
+                              minWidth: 110,
+                              cursor: 'pointer',
+                              fontWeight: 600,
+                              fontSize: 15,
+                              display: 'inline-block',
+                              boxSizing: 'border-box'
+                            }}
+                            onClick={() => handleEdit(aprendiz)}
+                          >
+                            Editar
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </td>
                 </tr>
               );
@@ -696,6 +793,21 @@ const Asistencia = () => {
           }} onClick={e => e.stopPropagation()} />
         </div>
       )}
+      <style jsx>{`
+        .asistencia-action-buttons {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          width: 100%;
+        }
+        @media (max-width: 600px) {
+          .asistencia-action-buttons button {
+            width: 100%;
+            font-size: 15px;
+            padding: 12px 0;
+          }
+        }
+      `}</style>
     </div>
   );
 };
