@@ -1868,3 +1868,12 @@
 2025-07-01 20:00:15 [[32minfo[39m]: Login exitoso para usuario: 2
 2025-07-01 20:32:21 [[32minfo[39m]: Login exitoso para usuario: 6
 2025-07-01 20:44:56 [[32minfo[39m]: Login exitoso para usuario: 7
+2025-07-01 21:00:34 [[32minfo[39m]: Login exitoso para usuario: 2
+2025-07-01 21:01:25 [[32minfo[39m]: Login exitoso para usuario: 7
+2025-07-02 06:06:02 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sIjoiaW5zdHJ1Y3RvciIsImlhdCI6MTc1MTQyMTY4NSwiZXhwIjoxNzUxNDUwNDg1fQ.xyTZIOz-YmKCRYTRBL094WzsAPlHoh2WPEif0tFXuEA
+2025-07-02 06:06:02 [[33mwarn[39m]: Token inválido: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Nywicm9sIjoiaW5zdHJ1Y3RvciIsImlhdCI6MTc1MTQyMTY4NSwiZXhwIjoxNzUxNDUwNDg1fQ.xyTZIOz-YmKCRYTRBL094WzsAPlHoh2WPEif0tFXuEA
+2025-07-02 06:06:25 [[32minfo[39m]: Login exitoso para usuario: 6
+2025-07-02 06:10:01 [[32minfo[39m]: Login exitoso para usuario: 2
+2025-07-02 06:10:34 [[32minfo[39m]: Login exitoso para usuario: 7
+2025-07-02 06:16:10 [[32minfo[39m]: Login exitoso para usuario: 6
+2025-07-02 06:17:18 [[32minfo[39m]: Login exitoso para usuario: 7

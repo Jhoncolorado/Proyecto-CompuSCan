@@ -200,24 +200,17 @@ const History = () => {
                 {dias.map(dia => (
                   <th key={dia} style={{ minWidth: 54, fontWeight: 500, padding: '8px 0', background: '#f6fbf2', textAlign: 'center', borderLeft: '2px solid #fff' }}>{format(parseISO(dia), 'dd/MM')}</th>
                 ))}
-                <th style={{ minWidth: 80, fontWeight: 700, background: '#e8f5e9', textAlign: 'center' }}>Total horas</th>
-                <th style={{ minWidth: 80, fontWeight: 700, background: '#ffe0b2', textAlign: 'center' }}>Horas faltadas</th>
+                <th style={{ minWidth: 80, fontWeight: 700, background: '#ffe0b2', textAlign: 'center' }}>Inasistencias</th>
                 </tr>
               </thead>
               <tbody>
               {aprendices.map(aprendiz => {
-                let totalHoras = 0;
-                let horasClase = 0;
+                // Calcular inasistencias
+                let inasistencias = 0;
                 dias.forEach(dia => {
                   const reg = asistenciaMap[`${(aprendiz.id_usuario || aprendiz.id)}_${dia}`];
-                  if (reg && typeof reg.total_horas === 'number') {
-                    totalHoras += reg.total_horas;
-                    if (typeof reg.horas_clase === 'number') horasClase = reg.horas_clase;
-                  } else if (reg && typeof reg.horas_clase === 'number') {
-                    horasClase = reg.horas_clase;
-                  }
+                  if (reg && reg.estado === 'ausente') inasistencias++;
                 });
-                const horasFaltadas = horasClase > 0 ? Math.max(0, horasClase - totalHoras) : 0;
                 return (
                   <tr key={aprendiz.id_usuario || aprendiz.id || aprendiz.documento || aprendiz.nombre}>
                     <td style={{ position: 'sticky', left: 0, background: '#fff', minWidth: 180, maxWidth: 220, padding: '8px 12px', fontWeight: 500, borderRight: '2px solid #e0e0e0' }}>{aprendiz.nombre}</td>
@@ -233,8 +226,7 @@ const History = () => {
                       }
                       return <td key={`${(aprendiz.id_usuario || aprendiz.id || aprendiz.documento || aprendiz.nombre)}_${dia}`} style={{ color, fontWeight: 600, textAlign: 'center', minWidth: 44, padding: '8px 0', background: '#fff', borderLeft: '2px solid #f6fbf2' }}>{cell}</td>;
                     })}
-                    <td style={{ fontWeight: 700, color: '#256029', textAlign: 'center', background: '#fff' }}>{formatHoras(totalHoras)}</td>
-                    <td style={{ fontWeight: 700, color: '#c62828', textAlign: 'center', background: '#fff' }}>{formatHoras(horasFaltadas)}</td>
+                    <td style={{ fontWeight: 700, color: '#c62828', textAlign: 'center', background: '#fff' }}>{inasistencias}</td>
                   </tr>
                 );
               })}
