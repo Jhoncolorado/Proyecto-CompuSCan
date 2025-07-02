@@ -487,7 +487,7 @@ const Asistencia = () => {
                     )}
                   </td>
                   <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px' }}>
-                    <div style={{ display: 'flex', flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'row', gap: 8, alignItems: 'center', justifyContent: 'flex-start' }}>
                       {!estado && (
                         <>
                           <button
@@ -508,7 +508,7 @@ const Asistencia = () => {
                           </button>
                           <button
                             style={{
-                              background: '#d32f2f',
+                              background: '#1976d2',
                               color: 'white',
                               border: 'none',
                               borderRadius: '4px',
@@ -544,45 +544,45 @@ const Asistencia = () => {
                           Justificar
                         </button>
                       )}
+                      {estado && (
+                        <button
+                          style={{
+                            background: '#d32f2f',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '6px',
+                            padding: '8px 14px',
+                            minWidth: 110,
+                            cursor: 'pointer',
+                            fontWeight: 600,
+                            fontSize: 15,
+                            display: 'inline-block',
+                            boxSizing: 'border-box'
+                          }}
+                          onClick={() => handleEdit(aprendiz)}
+                        >
+                          Editar
+                        </button>
+                      )}
                       {estado === 'justificado' && (
-                        <>
-                          <button
-                            style={{
-                              background: '#1976d2',
-                              color: 'white',
-                              border: 'none',
-                              borderRadius: '6px',
-                              padding: '8px 14px',
-                              minWidth: 110,
-                              cursor: 'pointer',
-                              fontWeight: 600,
-                              fontSize: 15,
-                              display: 'inline-block',
-                              boxSizing: 'border-box'
-                            }}
-                            onClick={() => handleVerMotivo(asistencia)}
-                          >
-                            Ver Motivo
-                          </button>
-                          <button
-                            style={{
-                              background: '#ffa000',
-                              color: 'white',
-                              border: 'none',
-                              borderRadius: '6px',
-                              padding: '8px 14px',
-                              minWidth: 110,
-                              cursor: 'pointer',
-                              fontWeight: 600,
-                              fontSize: 15,
-                              display: 'inline-block',
-                              boxSizing: 'border-box'
-                            }}
-                            onClick={() => handleEdit(aprendiz)}
-                          >
-                            Editar
-                          </button>
-                        </>
+                        <button
+                          style={{
+                            background: '#1976d2',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '6px',
+                            padding: '8px 14px',
+                            minWidth: 110,
+                            cursor: 'pointer',
+                            fontWeight: 600,
+                            fontSize: 15,
+                            display: 'inline-block',
+                            boxSizing: 'border-box'
+                          }}
+                          onClick={() => handleVerMotivo(asistencia)}
+                        >
+                          Ver Motivo
+                        </button>
                       )}
                     </div>
                   </td>
@@ -741,7 +741,7 @@ const Asistencia = () => {
           }} onClick={e => e.stopPropagation()} />
         </div>
       )}
-      <style jsx>{`
+      <style>{`
         .asistencia-action-buttons {
           display: flex;
           flex-direction: column;

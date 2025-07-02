@@ -20,6 +20,7 @@ const io = new Server(server, {
   }
 });
 const rateLimit = require('express-rate-limit');
+const historialDispositivoController = require('./controllers/historialDispositivoController');
 
 // Mostrar las variables de entorno cargadas (solo para desarrollo)
 console.log('Variables de entorno:');
@@ -148,6 +149,9 @@ app.use('/images', express.static(path.join(publicPath, 'images')));
 
 // Ruta específica para JavaScript
 app.use('/js', express.static(path.join(publicPath, 'js')));
+
+// Inicializar socket en el controlador de historial
+historialDispositivoController.initSocket(io);
 
 // Manejo de errores
 app.use((err, req, res, next) => {

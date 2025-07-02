@@ -374,15 +374,6 @@ const Login = () => {
 
   return (
     <div className="auth-bg-gradient">
-      <img 
-        src={logo} 
-        alt="Robot institucional" 
-        className="robot-bg" 
-        onError={(e) => {
-          e.target.onerror = null;
-          e.target.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><rect width="200" height="200" fill="%2343a047"/><text x="50%" y="50%" font-size="40" text-anchor="middle" dominant-baseline="middle" fill="white">CompuSCan</text></svg>';
-        }}
-      />
       <div className="auth-container auth-compact">
         <div className="auth-logo-box">
           <img 
