@@ -8,8 +8,10 @@ const dashboardController = {
     try {
       const usuarios = await usuarioModel.countUsuarios();
       const dispositivos = await dispositivoModel.countDispositivos();
-      // Estado de dispositivos (placeholders)
-      let estadoDispositivos = { aprobados: 0, pendientes: 0, rechazados: 0 };
+      // Estado de dispositivos (real)
+      const aprobados = await dispositivoModel.countByEstado('aprobado');
+      const pendientes = await dispositivoModel.countByEstado('pendiente');
+      let estadoDispositivos = { aprobados, pendientes };
       // Actividad de hoy (real)
       const actividad = await historialDispositivoModel.countActividadHoy();
       // Actividad reciente (real)
@@ -22,7 +24,9 @@ const dashboardController = {
   getDashboardStatsData: async () => {
     const usuarios = await usuarioModel.countUsuarios();
     const dispositivos = await dispositivoModel.countDispositivos();
-    let estadoDispositivos = { aprobados: 0, pendientes: 0, rechazados: 0 };
+    const aprobados = await dispositivoModel.countByEstado('aprobado');
+    const pendientes = await dispositivoModel.countByEstado('pendiente');
+    let estadoDispositivos = { aprobados, pendientes };
     const actividad = await historialDispositivoModel.countActividadHoy();
     const actividadReciente = await historialDispositivoModel.getActividadReciente();
     return { usuarios, dispositivos, estadoDispositivos, actividad, actividadReciente };

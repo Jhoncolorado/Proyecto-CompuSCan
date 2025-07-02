@@ -1,6 +1,11 @@
 const historialDispositivoModel = require('../models/historialDispositivoModel');
-const { io } = require('../app');
 const dashboardController = require('./dashboardController');
+
+let ioInstance = null;
+
+function initSocket(io) {
+  ioInstance = io;
+}
 
 const historialDispositivoController = {
     getAllHistoriales: async (req, res) => {
@@ -62,11 +67,10 @@ const historialDispositivoController = {
             });
 
             // Emitir evento de actualización de actividad
-            if (io) {
-                // Obtener los nuevos stats del dashboard
+            if (ioInstance) {
                 const stats = await dashboardController.getDashboardStatsData();
                 console.log('Emitiendo evento actividad_actualizada con stats:', stats);
-                io.emit('actividad_actualizada', stats);
+                ioInstance.emit('actividad_actualizada', stats);
             }
 
             res.status(201).json({
@@ -139,4 +143,4 @@ const historialDispositivoController = {
     }
 };
 
-module.exports = historialDispositivoController;
+module.exports = { ...historialDispositivoController, initSocket };

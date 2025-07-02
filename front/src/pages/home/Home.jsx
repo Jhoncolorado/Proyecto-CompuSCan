@@ -660,13 +660,6 @@ const Home = () => {
               </div>
               <div className="status-count">{stats?.estadoDispositivos?.pendientes || 0}</div>
               <div className="status-label">Pendientes</div>
-                </div>
-            <div className="status-item">
-              <div className="status-icon rejected">
-                <FaTimesCircle />
-              </div>
-              <div className="status-count">{stats?.estadoDispositivos?.rechazados || 0}</div>
-              <div className="status-label">Rechazados</div>
             </div>
           </div>
         </div>

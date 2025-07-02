@@ -219,6 +219,11 @@ const dispositivoModel = {
             }
             return device;
         });
+    },
+
+    countByEstado: async (estado) => {
+        const result = await pool.query('SELECT COUNT(*) FROM dispositivo WHERE estado_validacion = $1', [estado]);
+        return parseInt(result.rows[0].count, 10);
     }
 };
 
