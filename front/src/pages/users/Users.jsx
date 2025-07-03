@@ -28,6 +28,12 @@ const capitalize = (str) => {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
+function toTitleCase(str) {
+  return str
+    .toLowerCase()
+    .replace(/(?:^|\s|\b)[a-z]/g, c => c.toUpperCase());
+}
+
 const Users = () => {
   const { user } = useAuth();
   const [users, setUsers] = useState([]);
@@ -404,7 +410,7 @@ const Users = () => {
                         <FaUser style={{color:'#374151',fontSize:32}} className="user-card-avatar" />
                       )}
                       <div className="user-card-main">
-                        <div className="user-card-name">{user.nombre}</div>
+                        <div className="user-card-name">{toTitleCase(user.nombre)}</div>
                         <div className="user-card-email">{user.correo}</div>
                       </div>
                     </div>
@@ -449,7 +455,7 @@ const Users = () => {
                 {filteredUsers.map((user) => (
                   <tr key={user.id}>
                     <td>{user.foto ? <img src={user.foto} alt="Avatar" className="user-avatar" /> : <FaUser style={{color:'#374151',fontSize:22}} />}</td>
-                    <td>{user.nombre}</td>
+                    <td>{toTitleCase(user.nombre)}</td>
                     <td>{user.correo}</td>
                     <td><span className={`role-badge ${user.rol}`}>{capitalize(user.rol)}</span></td>
                     <td><span className={`status-badge ${user.estado}`}>{user.estado === 'deshabilitado' ? <span style={{color:'#b0b0b0', fontWeight:700}}>Deshabilitado</span> : capitalize(user.estado)}</span></td>

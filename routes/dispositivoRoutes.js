@@ -321,24 +321,6 @@ router.post('/acceso-rfid', async (req, res) => {
         'UPDATE historial_dispositivo SET fecha_hora_salida = NOW(), descripcion = $1 WHERE id_historial = $2',
         [descripcion, registroAbiertoRes.rows[0].id_historial]
       );
-      // --- ACTUALIZAR HORA DE SALIDA EN ASISTENCIA SI EXISTE ---
-      if (usuario.id_ficha) {
-        const hoy = new Date().toISOString().slice(0, 10);
-        const ahora = new Date();
-        // Solo si existe asistencia para hoy y no tiene hora_salida
-        const asistenciaHoy = await pool.query(
-          'SELECT id FROM asistencia WHERE id_usuario = $1 AND fecha = $2 AND hora_salida IS NULL',
-          [usuario.id, hoy]
-        );
-        if (asistenciaHoy.rows.length > 0) {
-          await pool.query(
-            'UPDATE asistencia SET hora_salida = $1 WHERE id = $2',
-            [ahora, asistenciaHoy.rows[0].id]
-          );
-          console.log('[ACCESO] Hora de salida registrada en asistencia para usuario:', usuario.id, 'hora_salida:', ahora);
-        }
-      }
-      // --- FIN ACTUALIZACIÓN HORA DE SALIDA ---
     }
 
     // Emitir evento de actualización de actividad para el dashboard

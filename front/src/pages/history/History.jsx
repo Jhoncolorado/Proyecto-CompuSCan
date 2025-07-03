@@ -107,6 +107,13 @@ const History = () => {
     return `${h}h ${m}min`;
   }
 
+  // Agregar función para formatear a Nombre Propio
+  function toTitleCase(str) {
+    return str
+      .toLowerCase()
+      .replace(/(?:^|\s|\b)[a-z]/g, c => c.toUpperCase());
+  }
+
   return (
     <div style={{ padding: 32 }}>
       <h2 style={{ color: '#256029', marginBottom: 24 }}>Historial de asistencia</h2>
@@ -213,8 +220,31 @@ const History = () => {
                 });
                 return (
                   <tr key={aprendiz.id_usuario || aprendiz.id || aprendiz.documento || aprendiz.nombre}>
-                    <td style={{ position: 'sticky', left: 0, background: '#fff', minWidth: 180, maxWidth: 220, padding: '8px 12px', fontWeight: 500, borderRight: '2px solid #e0e0e0' }}>{aprendiz.nombre}</td>
-                    <td style={{ position: 'sticky', left: 180, background: '#fff', minWidth: 120, maxWidth: 160, padding: '8px 12px', borderRight: '2px solid #e0e0e0' }}>{aprendiz.documento}</td>
+                    <td style={{
+                      color: '#222',
+                      fontWeight: 600,
+                      textAlign: 'left',
+                      minWidth: 180,
+                      maxWidth: 220,
+                      borderRight: '3px solid #d0d0d0',
+                      padding: '14px 12px',
+                      wordBreak: 'break-word',
+                      whiteSpace: 'normal',
+                      background: '#fff',
+                      position: 'sticky',
+                      left: 0,
+                      zIndex: 2
+                    }}>{toTitleCase(aprendiz.nombre)}</td>
+                    <td style={{
+                      position: 'sticky',
+                      left: 180,
+                      background: '#fff',
+                      minWidth: 120,
+                      maxWidth: 160,
+                      padding: '14px 12px',
+                      borderRight: '2px solid #e0e0e0',
+                      zIndex: 1
+                    }}>{aprendiz.documento}</td>
                     {dias.map(dia => {
                       const reg = asistenciaMap[`${(aprendiz.id_usuario || aprendiz.id)}_${dia}`];
                       let cell = '–';

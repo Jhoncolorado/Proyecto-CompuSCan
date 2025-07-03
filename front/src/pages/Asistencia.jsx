@@ -373,6 +373,13 @@ const Asistencia = () => {
     document.head.appendChild(style);
   }, []);
 
+  // Agregar función para formatear a Nombre Propio
+  function toTitleCase(str) {
+    return str
+      .toLowerCase()
+      .replace(/(?:^|\s|\b)[a-z]/g, c => c.toUpperCase());
+  }
+
   return (
     <div style={{
       maxWidth: 1200,
@@ -456,7 +463,7 @@ const Asistencia = () => {
               const estado = asistencia?.estado;
               return (
                 <tr key={aprendiz.id} style={{ background: '#fff', borderBottom: '1px solid #f0f0f0' }}>
-                  <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px' }}>{aprendiz.nombre}</td>
+                  <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px' }}>{toTitleCase(aprendiz.nombre)}</td>
                   <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px' }}>{aprendiz.documento}</td>
                   <td style={{ border: '1px solid #e0e0e0', padding: '10px 8px', fontWeight: 700 }}>
                     {estado === 'presente' && <span style={{ color: '#43a047' }}>✔️ Presente</span>}
