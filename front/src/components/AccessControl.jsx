@@ -84,6 +84,12 @@ const AccessControl = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [data]);
 
+  // Limpiar el string base64 de la foto para evitar prefijos duplicados
+  const getCleanFoto = (foto) => {
+    if (!foto) return '';
+    return foto.replace(/^(data:image\/[a-zA-Z]+;base64,)+/, 'data:image/jpeg;base64,');
+  };
+
   return (
     <div className="access-bg access-bg-full" style={{ minHeight: '100vh', width: '100vw', background: 'linear-gradient(135deg, #43a047 0%, #2e7d32 100%)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-start' }}>
       <h1 className="acceso-titulo" style={{
@@ -133,7 +139,7 @@ const AccessControl = () => {
                   </div>
                   <div className="carnet-fisico-foto">
                     <img
-                      src={data.usuario.foto || '/images/default-avatar.png'}
+                      src={getCleanFoto(data.usuario.foto) || '/images/default-avatar.png'}
                       alt="Foto usuario"
                       className="carnet-fisico-foto-img"
                     />

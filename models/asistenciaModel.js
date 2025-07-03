@@ -87,7 +87,9 @@ const asistenciaModel = {
                 COUNT(*) FILTER (WHERE estado = 'presente') AS presentes,
                 COUNT(*) FILTER (WHERE estado = 'ausente') AS ausentes,
                 COUNT(*) FILTER (WHERE estado = 'justificado') AS justificados,
-                COUNT(*) AS total
+                COUNT(*) AS total,
+                COUNT(*) FILTER (WHERE tipo = 'manual') AS manual,
+                COUNT(*) FILTER (WHERE tipo = 'rfid') AS rfid
             FROM asistencia
             WHERE id_ficha = $1 ${filtroFecha}`,
             params
@@ -95,14 +97,16 @@ const asistenciaModel = {
         const row = result.rows[0];
         let porcentaje = 0;
         if (row && row.total > 0) {
-            porcentaje = Math.round((row.presentes / row.total) * 100);
+            porcentaje = ((row.presentes / row.total) * 100).toFixed(2);
         }
         return {
             presentes: parseInt(row.presentes, 10) || 0,
             ausentes: parseInt(row.ausentes, 10) || 0,
             justificados: parseInt(row.justificados, 10) || 0,
             total: parseInt(row.total, 10) || 0,
-            porcentaje
+            porcentaje,
+            manual: parseInt(row.manual, 10) || 0,
+            rfid: parseInt(row.rfid, 10) || 0
         };
     },
     getHistorialPorFicha: async (id_ficha, fecha_inicio, fecha_fin) => {
